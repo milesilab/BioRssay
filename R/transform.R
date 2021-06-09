@@ -1,0 +1,72 @@
+# Helpers
+#1. creates a function which applies the Abbott's correction to the data for a given C
+probit_C <- function(Cx,ii,dataf,x){
+  datac<-dataf[dataf$dose==0,]
+  data<-dataf[dataf$dose>0,]
+  data$mort[ii]<-(data$mort[ii]-Cx)/(1-Cx)
+  dataf$dead[ii]<-dataf$mort[ii]*dataf$total[ii]
+  y<-cbind(data$dead[ii],data$total[ii]-data$dead[ii])
+  moda<-glm(y~log10(data$dose[ii]),family = quasibinomial(link=probit))
+  L<--moda$deviance/2
+  j<-datac$strain==x
+  L<-L+sum(datac$dead[j]*log10(Cx)+(datac$total[j]-datac$dead[j])*log10(1-Cx))
+  return(L)}
+
+
+#' Apply Abbott's correction and probit transform data
+#'
+#' This function applies the Abbott's correction (see reference) to control groups (strains) with significant variation and apply probit transformation to the data.
+#'
+#' @param dataf a data frame of mortality data containing columns "strain", "dose", "total", "dead" (not necessarily in that order)
+#' @param conf numerical. Confidence level above which the correction should be applied (default=0.05)
+#'
+#' @importFrom stats glm optim qnorm quasibinomial runif
+#'
+#' @return a list. convrg: with correction values and convergence, tr.data: transformed data
+#'
+#' @author Pascal Milesi, Piyal Karunarathne
+#'
+#' @references Abbott, WS (1925). A method of computing the effectiveness of an insecticide. J. Econ. Entomol.;18:265‐267.
+#'
+#' @examples
+#' data(bioassay)
+#' transd<-probid.trans(bioassay)
+#' @export
+probid.trans<-function(dataf,conf=0.05){
+  mort<-ifelse(dataf$dead/dataf$total==0,0.006,ifelse(dataf$dead/dataf$total==1,1-0.006,dataf$dead/dataf$total))
+  dataf<-cbind(dataf,mort)
+  if(any(dataf$dose==0)){
+    if(any(dataf[dataf$dose==0,"mort"]>conf)){
+      st<-unique(as.character(dataf$strain))
+      tt<-lapply(st,function(x,dataf){
+        data<-dataf[dataf$dose>0,]
+        sig<-data$strain==x
+        if(!any(data$mort[sig]==0)){
+          bottom<-1e-12;top<-min(data$mort[sig])
+          pin<-runif(1,min=bottom,max=top)
+          opz<-optim(pin,probit_C,ii=sig,dataf=dataf,x=x,control=list(fnscale=-1,trace=1),method="L-BFGS-B",lower=bottom,upper=top)
+          val<-c(opz$par,opz$convergence)
+        } else {
+          val<-c(0,0)
+        }
+        return(c(x,val))
+      },dataf=dataf)
+
+      tt<-data.frame(do.call(rbind,tt));colnames(tt)<-c("Strain","ControlMortality","Convergence(OK if 0)")
+      data<-dataf[dataf$dose>0,]
+      for(i in seq_along(tt[,1])){
+        data$mort[data[,"strain"]==tt[i,1]]<-(data$mort[data[,"strain"]==tt[i,1]]-as.numeric(tt[i,2])/(1-as.numeric(tt[i,2])))
+        data$dead[data[,"strain"]==tt[i,1]]<-data$mort[data[,"strain"]==tt[i,1]]*data$total[data[,"strain"]==tt[i,1]]
+      }
+    } else {
+      data<-dataf[dataf$dose>0,]
+      tt<-NULL
+    }
+  } else {
+    data<-dataf
+    tt<-NULL
+  }
+  probmort<-sapply(data$mort,qnorm) # apply probit transformation to the data
+  data<-cbind(data,probmort)
+  return(list(convrg=tt,tr.data=data))
+}
