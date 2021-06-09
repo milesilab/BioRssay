@@ -3,8 +3,7 @@ This package will help you to analyze mortality data from bioassays of any kind 
 
 For a comprehensive tutorial of the package, go to <https://milesilab.github.io/BioRssay/> and navigate to “Get started” where all the functions and usage is explained with ample examples.
 
-Installation
-
+To install the package, run the following code on R.
 ```{r}
 if (!requireNamespace("devtools", quietly = TRUE)) 
     install.packages("devtools") 
