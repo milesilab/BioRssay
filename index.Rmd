@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 **BioRssay** will help you to analyze mortality data from bioassays of any kind (e.g. insecti/pesti/herbi-cides, antibiotics, etc.).
 
-```{r,echo=FALSE, out.width="70%", fig.cap="Mortality plot"}
+```{r,echo=FALSE}
 library(BioRssay)
 data(bioassay)
 transd<-probid.trans(bioassay$assay2)
@@ -21,7 +21,7 @@ mort.plot(transd$tr.data)
 For a comprehensive tutorial of the package, navigate to "Get started" where all the functions and usage is described with ample examples.
 
 **Installation**
-```{r,results = "hide"}
+```{r,results = "hide",eval=FALSE}
 if (!requireNamespace("devtools", quietly = TRUE)) 
     install.packages("devtools") 
 devtools::install_github("milesilab/BioRssay")
