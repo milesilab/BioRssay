@@ -18,7 +18,7 @@ transd<-probid.trans(bioassay$assay2)
 mort.plot(transd$tr.data)
 ```
 
-For a comprehensive tutorial of the package, navigate to "Get started" where all the functions and usage is described with ample examples.
+***For a comprehensive tutorial of the package, navigate to "Get started" where all the functions and usage is explained with ample examples.***
 
 **Installation**
 ```{r,results = "hide",eval=FALSE}

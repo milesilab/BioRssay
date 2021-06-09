@@ -3,8 +3,9 @@ any kind (e.g. insecti/pesti/herbi-cides, antibiotics, etc.).
 
 ![](index_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
-For a comprehensive tutorial of the package, navigate to “Get started”
-where all the functions and usage is described with ample examples.
+***For a comprehensive tutorial of the package, navigate to “Get
+started” where all the functions and usage is explained with ample
+examples.***
 
 **Installation**
 
