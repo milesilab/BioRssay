@@ -117,7 +117,11 @@
 <h1 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>2. <strong>Analysis</strong>
 </h1>
-<p>##<strong>Example 1</strong> Let’s have a quick look at the data again.</p>
+<div id="example-1" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example-1" class="anchor"></a><strong>Example 1</strong>
+</h2>
+<p>Let’s have a quick look at the data again.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">assays</span><span class="op">&lt;-</span><span class="va">bioassay</span>
 <span class="va">exm1</span><span class="op">&lt;-</span><span class="va">assays</span><span class="op">$</span><span class="va">assay2</span>
@@ -189,6 +193,7 @@
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">TRUE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">TRUE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span>,pch<span class="op">=</span><span class="cn">NA</span><span class="op">)</span></code></pre></div>
 <p><img src="BioRssay_files/figure-html/unnamed-chunk-7-2.png" width="768"> It is also possible to input different confidence levels with “conf.level=”. The default is 0.95. In cases where only a subset of all the tested strains needs to be tested, they can be listed with “strains=”; if not provided, all the strains will be plotted.</p>
+</div>
 <div id="example-2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-2" class="anchor"></a><strong>Example 2</strong>

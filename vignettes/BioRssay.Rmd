@@ -54,7 +54,7 @@ NOTE: It is also possible to include a reference strain/population with the suff
 
 # 2. **Analysis**
 
-##**Example 1**
+## **Example 1**
 Let's have a quick look at the data again.
 ```{r}
 assays<-bioassay
