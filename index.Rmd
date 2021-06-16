@@ -2,14 +2,14 @@
 title: "index"
 author: "Piyal Karunarathne, Pascal Milesi, Nicolas Pocquet, and Pierrick Labbé"
 date: "6/9/2021"
-output: md_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**BioRssay** will help you to analyze mortality data from bioassays of any kind (e.g. insecti/pesti/herbi-cides, antibiotics, etc.).
+**BioRssay** will help you to analyze mortality data from bioassays of any kind (e.g.,insecti/pesti/herbi-cides, antibiotics, etc.).
 
 ```{r,echo=FALSE}
 library(BioRssay)

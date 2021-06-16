@@ -1,5 +1,5 @@
 **BioRssay** will help you to analyze mortality data from bioassays of
-any kind (e.g. insecti/pesti/herbi-cides, antibiotics, etc.).
+any kind (e.g.,insecti/pesti/herbi-cides, antibiotics, etc.).
 
 ![](index_files/figure-markdown_strict/unnamed-chunk-1-1.png)
 
