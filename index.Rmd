@@ -2,7 +2,7 @@
 title: "index"
 author: "Piyal Karunarathne, Pascal Milesi, Nicolas Pocquet, and Pierrick Labbé"
 date: "6/9/2021"
-output: html_document
+output: md_document
 ---
 
 ```{r setup, include=FALSE}
