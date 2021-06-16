@@ -15,7 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(BioRssay)
 data(bioassay)
 transd<-probid.trans(bioassay$assay2)
-mort.plot(transd$tr.data)
+data<-transd$tr.data
+strains<-levels(data$strain)
+mort.plot(data,strains)
 ```
 
 ***For a comprehensive tutorial of the package, navigate to "Get started" where all the functions and usage is explained with ample examples.***
