@@ -45,7 +45,8 @@ See the examples below.
 data(bioassay)
 head(bioassay$assay2)
 ```
-Also download the test data at <https://github.com/milesilab/BioRssay/blob/main/inst/Test.BioRssay.txt>
+Also download the test data at <https://github.com/milesilab/DATA/blob/main/BioAssays/Test.BioRssay.txt>
+and find more example data sets at <https://github.com/milesilab/DATA/blob/main/BioAssays>
 
 **Example 2**
 ```{r}
