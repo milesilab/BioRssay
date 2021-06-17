@@ -20,7 +20,6 @@ Please don’t forget to cite us if you use the package.
 \*Publication to be added
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
