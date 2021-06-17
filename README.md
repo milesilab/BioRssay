@@ -18,6 +18,7 @@ To install the package, run the following code on R.
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
-[![lifecycle](https://github.com/milesilab/BioRssay/workflows/lifecycle/badge.svg)](https://github.com/milesilab/BioRssay/actions)
-[![downloads](https://github.com/milesilab/BioRssay/workflows/downloads/badge.svg)](https://github.com/milesilab/BioRssay/actions)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![Github All Releases](https://img.shields.io/github/downloads/milesilab/BioRssay/total.svg)]()
 <!-- badges: end -->
