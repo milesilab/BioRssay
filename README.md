@@ -12,9 +12,10 @@ any kind (e.g.,insecti/pesti/herbi-cides, antibiotics, etc.).
 
 ![](unnamed-chunk-1-1.png)
 
-***For a comprehensive tutorial on the package, navigate to “Get
-started” where all the functions and usage is explained with ample
-examples.***
+***For a comprehensive tutorial on the package, go to
+<a href="https://milesilab.github.io/BioRssay/" class="uri">https://milesilab.github.io/BioRssay/</a>
+and navigate to “Get started” where all the functions and usage is
+explained with ample examples.***
 
 **Installation**
 

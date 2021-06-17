@@ -26,7 +26,7 @@ strains<-levels(data$strain)
 mort.plot(data,strains)
 ```
 
-***For a comprehensive tutorial on the package, navigate to "Get started" where all the functions and usage is explained with ample examples.***
+***For a comprehensive tutorial on the package, go to <https://milesilab.github.io/BioRssay/> and navigate to "Get started" where all the functions and usage is explained with ample examples.***
 
 **Installation**
 ```{r,results = "hide",eval=FALSE}
