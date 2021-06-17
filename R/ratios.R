@@ -119,7 +119,8 @@ return(dxt)
 #'
 #' @export
 resist.ratio<-function(data,conf.level=0.95,ref.strain=NULL,plot=FALSE,plot.conf=TRUE,test.validity=TRUE,...) {
-  strains<-as.character(unique(data$strain))
+  data$strain<-as.factor(data$strain)
+  strains<-levels(data$strain)
   dxt<-get.dxt(strains,data,conf.level)
   dat<-do.call(rbind,lapply(dxt,function(x){x[[2]]}))
   colnames(dat)<-c("LD50", "LD50min","LD50max","varLD50","LD95", "LD95min","LD95max","varLD95",
@@ -170,7 +171,8 @@ resist.ratio<-function(data,conf.level=0.95,ref.strain=NULL,plot=FALSE,plot.conf
 #'
 #' @export
 model.signif<-function(data){
-  strains<-as.character(unique(data$strain))
+  data$strain<-as.factor(data$strain)
+  strains<-levels(data$strain)
   if (length(strains)>=2) {
     if (length(strains)==2) {
       Test<-reg.pair(data)

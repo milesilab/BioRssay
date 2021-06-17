@@ -68,5 +68,6 @@ probid.trans<-function(dataf,conf=0.05){
   }
   probmort<-sapply(data$mort,qnorm) # apply probit transformation to the data
   data<-cbind(data,probmort)
+  data$strain<-as.factor(data$strain)
   return(list(convrg=tt,tr.data=data))
 }

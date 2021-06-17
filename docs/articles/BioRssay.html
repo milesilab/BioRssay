@@ -136,9 +136,8 @@
 <span class="co">#&gt; 4    temephos KIS-ref 0.004    98   89         1 26/01/11     1</span>
 <span class="co">#&gt; 5    temephos KIS-ref 0.005    95   90         1 26/01/11     1</span>
 <span class="co">#&gt; 6    temephos KIS-ref 0.007    99   97         1 26/01/11     1</span>
-<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">exm1</span><span class="op">$</span><span class="va">strain</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] KIS-ref DZOU    DZOU2  </span>
-<span class="co">#&gt; Levels: DZOU DZOU2 KIS-ref</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">exm1</span><span class="op">$</span><span class="va">strain</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] "KIS-ref" "DZOU"    "DZOU2"</span></code></pre></div>
 <p>This example contains the mortality data of three strains (KIS, DZOU, and KIS-ref); KIS is used as the reference with suffix “ref”.</p>
 <p>The first step is to check if the controls also have considerable mortality and whether a correction should be applied to the data, followed by probid transformation (<em>we might need to explain more on why this transformation</em>). This is easily achieved with the function “probit.trans”.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -167,26 +166,27 @@
 <span class="va">RR</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 <span class="va">RR</span>
 <span class="co">#&gt;                LD50     LD50min     LD50max      varLD50        LD95    LD95min</span>
-<span class="co">#&gt; KIS-ref 0.001519579 0.001163367 0.001819190 0.0006597966 0.005011012 0.00414955</span>
 <span class="co">#&gt; DZOU    0.007360928 0.006136601 0.009107134 0.0004813749 0.064493518 0.04099287</span>
 <span class="co">#&gt; DZOU2   0.006156279 0.005043721 0.007720790 0.0003991162 0.057611139 0.03537616</span>
+<span class="co">#&gt; KIS-ref 0.001519579 0.001163367 0.001819190 0.0006597966 0.005011012 0.00414955</span>
 <span class="co">#&gt;             LD95max     varLD95    Slope   SlopeSE Intercept InterceptSE</span>
-<span class="co">#&gt; KIS-ref 0.006666735 0.001109805 3.174155 0.3811593  8.945646   0.9848957</span>
 <span class="co">#&gt; DZOU    0.125240023 0.012002361 1.745048 0.1537397  3.722305   0.3579163</span>
 <span class="co">#&gt; DZOU2   0.121382718 0.010222512 1.693651 0.1657277  3.744123   0.3906964</span>
+<span class="co">#&gt; KIS-ref 0.006666735 0.001109805 3.174155 0.3811593  8.945646   0.9848957</span>
 <span class="co">#&gt;                h          g    Chi(p)     rr50  rr50max  rr50min     rr95</span>
-<span class="co">#&gt; KIS-ref 3.259672 0.07158818 0.5714766 1.000000 0.000000 0.000000  1.00000</span>
 <span class="co">#&gt; DZOU    1.905596 0.03971941 0.3606160 4.844057 5.641835 4.159087 12.87036</span>
 <span class="co">#&gt; DZOU2   2.326646 0.04899907 0.3568112 4.051305 4.692185 3.497959 11.49691</span>
+<span class="co">#&gt; KIS-ref 3.259672 0.07158818 0.5714766 1.000000 0.000000 0.000000  1.00000</span>
 <span class="co">#&gt;          rr95max   rr95min</span>
-<span class="co">#&gt; KIS-ref  0.00000  0.000000</span>
 <span class="co">#&gt; DZOU    14.99001 11.050435</span>
-<span class="co">#&gt; DZOU2   13.31562  9.926605</span></code></pre></div>
+<span class="co">#&gt; DZOU2   13.31562  9.926605</span>
+<span class="co">#&gt; KIS-ref  0.00000  0.000000</span></code></pre></div>
 <p><em>Note that we did not specify the reference strain here as it is already labeled in the data</em></p>
 <p><em>For each strain you have first the LD50 and LD95 and their upper and lower limits (95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971). </em>The result of the chi test (Chi(p)) is then indicated to judge whether the data are well fitted to the regression or not: here all the p-values are over 0.05 so the fits are acceptable). <em>Finally the resistance ratios are indicated for LD50 and LD95 (RR50 and RR95). </em>As there are 3 strains, the script first tests whether they are all similar (i.e. equivalent to 1 strain) or not (3 strains vs 1 strain). Here, the test is highly significant, some strains are thus different in terms of resistance.</p>
 <p>Plotting option with confidence levels and a validity test of the regression models is also available in the function “resist.ratio”. However, we did not use it here and we will do a more comparative plotting with “mort.plot” next.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="co"># set plot rows</span>
+<code class="sourceCode R"><span class="co">#strains&lt;-levels(data$strain)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="co"># set plot rows</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">FALSE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="co"># plot without confidence intervals and test of validity of the model</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">FALSE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span>,pch<span class="op">=</span><span class="cn">NA</span><span class="op">)</span> <span class="co"># plot only the regression lines</span></code></pre></div>
 <p><img src="BioRssay_files/figure-html/unnamed-chunk-7-1.png" width="768"></p>
@@ -232,21 +232,21 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">RR.b</span><span class="op">)</span>
 <span class="co">#&gt;               LD50    LD50min    LD50max     varLD50       LD95    LD95min</span>
-<span class="co">#&gt; Kisumu   0.2726414  0.2587263  0.2860428 0.022377514   0.446101   0.415979</span>
 <span class="co">#&gt; Acerkis 56.5098989 53.2114813 59.6792554 0.001786642 107.634086 100.302691</span>
 <span class="co">#&gt; AgRR5   79.1108266 74.7149834 83.1800402 0.001573892 123.408708 115.649404</span>
+<span class="co">#&gt; Kisumu   0.2726414  0.2587263  0.2860428 0.022377514   0.446101   0.415979</span>
 <span class="co">#&gt;             LD95max     varLD95    Slope   SlopeSE  Intercept InterceptSE</span>
-<span class="co">#&gt; Kisumu    0.4878805 0.144419248 7.691933 0.6055473   4.341389   0.3281966</span>
 <span class="co">#&gt; Acerkis 117.1146160 0.002410525 5.878145 0.3656493 -10.299242   0.6734320</span>
 <span class="co">#&gt; AgRR5   134.1446941 0.002449533 8.517708 0.6962015 -16.168620   1.3613946</span>
+<span class="co">#&gt; Kisumu    0.4878805 0.144419248 7.691933 0.6055473   4.341389   0.3281966</span>
 <span class="co">#&gt;                h          g       Chi(p)     rr50  rr50max  rr50min     rr95</span>
-<span class="co">#&gt; Kisumu  1.000000 0.02380791 7.672306e-24   1.0000   0.0000   0.0000   1.0000</span>
 <span class="co">#&gt; Acerkis 1.000000 0.01486432 9.995387e-01 207.2682 418.0336 102.7671 241.2774</span>
 <span class="co">#&gt; AgRR5   1.612638 0.02786453 9.609371e-01 290.1644 583.4161 144.3144 276.6385</span>
+<span class="co">#&gt; Kisumu  1.000000 0.02380791 7.672306e-24   1.0000   0.0000   0.0000   1.0000</span>
 <span class="co">#&gt;          rr95max  rr95min</span>
-<span class="co">#&gt; Kisumu    0.0000   0.0000</span>
 <span class="co">#&gt; Acerkis 486.6258 119.6294</span>
-<span class="co">#&gt; AgRR5   556.2204 137.5873</span></code></pre></div>
+<span class="co">#&gt; AgRR5   556.2204 137.5873</span>
+<span class="co">#&gt; Kisumu    0.0000   0.0000</span></code></pre></div>
 <p>Note that we have enabled the arguments “plot=” with “plot.conf=” and “test.validity=”. When the regression is not valid (Chi-square significance) for a strain, it will be plotted without the regression, as in this example “Kisumu”.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#test the validity of the regression models</span>
@@ -254,9 +254,9 @@
 <span class="va">t.models</span>
 <span class="co">#&gt; $model</span>
 <span class="co">#&gt;   strain1 strain2           model.pval          deviance df bonferroni</span>
-<span class="co">#&gt; 1  Kisumu Acerkis 4.09605796743876e-78 -1220.98742604214 -2        sig</span>
-<span class="co">#&gt; 2  Kisumu   AgRR5 3.52611879574658e-84 -1433.09904360371 -2        sig</span>
-<span class="co">#&gt; 3 Acerkis   AgRR5 9.81944629906017e-18 -93.3705086548187 -2        sig</span></code></pre></div>
+<span class="co">#&gt; 1 Acerkis   AgRR5 9.81944629906017e-18 -93.3705086548187 -2        sig</span>
+<span class="co">#&gt; 2 Acerkis  Kisumu 4.09605796743876e-78 -1220.98742604214 -2        sig</span>
+<span class="co">#&gt; 3   AgRR5  Kisumu 3.52611879574658e-84 -1433.09904360371 -2        sig</span></code></pre></div>
 <p>These steps can be repeated for separate insecticides in the example 2 one by one or in a loop (e.g. for loop)</p>
 </div>
 </div>

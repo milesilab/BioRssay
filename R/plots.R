@@ -41,8 +41,9 @@ validity<-function(strains,data){
 #'
 #' @export
 mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,test.validity=TRUE,...){
+  data$strain<-as.factor(data$strain)
   if(is.null(strains)){
-    strains<-as.character(unique(data$strain))
+    strains<-levels(data$strain)
   }
   dmin<-floor(log10(min(data$dose)))
   dmax<-ceiling(log10(max(data$dose)))

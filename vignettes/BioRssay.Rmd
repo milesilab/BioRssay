@@ -63,7 +63,7 @@ Let's have a quick look at the data again.
 assays<-bioassay
 exm1<-assays$assay2
 head(exm1)
-unique(unique(exm1$strain))
+unique(as.character(exm1$strain))
 ```
 This example contains the mortality data of three strains (KIS, DZOU, and KIS-ref); KIS is used as the reference with suffix "ref". 
 
@@ -94,6 +94,7 @@ Plotting option with confidence levels and a validity test of the regression mod
 
 
 ```{r,fig.dim=c(8,4)}
+#strains<-levels(data$strain)
 par(mfrow=c(1,2)) # set plot rows
 mort.plot(data,plot.conf=FALSE,test.validity=FALSE) # plot without confidence intervals and test of validity of the model
 mort.plot(data,plot.conf=FALSE,test.validity=FALSE,pch=NA) # plot only the regression lines
