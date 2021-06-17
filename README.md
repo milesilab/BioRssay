@@ -16,5 +16,8 @@ To install the package, run the following code on R.
     devtools::install_github("milesilab/BioRssay")
 
 <!-- badges: start -->
+
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
+[![lifecycle](https://github.com/milesilab/BioRssay/workflows/lifecycle/badge.svg)](https://github.com/milesilab/BioRssay/actions)
+[![downloads](https://github.com/milesilab/BioRssay/workflows/downloads/badge.svg)](https://github.com/milesilab/BioRssay/actions)
 <!-- badges: end -->
