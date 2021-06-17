@@ -1,7 +1,7 @@
 Package: BioRssay
 Type: Package
 Title: Analyze bioassays and probit graphs
-Version: 0.1.0
+Version: 0.9.0
 Authors@R:
   c(person(given="Piyal",family="Karunarathne", email="piyal.karunarathne@ebc.uu.se", role = c("aut", "cre"),comment = c(ORCID = "0000-0002-1934-145X")),person(given="Pascal", family="Milesi", role = "aut",comment = c(ORCID = "0000-0001-8580-4291")))
 Maintainer: Piyal Karunarathne <piyal.karunarathne@ebc.uu.se>
