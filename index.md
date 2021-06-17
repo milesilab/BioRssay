@@ -18,3 +18,10 @@ Please don’t forget to cite us if you use the package.
 **How to cite**
 
 \*Publication to be added
+
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
+[![lifecycle](https://github.com/milesilab/BioRssay/workflows/lifecycle/badge.svg)](https://github.com/milesilab/BioRssay/actions)
+[![downloads](https://github.com/milesilab/BioRssay/workflows/downloads/badge.svg)](https://github.com/milesilab/BioRssay/actions)
+<!-- badges: end -->
