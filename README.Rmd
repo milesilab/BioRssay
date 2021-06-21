@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 [![Github All Releases](https://img.shields.io/github/downloads/milesilab/BioRssay/total.svg)]()
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
-[![Codecov test coverage](https://codecov.io/gh/milesilab/BioRssay/branch/master/graph/badge.svg)](https://codecov.io/gh/milesilab/BioRssay?branch=master)
 <!-- badges: end -->
 
 **BioRssay** will help you to analyze mortality data from bioassays of any kind (e.g.,insecti/pesti/herbi-cides, antibiotics, etc.).
