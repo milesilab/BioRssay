@@ -2,7 +2,7 @@
 % Please edit documentation in R/ratios.R
 \name{resist.ratio}
 \alias{resist.ratio}
-\title{Calculate regression coefficients and resistance ratios}
+\title{Calculate lethal dosage, resistance ratios, and regression coefficients and tests for linearity}
 \usage{
 resist.ratio(
   data,
@@ -15,32 +15,34 @@ resist.ratio(
 )
 }
 \arguments{
-\item{data}{a data frame of probit transformed mortality data using the function probit.trans}
+\item{data}{a data frame of probit-transformed mortality data using the function probit.trans()}
 
-\item{conf.level}{numerical. confidence level for the LD calculation (default 0.95)}
+\item{conf.level}{numerical. level for confidence intervals of the LD50 and LD95 (default 0.95)}
 
 \item{ref.strain}{character. name of the reference strain if present (see details)}
 
-\item{plot}{logical. Whether to plot the mortality plot}
+\item{plot}{logical. Whether to draw the plot. Default FALSE}
 
-\item{plot.conf}{logical. If plot=TRUE, whether to plot the confidence intervals}
+\item{plot.conf}{logical. If plot=TRUE, whether to plot the 95 percent confidence intervals. Default TRUE}
 
-\item{test.validity}{logical. (If plot=TRUE) Test and plot the validity of the models}
+\item{test.validity}{logical. If plot=TRUE (default), the regression for a strain that failed the linearity test is not plotted}
 
 \item{...}{parameters to be passed on to graphics for the plot (e.g. col, pch)}
 }
 \value{
+Returns a data frame with the various estimates mentioned above. If plot=TRUE, plots the mortality on a probit-transformed scale against the log10 doses.
+
 returns a data frame of statistical output and if plot=TRUE, plots the mortality on a log transformed scale.
 }
 \description{
-This function calculates coefficients of the linear regression and the LD values for the strains tested using a GLM. Further it also outputs 95 percent confidence intervals of the RR (log-dose), according to Robertson and Preisler 1992 (also check references).
+Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 50\% and 95\% of the population (LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default), using a script modified from Johnson et al (2013), which allows taking the g factor into account ("With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4." Finney, 1971) and the heterogeneity (h) of the data (Finney, 1971) to calculate the confidence intervals (i.e. a larger heterogeneity will increase the confidence intervals). It also computes the corresponding resistance ratios (RR), i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively for RR50 and RR95 (usually, it is the susceptible reference strain), with their 95\% confidence intervals (RRmin and RRmax), calculated according to Robertson and Preisler (1992). Finally, it also computes the coefficients (slope and intercept, with their standard error) of the linear regressions) and tests for the linearity of the dose-mortality response using a chi-square test (Chi(p)) between the observed dead numbers (data) and the dead numbers predicted by the regression (the test is significant if the data is not linear, e.g. mixed populations).
 }
 \details{
-If a name of the reference strain is provided as it appears in the data, it will be used in the model. If not provided, the function will look for strains with the suffix "ref" in their names and will use it as the reference. If this returns NULL, the function will run the model considering no reference strain.
+If a name is provided in ref.strain=, it will be used as the reference to compute the resistance ratios (RR). Alternatively, the function will look for a strain with the suffix "ref" in the dataset. If this returns NULL, the strain with the lowest LD50 will be considered as reference.
 }
 \examples{
 data(bioassay)
-transd<-probid.trans(bioassay$assay2)
+transd<-probit.trans(bioassay$assay2)
 data<-transd$tr.data
 resist.ratio(data,plot=TRUE)
 
@@ -53,7 +55,4 @@ HommelG(1988). A stage wise rejective multiple test procedure based on a modifie
 Johnson RM, Dahlgren L, Siegfried BD,EllisMD(2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
 
 Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with arthropods. CRC, Boca Raton, FL.
-}
-\author{
-Pascal Milesi, Piyal Karunarathne
 }

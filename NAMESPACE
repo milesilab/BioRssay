@@ -2,7 +2,7 @@
 
 export(model.signif)
 export(mort.plot)
-export(probid.trans)
+export(probit.trans)
 export(resist.ratio)
 importFrom(colorspace,rainbow_hcl)
 importFrom(graphics,abline)

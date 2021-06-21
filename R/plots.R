@@ -14,27 +14,27 @@ validity<-function(strains,data){
 }
 
 
-#' Plot mortality
+#' Plot dose-mortality response for each strain
 #'
-#' Plots the mortality of a given data set with and without confidence levels, and adds the validity of the regression.
+#' This function plots the probit-transformed mortalities (probit.trans() function) as a function of the log10 of the dose, the regressions predicted by the resist.ratio() function,  with or without confidence levels, if the dose-mortality responses are linear (option).
 #'
-#' @param data a data frame of probit transformed mortality data using the function probit.trans
-#' @param strains character. list of test strains. If not provided, the function will plot all the strains in the data set.
-#' @param plot.conf logical. Whether to plot the confidence level on the plot for each strain
+#' @param data a data frame of probit transformed mortality data using the function probit.trans()
+#' @param strains character. list of test strains to be plotted. If not provided, the function will plot all the strains in the data set.
+#' @param plot.conf logical. Whether to plot the confidence intervals for each strain, default TRUE
 #' @param conf.level numerical. The confidence interval to be plotted
-#' @param test.validity logical. Test and plot the validity of the models
+#' @param test.validity logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.
 #' @param ... parameters to be passed on to graphics for the plot (e.g. col, pch)
 #'
 #' @importFrom graphics points
 #' @importFrom colorspace rainbow_hcl
 #'
-#' @return A plot of mortality
+#' @return A plot of dose-mortality responses for bioassays
 #'
-#' @author Piyal Karunarathne, Pascal Milesi
+#' @author Piyal Karunarathne, Pascal Milesi, Pierrick Labbé
 #'
 #' @examples
 #' data(bioassay)
-#' transd<-probid.trans(bioassay$assay2)
+#' transd<-probit.trans(bioassay$assay2)
 #' data<-transd$tr.data
 #' strains<-levels(data$strain)
 #' mort.plot(data,strains)

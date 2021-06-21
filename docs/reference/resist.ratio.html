@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate regression coefficients and resistance ratios — resist.ratio • BioRssay</title>
+<title>Calculate lethal dosage, resistance ratios, and regression coefficients and tests for linearity — resist.ratio • BioRssay</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Calculate regression coefficients and resistance ratios — resist.ratio" />
-<meta property="og:description" content="This function calculates coefficients of the linear regression and the LD values for the strains tested using a GLM. Further it also outputs 95 percent confidence intervals of the RR (log-dose), according to Robertson and Preisler 1992 (also check references)." />
+<meta property="og:title" content="Calculate lethal dosage, resistance ratios, and regression coefficients and tests for linearity — resist.ratio" />
+<meta property="og:description" content="Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 50% and 95% of the population (LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default), using a script modified from Johnson et al (2013), which allows taking the g factor into account (&quot;With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.&quot; Finney, 1971) and the heterogeneity (h) of the data (Finney, 1971) to calculate the confidence intervals (i.e. a larger heterogeneity will increase the confidence intervals). It also computes the corresponding resistance ratios (RR), i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively for RR50 and RR95 (usually, it is the susceptible reference strain), with their 95% confidence intervals (RRmin and RRmax), calculated according to Robertson and Preisler (1992). Finally, it also computes the coefficients (slope and intercept, with their standard error) of the linear regressions) and tests for the linearity of the dose-mortality response using a chi-square test (Chi(p)) between the observed dead numbers (data) and the dead numbers predicted by the regression (the test is significant if the data is not linear, e.g. mixed populations)." />
 
 
 
@@ -106,13 +106,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate regression coefficients and resistance ratios</h1>
+    <h1>Calculate lethal dosage, resistance ratios, and regression coefficients and tests for linearity</h1>
     
     <div class="hidden name"><code>resist.ratio.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function calculates coefficients of the linear regression and the LD values for the strains tested using a GLM. Further it also outputs 95 percent confidence intervals of the RR (log-dose), according to Robertson and Preisler 1992 (also check references).</p>
+    <p>Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 50% and 95% of the population (LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default), using a script modified from Johnson et al (2013), which allows taking the g factor into account ("With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4." Finney, 1971) and the heterogeneity (h) of the data (Finney, 1971) to calculate the confidence intervals (i.e. a larger heterogeneity will increase the confidence intervals). It also computes the corresponding resistance ratios (RR), i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively for RR50 and RR95 (usually, it is the susceptible reference strain), with their 95% confidence intervals (RRmin and RRmax), calculated according to Robertson and Preisler (1992). Finally, it also computes the coefficients (slope and intercept, with their standard error) of the linear regressions) and tests for the linearity of the dose-mortality response using a chi-square test (Chi(p)) between the observed dead numbers (data) and the dead numbers predicted by the regression (the test is significant if the data is not linear, e.g. mixed populations).</p>
     </div>
 
     <pre class="usage"><span class='fu'>resist.ratio</span><span class='op'>(</span>
@@ -130,11 +130,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>a data frame of probit transformed mortality data using the function probit.trans</p></td>
+      <td><p>a data frame of probit-transformed mortality data using the function probit.trans()</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
-      <td><p>numerical. confidence level for the LD calculation (default 0.95)</p></td>
+      <td><p>numerical. level for confidence intervals of the LD50 and LD95 (default 0.95)</p></td>
     </tr>
     <tr>
       <th>ref.strain</th>
@@ -142,15 +142,15 @@
     </tr>
     <tr>
       <th>plot</th>
-      <td><p>logical. Whether to plot the mortality plot</p></td>
+      <td><p>logical. Whether to draw the plot. Default FALSE</p></td>
     </tr>
     <tr>
       <th>plot.conf</th>
-      <td><p>logical. If plot=TRUE, whether to plot the confidence intervals</p></td>
+      <td><p>logical. If plot=TRUE, whether to plot the 95 percent confidence intervals. Default TRUE</p></td>
     </tr>
     <tr>
       <th>test.validity</th>
-      <td><p>logical. (If plot=TRUE) Test and plot the validity of the models</p></td>
+      <td><p>logical. If plot=TRUE (default), the regression for a strain that failed the linearity test is not plotted</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -160,23 +160,21 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>returns a data frame of statistical output and if plot=TRUE, plots the mortality on a log transformed scale.</p>
+    <p>Returns a data frame with the various estimates mentioned above. If plot=TRUE, plots the mortality on a probit-transformed scale against the log10 doses.</p>
+<p>returns a data frame of statistical output and if plot=TRUE, plots the mortality on a log transformed scale.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If a name of the reference strain is provided as it appears in the data, it will be used in the model. If not provided, the function will look for strains with the suffix "ref" in their names and will use it as the reference. If this returns NULL, the function will run the model considering no reference strain.</p>
+    <p>If a name is provided in ref.strain=, it will be used as the reference to compute the resistance ratios (RR). Alternatively, the function will look for a strain with the suffix "ref" in the dataset. If this returns NULL, the strain with the lowest LD50 will be considered as reference.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Finney DJ(1971). Probitanalysis. Cambridge:Cambridge UniversityPress. 350p.</p>
 <p>HommelG(1988). A stage wise rejective multiple test procedure based on a modified Bonferroni test. Biometrika 75, 383-6.</p>
 <p>Johnson RM, Dahlgren L, Siegfried BD,EllisMD(2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.</p>
 <p>Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with arthropods. CRC, Boca Raton, FL.</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Pascal Milesi, Piyal Karunarathne</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>)</span>
-<span class='va'>transd</span><span class='op'>&lt;-</span><span class='fu'><a href='probid.trans.html'>probid.trans</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>$</span><span class='va'>assay2</span><span class='op'>)</span>
+<span class='va'>transd</span><span class='op'>&lt;-</span><span class='fu'><a href='probit.trans.html'>probit.trans</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>$</span><span class='va'>assay2</span><span class='op'>)</span>
 <span class='va'>data</span><span class='op'>&lt;-</span><span class='va'>transd</span><span class='op'>$</span><span class='va'>tr.data</span>
 <span class='fu'>resist.ratio</span><span class='op'>(</span><span class='va'>data</span>,plot<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='img'><img src='resist.ratio-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;                LD50     LD50min     LD50max      varLD50        LD95    LD95min

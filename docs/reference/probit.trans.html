@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Test the significance of dose-mortality response differences — model.signif • BioRssay</title>
+<title>Probit-transform the data and apply Abbott's correction (if necessary) — probit.trans • BioRssay</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Test the significance of dose-mortality response differences — model.signif" />
-<meta property="og:description" content="This function is used when comparing at least two strains. It tests whether the mortality-dose regressions are similar for different strains, using a likelihood ratio test (LRT). If there are more than two strains, it also computes pairwise tests, using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing." />
+<meta property="og:title" content="Probit-transform the data and apply Abbott's correction (if necessary) — probit.trans" />
+<meta property="og:description" content="This function applies probit transformation to the data, after applying Abbott's correction (see reference) when control groups (e.g. unexposed susceptible strain) show non-negligible mortality." />
 
 
 
@@ -106,46 +106,43 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Test the significance of dose-mortality response differences</h1>
+    <h1>Probit-transform the data and apply Abbott's correction (if necessary)</h1>
     
-    <div class="hidden name"><code>model.signif.Rd</code></div>
+    <div class="hidden name"><code>probit.trans.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function is used when comparing at least two strains. It tests whether the mortality-dose regressions are similar for different strains, using a likelihood ratio test (LRT). If there are more than two strains, it also computes pairwise tests, using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.</p>
+    <p>This function applies probit transformation to the data, after applying Abbott's correction (see reference) when control groups (e.g. unexposed susceptible strain) show non-negligible mortality.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>model.signif</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>probit.trans</span><span class='op'>(</span><span class='va'>dataf</span>, conf <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>data</th>
-      <td><p>a data frame of probit transformed mortality data using the function probit.trans</p></td>
+      <th>dataf</th>
+      <td><p>a data frame of mortality data containing four mandatory columns "strain", "dose", "total", "dead" (not necessarily in that order).</p></td>
+    </tr>
+    <tr>
+      <th>conf</th>
+      <td><p>numerical. Threshold for the mortality in the controls above which the correction should be applied (default=0.05)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list with model outputs: a chi-square test if there only two strains or bonferroni test significance from a pariwise model comparison if there are more than two strains</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>a list. convrg: with correction values and convergence (NULL if mortality in the controls is below conf.), tr.data: transformed data</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>A global LRT test assesses a strain’s effect, by comparing two models, one with and one without this effect (i.e. comparing a model with several strains to a model where all the data originate from a single strain).
-If there are more than two strains, pairwise tests are computed, and p-values of significance are assessed using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.</p>
-<p>Warning: We strongly encourage users to not use this function when the dose-mortality response for at least one strain significantly deviates from linearity (see resist.ratio() function for more details): in such cases the test cannot be interpreted.</p>
+    <p>Abbott, WS (1925). A method of computing the effectiveness of an insecticide. J. Econ. Entomol.;18:265‐267.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Pascal Milesi, Piyal Karunarathne, Pierrick Labbé</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>)</span>
-<span class='va'>transd</span><span class='op'>&lt;-</span><span class='fu'><a href='probit.trans.html'>probit.trans</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>$</span><span class='va'>assay2</span><span class='op'>)</span>
-<span class='va'>data</span><span class='op'>&lt;-</span><span class='va'>transd</span><span class='op'>$</span><span class='va'>tr.data</span>
-<span class='fu'>model.signif</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; $model
-#&gt;   strain1 strain2           model.pval          deviance df bonferroni
-#&gt; 1    DZOU   DZOU2    0.264023226942502 -5.52847606655654 -2        sig
-#&gt; 2    DZOU KIS-ref  8.3588934657195e-61 -714.373451385791 -2        sig
-#&gt; 3   DZOU2 KIS-ref 3.15241148845391e-48 -603.931258358858 -2    non-sig
-#&gt; </div><div class='input'>
+<span class='va'>transd</span><span class='op'>&lt;-</span><span class='fu'>probit.trans</span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

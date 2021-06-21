@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{mort.plot}
 \alias{mort.plot}
-\title{Plot mortality}
+\title{Plot dose-mortality response for each strain}
 \usage{
 mort.plot(
   data,
@@ -14,32 +14,32 @@ mort.plot(
 )
 }
 \arguments{
-\item{data}{a data frame of probit transformed mortality data using the function probit.trans}
+\item{data}{a data frame of probit transformed mortality data using the function probit.trans()}
 
-\item{strains}{character. list of test strains. If not provided, the function will plot all the strains in the data set.}
+\item{strains}{character. list of test strains to be plotted. If not provided, the function will plot all the strains in the data set.}
 
-\item{plot.conf}{logical. Whether to plot the confidence level on the plot for each strain}
+\item{plot.conf}{logical. Whether to plot the confidence intervals for each strain, default TRUE}
 
 \item{conf.level}{numerical. The confidence interval to be plotted}
 
-\item{test.validity}{logical. Test and plot the validity of the models}
+\item{test.validity}{logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.}
 
 \item{...}{parameters to be passed on to graphics for the plot (e.g. col, pch)}
 }
 \value{
-A plot of mortality
+A plot of dose-mortality responses for bioassays
 }
 \description{
-Plots the mortality of a given data set with and without confidence levels, and adds the validity of the regression.
+This function plots the probit-transformed mortalities (probit.trans() function) as a function of the log10 of the dose, the regressions predicted by the resist.ratio() function,  with or without confidence levels, if the dose-mortality responses are linear (option).
 }
 \examples{
 data(bioassay)
-transd<-probid.trans(bioassay$assay2)
+transd<-probit.trans(bioassay$assay2)
 data<-transd$tr.data
 strains<-levels(data$strain)
 mort.plot(data,strains)
 
 }
 \author{
-Piyal Karunarathne, Pascal Milesi
+Piyal Karunarathne, Pascal Milesi, Pierrick Labbé
 }

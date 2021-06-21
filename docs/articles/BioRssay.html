@@ -75,36 +75,36 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">BioRssay</span><span class="op">)</span></code></pre></div>
-<div id="an-r-package-for-analyses-of-bioassays-and-probid-graphs" class="section level1">
+<div id="an-r-package-for-analyses-of-bioassays-and-probit-graphs" class="section level1">
 <h1 class="hasAnchor">
-<a href="#an-r-package-for-analyses-of-bioassays-and-probid-graphs" class="anchor"></a><strong>An R package for analyses of bioassays and probid graphs</strong>
+<a href="#an-r-package-for-analyses-of-bioassays-and-probit-graphs" class="anchor"></a><strong>An R package for analyses of bioassays and probit graphs</strong>
 </h1>
-<p><em>Piyal Karunarathne, Pascal Milesi, Nicolas Pocquet, and Pierrick Labbé</em></p>
-<p>This package is designed to analyze mortality data from bioassays of one or several strains/lines/populations. As of now, the functions in the package allow control mortality with Abott’s correction for more precise analysis of mortality. For each strain, functions are available to generate mortality-dose regression using a generalized linear model (takes over-dispersion into account and allows mortality of 0 or 1), and plot the regressions with or without the desired confidence interval (e.g. 95%).</p>
-<p>The package also carries functions to test the validity of the regression outputs using a chi-square test between model predictions and observed number of dead samples; A significant valid test will reflect a non-linear data (e.g. mixed populations). These plots can be drawn side by side for a better comparison with the same functions (see below).</p>
-<p>The functions in the package also compute the lethal dose for 50% and 95% of the populations (LD50 and LD95 respectively), with their 95% confidence intervals (CI), using a methodology described by Johnson et al. 2013, which allows taking the heterogeneity of the data into account (Finney 1971) to calculate the CI (i.e. a larger heterogeneity will increase the CI).</p>
-<p>The methods implemented use a likelihood ratio test (LRT) to test coherence of mortality-dose regressions among different strains. In the case of more than two strains, a pairwise comparison of models is performed and further corrected using a sequential Bonferroni correction (Hommel 1988). Finally, users can calculate the resistance ratios (RR) at LD50 and LD95, i.e. the ratios between a given strain and the starain with the lower LD50 and LD95, respectively (usually it is the susceptible reference), with their 95% confidence intervals, calculated according to Robertson and Preisler (1992).</p>
+<p><em>Piyal Karunarathne, Nicolas Pocquet, Pascal Milesi, and Pierrick Labbé</em></p>
+<p>This package is designed to analyze mortality data from bioassays of one or several strains/lines/populations. As of now, the functions in the package allow adjusting for mortality in the controls with Abott’s correction. For each strain, functions are available to generate a mortality-dose regression using a generalized linear model (which take over-dispersion into account and allow mortality of 0 or 1), and plot the regressions with or without the desired confidence interval (e.g. 95%).</p>
+<p>The package also provides functions to test the linearity of the log-dose response using a chi-square test between model predictions and observed data (significant deviations from linearity may reflect mixed populations for example).</p>
+<p>The package also allows computing the lethal dose for 50% and 95% of the populations (LD50 and LD95 respectively), with their 95% confidence intervals (CI), following Johnson et al. 2013 approach, which allows taking the heterogeneity of the data into account (<em>Finney 1971</em>) to calculate the CI (i.e. a larger heterogeneity will increase the CI).</p>
+<p>The methods implemented here use a likelihood ratio test (LRT) to test for differences in resistance levels among different strains. Finally, resistance ratios (RR) at LD50 and LD95, i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively (usually it is the susceptible reference), with their 95% confidence intervals, are calculated according to Robertson and <em>Preisler (1992)</em>.</p>
 </div>
 <div id="data-preparation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#data-preparation" class="anchor"></a>1. <strong>DATA PREPARATION</strong>
 </h1>
-<p>BioRssay can import data in any format that is compatible with base R data import functions (e.g. read.table, read.csv). However, for the functions in BioRssay to work, the data <strong>must</strong> have the following columns * strain: a column containing the strains tested * dose: dosage tested on each strain/sample. controls should be entered as 0 * total: total number of samples tested * dead: number of dead samples See the examples below.</p>
+<p>BioRssay can import data in any format that is compatible with base R data import functions (e.g. read.table, read.csv). However, for the functions in BioRssay to work, the data <strong>must</strong> have at least the following columns (other columns won’t be used, but are no hindrance): * strain: a column containing the strains tested * dose: dosage tested on each strain/sample. controls should be entered as 0 * total: total number of samples tested * dead: number of dead samples See the examples below.</p>
 <p><strong>Example 1</strong></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">bioassay</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">bioassay</span><span class="op">$</span><span class="va">assay2</span><span class="op">)</span>
-<span class="co">#&gt;   insecticide  strain  dose total dead replicate     date color</span>
-<span class="co">#&gt; 1    temephos KIS-ref 0.000   100    1         1 26/01/11     1</span>
-<span class="co">#&gt; 2    temephos KIS-ref 0.002    97   47         1 26/01/11     1</span>
-<span class="co">#&gt; 3    temephos KIS-ref 0.003    96   68         1 26/01/11     1</span>
-<span class="co">#&gt; 4    temephos KIS-ref 0.004    98   89         1 26/01/11     1</span>
-<span class="co">#&gt; 5    temephos KIS-ref 0.005    95   90         1 26/01/11     1</span>
-<span class="co">#&gt; 6    temephos KIS-ref 0.007    99   97         1 26/01/11     1</span></code></pre></div>
+<span class="co">#&gt;   insecticide  strain  dose total dead replicate     date</span>
+<span class="co">#&gt; 1    temephos KIS-ref 0.000   100    1         1 26/01/11</span>
+<span class="co">#&gt; 2    temephos KIS-ref 0.002    97   47         1 26/01/11</span>
+<span class="co">#&gt; 3    temephos KIS-ref 0.003    96   68         1 26/01/11</span>
+<span class="co">#&gt; 4    temephos KIS-ref 0.004    98   89         1 26/01/11</span>
+<span class="co">#&gt; 5    temephos KIS-ref 0.005    95   90         1 26/01/11</span>
+<span class="co">#&gt; 6    temephos KIS-ref 0.007    99   97         1 26/01/11</span></code></pre></div>
 <p>Also download the test data at <a href="https://github.com/milesilab/DATA/blob/main/BioAssays/Test.BioRssay.txt" class="uri">https://github.com/milesilab/DATA/blob/main/BioAssays/Test.BioRssay.txt</a> and find more example data sets at <a href="https://github.com/milesilab/DATA/blob/main/BioAssays" class="uri">https://github.com/milesilab/DATA/blob/main/BioAssays</a></p>
 <p><strong>Example 2</strong></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/find.package.html">path.package</a></span><span class="op">(</span><span class="st">"BioRssay"</span><span class="op">)</span>, <span class="st">"/Test.BioRssay.txt"</span><span class="op">)</span> <span class="co"># if the download doesn't work</span>
+<code class="sourceCode R"><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/find.package.html">path.package</a></span><span class="op">(</span><span class="st">"BioRssay"</span><span class="op">)</span>, <span class="st">"/Test.BioRssay.txt"</span><span class="op">)</span>
 <span class="va">test</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="va">file</span>,header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span>
 <span class="co">#&gt;   insecticide strain dose total dead</span>
@@ -120,6 +120,7 @@
 <h1 class="hasAnchor">
 <a href="#analysis" class="anchor"></a>2. <strong>Analysis</strong>
 </h1>
+<p>The workflow is only succinctly described here, for more information on the functions and their options, see individual one in the reference index.</p>
 <div id="example-1" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-1" class="anchor"></a><strong>Example 1</strong>
@@ -129,38 +130,33 @@
 <code class="sourceCode R"><span class="va">assays</span><span class="op">&lt;-</span><span class="va">bioassay</span>
 <span class="va">exm1</span><span class="op">&lt;-</span><span class="va">assays</span><span class="op">$</span><span class="va">assay2</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">exm1</span><span class="op">)</span>
-<span class="co">#&gt;   insecticide  strain  dose total dead replicate     date color</span>
-<span class="co">#&gt; 1    temephos KIS-ref 0.000   100    1         1 26/01/11     1</span>
-<span class="co">#&gt; 2    temephos KIS-ref 0.002    97   47         1 26/01/11     1</span>
-<span class="co">#&gt; 3    temephos KIS-ref 0.003    96   68         1 26/01/11     1</span>
-<span class="co">#&gt; 4    temephos KIS-ref 0.004    98   89         1 26/01/11     1</span>
-<span class="co">#&gt; 5    temephos KIS-ref 0.005    95   90         1 26/01/11     1</span>
-<span class="co">#&gt; 6    temephos KIS-ref 0.007    99   97         1 26/01/11     1</span>
+<span class="co">#&gt;   insecticide  strain  dose total dead replicate     date</span>
+<span class="co">#&gt; 1    temephos KIS-ref 0.000   100    1         1 26/01/11</span>
+<span class="co">#&gt; 2    temephos KIS-ref 0.002    97   47         1 26/01/11</span>
+<span class="co">#&gt; 3    temephos KIS-ref 0.003    96   68         1 26/01/11</span>
+<span class="co">#&gt; 4    temephos KIS-ref 0.004    98   89         1 26/01/11</span>
+<span class="co">#&gt; 5    temephos KIS-ref 0.005    95   90         1 26/01/11</span>
+<span class="co">#&gt; 6    temephos KIS-ref 0.007    99   97         1 26/01/11</span>
 <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">exm1</span><span class="op">$</span><span class="va">strain</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "KIS-ref" "DZOU"    "DZOU2"</span></code></pre></div>
-<p>This example contains the mortality data of three strains (KIS, DZOU, and KIS-ref); KIS is used as the reference with suffix “ref”.</p>
-<p>The first step is to check if the controls also have considerable mortality and whether a correction should be applied to the data, followed by probid transformation (<em>we might need to explain more on why this transformation</em>). This is easily achieved with the function “probit.trans”.</p>
+<p>This example contains the mortality data of three strains (KIS, DZOU, and KIS-ref); KIS is used as the reference, as indicated by the “ref” suffix.</p>
+<p>The first step is to check whether the controls have a non-negligible mortality, in which case a correction should be applied to the data, before probit transformation. This is easily achieved with the function “probit.trans”.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dataT</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/probid.trans.html">probid.trans</a></span><span class="op">(</span><span class="va">exm1</span><span class="op">)</span> <span class="co">#additionally confindence interval for controls' mortality can be set as desired with "conf="; default is 0.05.</span>
+<code class="sourceCode R"><span class="va">dataT</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/probit.trans.html">probit.trans</a></span><span class="op">(</span><span class="va">exm1</span><span class="op">)</span> <span class="co">#additionally an acceptable threshold for controls' mortality can be set as desired with "conf="; default is 0.05.</span>
 <span class="va">dataT</span><span class="op">$</span><span class="va">convrg</span>
 <span class="co">#&gt; NULL</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span><span class="op">)</span>
-<span class="co">#&gt;   insecticide  strain  dose total dead replicate     date color      mort</span>
-<span class="co">#&gt; 2    temephos KIS-ref 0.002    97   47         1 26/01/11     1 0.4845361</span>
-<span class="co">#&gt; 3    temephos KIS-ref 0.003    96   68         1 26/01/11     1 0.7083333</span>
-<span class="co">#&gt; 4    temephos KIS-ref 0.004    98   89         1 26/01/11     1 0.9081633</span>
-<span class="co">#&gt; 5    temephos KIS-ref 0.005    95   90         1 26/01/11     1 0.9473684</span>
-<span class="co">#&gt; 6    temephos KIS-ref 0.007    99   97         1 26/01/11     1 0.9797980</span>
-<span class="co">#&gt; 7    temephos KIS-ref 0.010    99   99         1 26/01/11     1 0.9940000</span>
-<span class="co">#&gt;     probmort</span>
-<span class="co">#&gt; 2 -0.0387720</span>
-<span class="co">#&gt; 3  0.5485223</span>
-<span class="co">#&gt; 4  1.3295291</span>
-<span class="co">#&gt; 5  1.6198563</span>
-<span class="co">#&gt; 6  2.0495943</span>
-<span class="co">#&gt; 7  2.5121443</span></code></pre></div>
-<p>The output of probid.trans is a list of which the first element (convrg) contains the results of Abotte’s correction and convergence values. However, since the mortality in the controls (dose=0) is below 5% (alpha=0.05), no correction applied to the data. Hence data$convrg is NULL. The second element of the list dataT is the probid transformed data with two additional columns: mort: mortality and probmort: probid transformed mortality. This data frame is what we’ll use in the next steps of the analysis.</p>
-<p>Next we will get the LD values at (50% and 95%) and resistance ratios at their respective LD values. The function “resist.ratio” allows you to do just that. Here you can also change the confidence level at which the LD is tested (default is 0.95); the reference strain can be specified in “ref.strain=”, if labeled with the suffix “ref” (as mentioned above), it is not necessary to specify it here although doing so still works. However, if the strain is not labeled with the said suffix in the data, ref.strain <strong>must</strong> be specified here. If neither labeled with “ref” nor specified with “ref.strain=”, the analysis will not consider any references.</p>
+<span class="co">#&gt;   insecticide  strain  dose total dead replicate     date      mort   probmort</span>
+<span class="co">#&gt; 2    temephos KIS-ref 0.002    97   47         1 26/01/11 0.4845361 -0.0387720</span>
+<span class="co">#&gt; 3    temephos KIS-ref 0.003    96   68         1 26/01/11 0.7083333  0.5485223</span>
+<span class="co">#&gt; 4    temephos KIS-ref 0.004    98   89         1 26/01/11 0.9081633  1.3295291</span>
+<span class="co">#&gt; 5    temephos KIS-ref 0.005    95   90         1 26/01/11 0.9473684  1.6198563</span>
+<span class="co">#&gt; 6    temephos KIS-ref 0.007    99   97         1 26/01/11 0.9797980  2.0495943</span>
+<span class="co">#&gt; 7    temephos KIS-ref 0.010    99   99         1 26/01/11 0.9940000  2.5121443</span></code></pre></div>
+<p>The output of probit.trans is a list of which the first element (convrg) contains the results of Abott’s correction and convergence values.</p>
+<p>However, since the mortality in the controls (dose=0) is below 5% (conf=0.05) in the present example, data$convrg is NULL and thus no correction is applied to the data . The second element of the list dataT is the probid transformed data with two additional columns: mort, the observed mortalities, and probmort, the observed probit-transformed mortalities. This data frame is what we’ll use in the next steps of the analysis.</p>
+<p><em>If you set the threshold to conf=0.01 with example 1, you can assess the effects of the Abbot’s correction: all mortalities are slightly reduced to take the base control mortality into account.</em></p>
+<p>The second step is to compute the lethal dose values (50% and 95%, LD50 and LD95 respectively) and the corresponding resistance ratios. The function “resist.ratio” allows you to do just that. If no reference strain has been specified in the data file (using the suffix “ref” as mentioned above), it can be specified in “ref.strain=”. Otherwise, the strain with the lowest LD50 will be considered as such. By default, the LDs’ 95% confidence intervals are computed (the min and max values are reported); you can adjust this using “conf.level=”.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data</span><span class="op">&lt;-</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span> <span class="co">#probid transformed data</span>
 <span class="va">RR</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
@@ -182,27 +178,39 @@
 <span class="co">#&gt; DZOU2   13.31562  9.926605</span>
 <span class="co">#&gt; KIS-ref  0.00000  0.000000</span></code></pre></div>
 <p><em>Note that we did not specify the reference strain here as it is already labeled in the data</em></p>
-<p><em>For each strain you have first the LD50 and LD95 and their upper and lower limits (95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971). </em>The result of the chi test (Chi(p)) is then indicated to judge whether the data are well fitted to the regression or not: here all the p-values are over 0.05 so the fits are acceptable). <em>Finally the resistance ratios are indicated for LD50 and LD95 (RR50 and RR95). </em>As there are 3 strains, the script first tests whether they are all similar (i.e. equivalent to 1 strain) or not (3 strains vs 1 strain). Here, the test is highly significant, some strains are thus different in terms of resistance.</p>
-<p>Plotting option with confidence levels and a validity test of the regression models is also available in the function “resist.ratio”. However, we did not use it here and we will do a more comparative plotting with “mort.plot” next.</p>
+<p><em>For each strain, you have first the LD50 and LD95 and their upper and lower limits (defaults is 95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971).</em></p>
+<p><em>The result of the chi test (Chi(p)) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD50 and LD95 (RR50 and RR95), as well as their upper and lower limits.</em></p>
+<p><em>The third step, when analysing more than one strain, is now to test for difference in dose-mortality responses between strains using the “model.signif” function.</em></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span><span class="op">)</span>
+<span class="co">#&gt; $model</span>
+<span class="co">#&gt;   strain1 strain2           model.pval          deviance df bonferroni</span>
+<span class="co">#&gt; 1    DZOU   DZOU2    0.264023226942502 -5.52847606655654 -2        sig</span>
+<span class="co">#&gt; 2    DZOU KIS-ref  8.3588934657195e-61 -714.373451385791 -2        sig</span>
+<span class="co">#&gt; 3   DZOU2 KIS-ref 3.15241148845391e-48 -603.931258358858 -2    non-sig</span></code></pre></div>
+<p><em>As there are 3 strains, the function first tests whether all strains are similar (i.e. equivalent to 1 strain) or not (3 strains vs 1 strain), using a likelihood ratio test. Here, the test is highly significant, some strains are thus different in terms of resistance.</em></p>
+<p><em>Pairwise tests are then performed and reported below. Here, the KIS strain is different from DZOU and from DZOU2 strains (model.pval &lt;0.05). DZOU and DZOU2 are not different (model.pval &gt;0.05). The bonferroni column indicates whether the p-values &lt;0.05 remain significant (sig vs non-sig) after correction for multiple testing.</em></p>
+<p><strong><em>Data Visualization</em></strong> The data and the regression can be plotted with confidence levels using the “mort.plot” function. It is also possible to take the validity of the linearity test into account for the plots using the “test.validity=” option. The probit-transformed mortalities [probit.trans() function] are plotted as a function of the log10 of the doses.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#strains&lt;-levels(data$strain)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="co"># set plot rows</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">FALSE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> <span class="co"># plot without confidence intervals and test of validity of the model</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">FALSE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span>,pch<span class="op">=</span><span class="cn">NA</span><span class="op">)</span> <span class="co"># plot only the regression lines</span></code></pre></div>
-<p><img src="BioRssay_files/figure-html/unnamed-chunk-7-1.png" width="768"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p><img src="BioRssay_files/figure-html/unnamed-chunk-8-1.png" width="768"></p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># same plots with confidence level</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">TRUE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">TRUE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span>,pch<span class="op">=</span><span class="cn">NA</span><span class="op">)</span></code></pre></div>
-<p><img src="BioRssay_files/figure-html/unnamed-chunk-7-2.png" width="768"> It is also possible to input different confidence levels with “conf.level=”. The default is 0.95. In cases where only a subset of all the tested strains needs to be tested, they can be listed with “strains=”; if not provided, all the strains will be plotted.</p>
+<p><img src="BioRssay_files/figure-html/unnamed-chunk-8-2.png" width="768"> It is also possible to plot different confidence intervals with the “conf.level=” option (the default is 0.95). It is possible to plot only a subset of strains using the “strains=” option to list the desired strains; if not provided, all the strains will be plotted.</p>
+<p><em>Note that the plots can be generated directly from the “resist.ratio” function using the “plot=T” option.</em></p>
 </div>
 <div id="example-2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-2" class="anchor"></a><strong>Example 2</strong>
 </h2>
-<p>We follow the same workflow the example 2. However, there are more than one insecticide tested in this experiment. Therefore, we need to subset the data into separate insecticides and carry out the analysis as before.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>We follow the same workflow (using the plot option in “resist.ratio”). However, there are more than one insecticide tested in this experiment. Therefore, we need to subset the data for each insecticide, and carry out the analysis as before.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span>
 <span class="co">#&gt;   insecticide strain dose total dead</span>
 <span class="co">#&gt; 1  bendiocarb Kisumu 0.00    25    0</span>
@@ -222,14 +230,14 @@
 <span class="co">#&gt; 4  bendiocarb Kisumu 0.00    25    0</span>
 <span class="co">#&gt; 5  bendiocarb Kisumu 0.01    25    0</span>
 <span class="co">#&gt; 6  bendiocarb Kisumu 0.01    25    0</span></code></pre></div>
-<p>We have a subset of the data with only the insecticide “bendiocarb”</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dataT.b</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/probid.trans.html">probid.trans</a></span><span class="op">(</span><span class="va">bend</span><span class="op">)</span>
+<p>We will use a subset of the data for the insecticide “bendiocarb” only.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">dataT.b</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/probit.trans.html">probit.trans</a></span><span class="op">(</span><span class="va">bend</span><span class="op">)</span>
 <span class="va">data.b</span><span class="op">&lt;-</span><span class="va">dataT.b</span><span class="op">$</span><span class="va">tr.data</span>
 
 <span class="va">RR.b</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">data.b</span>,plot <span class="op">=</span> <span class="cn">T</span>,ref.strain <span class="op">=</span> <span class="st">"Kisumu"</span>,plot.conf <span class="op">=</span> <span class="cn">T</span>, test.validity <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
-<p><img src="BioRssay_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p><img src="BioRssay_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">RR.b</span><span class="op">)</span>
 <span class="co">#&gt;               LD50    LD50min    LD50max     varLD50       LD95    LD95min</span>
 <span class="co">#&gt; Acerkis 56.5098989 53.2114813 59.6792554 0.001786642 107.634086 100.302691</span>
@@ -247,9 +255,9 @@
 <span class="co">#&gt; Acerkis 486.6258 119.6294</span>
 <span class="co">#&gt; AgRR5   556.2204 137.5873</span>
 <span class="co">#&gt; Kisumu    0.0000   0.0000</span></code></pre></div>
-<p>Note that we have enabled the arguments “plot=” with “plot.conf=” and “test.validity=”. When the regression is not valid (Chi-square significance) for a strain, it will be plotted without the regression, as in this example “Kisumu”.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co">#test the validity of the regression models</span>
+<p><em>Note that we have enabled the arguments “plot=” with “plot.conf=” and “test.validity=”. When the log-dose-response is not linear for a strain (Chi-square p-value &lt; 0.05), it will be plotted without forcing linearity as for ,“Kisumu” strain in this example.</em></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#To then test the difference in dose-mortality response between the strains</span>
 <span class="va">t.models</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">data.b</span><span class="op">)</span>
 <span class="va">t.models</span>
 <span class="co">#&gt; $model</span>
@@ -257,7 +265,8 @@
 <span class="co">#&gt; 1 Acerkis   AgRR5 9.81944629906017e-18 -93.3705086548187 -2        sig</span>
 <span class="co">#&gt; 2 Acerkis  Kisumu 4.09605796743876e-78 -1220.98742604214 -2        sig</span>
 <span class="co">#&gt; 3   AgRR5  Kisumu 3.52611879574658e-84 -1433.09904360371 -2        sig</span></code></pre></div>
-<p>These steps can be repeated for separate insecticides in the example 2 one by one or in a loop (e.g. for loop)</p>
+<p><em>Note that as one of the strains failed the linearity test, the validity of the dose-mortality response test is, at best, highly questionable. We do not recommend it.</em></p>
+<p>These steps can be repeated for the different insecticides, either one by one or or in a loop (e.g. “for” loop function).</p>
 </div>
 </div>
 <div id="references" class="section level1">

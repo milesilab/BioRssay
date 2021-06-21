@@ -1,4 +1,4 @@
-#' Example bioassy data set
+#' Example bioassay data set
 #'
 #' @docType data
 #' @usage data(bioassay)

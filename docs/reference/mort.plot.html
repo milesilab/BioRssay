@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot mortality — mort.plot • BioRssay</title>
+<title>Plot dose-mortality response for each strain — mort.plot • BioRssay</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Plot mortality — mort.plot" />
-<meta property="og:description" content="Plots the mortality of a given data set with and without confidence levels, and adds the validity of the regression." />
+<meta property="og:title" content="Plot dose-mortality response for each strain — mort.plot" />
+<meta property="og:description" content="This function plots the probit-transformed mortalities (probit.trans() function) as a function of the log10 of the dose, the regressions predicted by the resist.ratio() function,  with or without confidence levels, if the dose-mortality responses are linear (option)." />
 
 
 
@@ -106,13 +106,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot mortality</h1>
+    <h1>Plot dose-mortality response for each strain</h1>
     
     <div class="hidden name"><code>mort.plot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Plots the mortality of a given data set with and without confidence levels, and adds the validity of the regression.</p>
+    <p>This function plots the probit-transformed mortalities (probit.trans() function) as a function of the log10 of the dose, the regressions predicted by the resist.ratio() function,  with or without confidence levels, if the dose-mortality responses are linear (option).</p>
     </div>
 
     <pre class="usage"><span class='fu'>mort.plot</span><span class='op'>(</span>
@@ -129,15 +129,15 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>a data frame of probit transformed mortality data using the function probit.trans</p></td>
+      <td><p>a data frame of probit transformed mortality data using the function probit.trans()</p></td>
     </tr>
     <tr>
       <th>strains</th>
-      <td><p>character. list of test strains. If not provided, the function will plot all the strains in the data set.</p></td>
+      <td><p>character. list of test strains to be plotted. If not provided, the function will plot all the strains in the data set.</p></td>
     </tr>
     <tr>
       <th>plot.conf</th>
-      <td><p>logical. Whether to plot the confidence level on the plot for each strain</p></td>
+      <td><p>logical. Whether to plot the confidence intervals for each strain, default TRUE</p></td>
     </tr>
     <tr>
       <th>conf.level</th>
@@ -145,7 +145,7 @@
     </tr>
     <tr>
       <th>test.validity</th>
-      <td><p>logical. Test and plot the validity of the models</p></td>
+      <td><p>logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -155,14 +155,14 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A plot of mortality</p>
+    <p>A plot of dose-mortality responses for bioassays</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Piyal Karunarathne, Pascal Milesi</p>
+    <p>Piyal Karunarathne, Pascal Milesi, Pierrick Labbé</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>)</span>
-<span class='va'>transd</span><span class='op'>&lt;-</span><span class='fu'><a href='probid.trans.html'>probid.trans</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>$</span><span class='va'>assay2</span><span class='op'>)</span>
+<span class='va'>transd</span><span class='op'>&lt;-</span><span class='fu'><a href='probit.trans.html'>probit.trans</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>$</span><span class='va'>assay2</span><span class='op'>)</span>
 <span class='va'>data</span><span class='op'>&lt;-</span><span class='va'>transd</span><span class='op'>$</span><span class='va'>tr.data</span>
 <span class='va'>strains</span><span class='op'>&lt;-</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>strain</span><span class='op'>)</span>
 <span class='fu'>mort.plot</span><span class='op'>(</span><span class='va'>data</span>,<span class='va'>strains</span><span class='op'>)</span>

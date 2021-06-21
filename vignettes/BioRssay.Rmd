@@ -18,22 +18,21 @@ knitr::opts_chunk$set(
 library(BioRssay)
 ```
 
-# **An R package for analyses of bioassays and probid graphs**
-*Piyal Karunarathne, Pascal Milesi, Nicolas Pocquet, and Pierrick Labbé*
+# **An R package for analyses of bioassays and probit graphs**
+*Piyal Karunarathne, Nicolas Pocquet, Pascal Milesi, and Pierrick Labbé*
 
 
-This package is designed to analyze mortality data from bioassays of one or several strains/lines/populations.
-As of now, the functions in the package allow control mortality with Abott's correction for more precise analysis of mortality. For each strain, functions are available to generate mortality-dose regression using a generalized linear model (takes over-dispersion into account and allows mortality of 0 or 1), and plot the regressions with or without the desired confidence interval (e.g. 95%).
+This package is designed to analyze mortality data from bioassays of one or several strains/lines/populations. As of now, the functions in the package allow adjusting for  mortality in the controls with Abott’s correction. For each strain, functions are available to generate a mortality-dose regression using a generalized linear model (which take over-dispersion into account and allow mortality of 0 or 1), and plot the regressions with or without the desired confidence interval (e.g. 95%).
 
-The package also carries functions to test the validity of the regression outputs using a chi-square test between model predictions and observed number of dead samples; A significant valid test will reflect a non-linear data (e.g. mixed populations). These plots can be drawn side by side for a better comparison with the same functions (see below).
+The package also provides functions to test the linearity of the log-dose response using a chi-square test between model predictions and observed data (significant deviations from linearity may reflect mixed populations for example).
 
-The functions in the package also compute the lethal dose for 50% and 95% of the populations (LD50 and LD95 respectively), with their 95% confidence intervals (CI), using a methodology described by Johnson et al. 2013, which allows taking the heterogeneity of the data into account (Finney 1971) to calculate the CI (i.e. a larger heterogeneity will increase the CI).
+The package also allows computing the lethal dose for 50% and 95% of the populations (LD50 and LD95 respectively), with their 95% confidence intervals (CI), following Johnson et al. 2013 approach, which allows taking the heterogeneity of the data into account (*Finney 1971*) to calculate the CI (i.e. a larger heterogeneity will increase the CI).
 
-The methods implemented use a likelihood ratio test (LRT) to test coherence of mortality-dose regressions among different strains. In the case of more than two strains, a pairwise comparison of models is performed and further corrected using a sequential Bonferroni correction (Hommel 1988).
-Finally, users can calculate the resistance ratios (RR) at LD50 and LD95, i.e. the ratios between a given strain and the starain with the lower LD50 and LD95, respectively (usually it is the susceptible reference), with their 95% confidence intervals, calculated according to Robertson and Preisler (1992).
+The methods implemented here use a likelihood ratio test (LRT) to test for differences in resistance levels among different strains.  Finally, resistance ratios (RR) at LD50 and LD95, i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively (usually it is the susceptible reference), with their 95% confidence intervals, are calculated according to Robertson and *Preisler (1992)*.
+
 
 # 1. **DATA PREPARATION**
-BioRssay can import data in any format that is compatible with base R data import functions (e.g. read.table, read.csv). However, for the functions in BioRssay to work, the data **must** have the following columns
+BioRssay can import data in any format that is compatible with base R data import functions (e.g. read.table, read.csv). However, for the functions in BioRssay to work, the data **must** have at least the following columns (other columns won’t be used, but are no hindrance):
         * strain: a column containing the strains tested
         * dose: dosage tested on each strain/sample. controls should be entered as 0
         * total: total number of samples tested
@@ -50,13 +49,15 @@ and find more example data sets at <https://github.com/milesilab/DATA/blob/main/
 
 **Example 2**
 ```{r}
-file <- paste0(path.package("BioRssay"), "/Test.BioRssay.txt") # if the download doesn't work
+file <- paste0(path.package("BioRssay"), "/Test.BioRssay.txt")
 test<-read.table(file,header=TRUE)
 head(test)
 ```
 NOTE: It is also possible to include a reference strain/population with the suffix "ref" in the strain column, or the reference strain can be specified later in the function "resist.ratio" to obtain the resistance ratios for each strain (see below).
 
 # 2. **Analysis**
+
+The workflow is only succinctly described here, for more information on the functions and their options, see individual one in the reference index.
 
 ## **Example 1**
 Let's have a quick look at the data again.
@@ -66,18 +67,24 @@ exm1<-assays$assay2
 head(exm1)
 unique(as.character(exm1$strain))
 ```
-This example contains the mortality data of three strains (KIS, DZOU, and KIS-ref); KIS is used as the reference with suffix "ref". 
+This example contains the mortality data of three strains (KIS, DZOU, and KIS-ref); KIS is used as the reference, as indicated by the “ref” suffix.
 
-The first step is to check if the controls also have considerable mortality and whether a correction should be applied to the data, followed by probid transformation (*we might need to explain more on why this transformation*). This is easily achieved with the function "probit.trans".
+The first step is to check whether the controls have a non-negligible mortality, in which case a correction should be applied to the data, before probit transformation. This is easily achieved with the function “probit.trans”.
+
 ```{r}
-dataT<-probid.trans(exm1) #additionally confindence interval for controls' mortality can be set as desired with "conf="; default is 0.05.
+dataT<-probit.trans(exm1) #additionally an acceptable threshold for controls' mortality can be set as desired with "conf="; default is 0.05.
 dataT$convrg
 head(dataT$tr.data)
 
 ```
-The output of probid.trans is a list of which the first element (convrg) contains the results of Abotte's correction and convergence values. However, since the mortality in the controls (dose=0) is below 5% (alpha=0.05), no correction applied to the data. Hence data$convrg is NULL. The second element of the list dataT is the probid transformed data with two additional columns: mort: mortality and probmort: probid transformed mortality. This data frame is what we'll use in the next steps of the analysis.
+The output of probit.trans is a list of which the first element (convrg) contains the results of Abott’s correction and convergence values.
 
-Next we will get the LD values at (50% and 95%) and resistance ratios at their respective LD values. The function "resist.ratio" allows you to do just that. Here you can also change the confidence level at which the LD is tested (default is 0.95); the reference strain can be specified in "ref.strain=", if labeled with the suffix "ref" (as mentioned above), it is not necessary to specify it here although doing so still works. However, if the strain is not labeled with the said suffix in the data, ref.strain **must** be specified here. If neither labeled with "ref" nor specified with "ref.strain=", the analysis will not consider any references.
+However, since the mortality in the controls (dose=0) is below 5% (conf=0.05) in the present example, data$convrg is NULL and thus no correction is applied to the data . The second element of the list dataT is the probid transformed data with two additional columns: mort, the observed mortalities, and probmort, the observed probit-transformed mortalities. This data frame is what we’ll use in the next steps of the analysis.
+
+  *If you set the threshold to conf=0.01 with example 1, you can assess the effects of the Abbot’s correction: all mortalities are slightly reduced to take the base control mortality into account.*
+
+The second step is to compute the lethal dose values (50% and 95%, LD50 and LD95 respectively) and the corresponding resistance ratios. The function “resist.ratio” allows you to do just that. If no reference strain has been specified in the data file (using the suffix “ref” as mentioned above), it can be specified in “ref.strain=”. Otherwise, the strain with the lowest LD50 will be considered as such. By default, the LDs’ 95% confidence intervals are computed (the min and max values are reported); you can adjust this using “conf.level=”. 
+
 
 ```{r}
 data<-dataT$tr.data #probid transformed data
@@ -86,13 +93,23 @@ RR
 ```
 *Note that we did not specify the reference strain here as it is already labeled in the data*
 
-  *For each strain you have first the LD50 and LD95 and their upper and lower limits (95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor ("With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4." Finney, 1971).
-  *The result of the chi test (Chi(p)) is then indicated to judge whether the data are well fitted to the regression or not: here all the p-values are over 0.05 so the fits are acceptable).
-  *Finally the resistance ratios are indicated for LD50 and LD95 (RR50 and RR95).
-  *As there are 3 strains, the script first tests whether they are all similar (i.e. equivalent to 1 strain) or not (3 strains vs 1 strain). Here, the test is highly significant, some strains are thus different in terms of resistance.
+*For each strain, you have first the LD50 and LD95 and their upper and lower limits (defaults is 95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971).*
 
-Plotting option with confidence levels and a validity test of the regression models is also available in the function "resist.ratio". However, we did not use it here and we will do a more comparative plotting with "mort.plot" next.
+*The result of the chi test (Chi(p)) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD50 and LD95 (RR50 and RR95), as well as their upper and lower limits.*
 
+*The third step, when analysing more than one strain, is now to test for difference in dose-mortality responses between strains using the “model.signif” function.*
+
+
+```{r}
+model.signif(dataT$tr.data)
+```
+
+*As there are 3 strains, the function first tests whether all strains are similar (i.e. equivalent to 1 strain) or not (3 strains vs 1 strain), using a likelihood ratio test. Here, the test is highly significant, some strains are thus different in terms of resistance.*
+
+*Pairwise tests are then performed and reported below. Here, the KIS strain is different from DZOU and from DZOU2 strains (model.pval <0.05). DZOU and DZOU2 are not different (model.pval >0.05). The bonferroni column indicates whether the p-values <0.05 remain significant (sig vs non-sig) after correction for multiple testing.*
+
+***Data Visualization***
+The data and the regression can be plotted with confidence levels using the “mort.plot” function. It is also possible to take the validity of the linearity test into account for the plots using the “test.validity=” option. The probit-transformed mortalities [probit.trans() function] are plotted as a function of the log10 of the doses.
 
 ```{r,fig.dim=c(8,4)}
 #strains<-levels(data$strain)
@@ -104,11 +121,13 @@ par(mfrow=c(1,2))
 mort.plot(data,plot.conf=TRUE,test.validity=FALSE)
 mort.plot(data,plot.conf=TRUE,test.validity=FALSE,pch=NA)
 ```
-It is also possible to input different confidence levels with "conf.level=". The default is 0.95. In cases where only a subset of all the tested strains needs to be tested, they can be listed with "strains="; if not provided, all the strains will be plotted.
+It is also possible to plot different confidence intervals with the “conf.level=” option (the default is 0.95). It is possible to plot only a subset of strains using the “strains=” option to list the desired strains; if not provided, all the strains will be plotted.
+
+*Note that the plots can be generated directly from the “resist.ratio” function using the “plot=T” option.*
 
 
 ## **Example 2**
-We follow the same workflow the example 2. However, there are more than one insecticide tested in this experiment. Therefore, we need to subset the data into separate insecticides and carry out the analysis as before.
+We follow the same workflow (using the plot option in “resist.ratio”). However, there are more than one insecticide tested in this experiment. Therefore, we need to subset the data for each insecticide, and carry out the analysis as before.
 
 ```{r}
 head(test)
@@ -116,24 +135,26 @@ unique(test$insecticide)
 bend<-test[test$insecticide=="bendiocarb",]
 head(bend)
 ```
-We have a subset of the data with only the insecticide "bendiocarb"
+We will use a subset of the data for the insecticide "bendiocarb" only.
 
 ```{r,fig.dim=c(6,4)}
-dataT.b<-probid.trans(bend)
+dataT.b<-probit.trans(bend)
 data.b<-dataT.b$tr.data
 
 RR.b<-resist.ratio(data.b,plot = T,ref.strain = "Kisumu",plot.conf = T, test.validity = T)
 head(RR.b)
 ```
-Note that we have enabled the arguments "plot=" with "plot.conf=" and "test.validity=". When the regression is not valid (Chi-square significance) for a strain, it will be plotted without the regression, as in this example "Kisumu".
+*Note that we have enabled the arguments “plot=” with “plot.conf=” and “test.validity=”. When the log-dose-response is not linear for a strain (Chi-square p-value < 0.05), it will be plotted without forcing linearity as for ,“Kisumu” strain in this example.*
 
 ```{r}
-#test the validity of the regression models
+#To then test the difference in dose-mortality response between the strains
 t.models<-model.signif(data.b)
 t.models
 ```
 
-These steps can be repeated for separate insecticides in the example 2 one by one or in a loop (e.g. for loop)
+*Note that as one of the strains failed the linearity test, the validity of the dose-mortality response test is, at best, highly questionable. We do not recommend it.*
+
+These steps can be repeated for the different insecticides, either one by one or   or in a loop (e.g. “for” loop function).
 
 
 # 3. **REFERENCES**
@@ -144,14 +165,6 @@ These steps can be repeated for separate insecticides in the example 2 one by on
   1. Johnson RM, Dahlgren L, Siegfried BD,EllisMD(2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
   
   1. Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with arthropods. CRC, Boca Raton, FL.
-
-
-
-
-
-
-
-
 
 
 

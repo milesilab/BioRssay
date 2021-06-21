@@ -82,26 +82,28 @@ get.dxt<-function(strains,data,conf.level){dxt<-lapply(strains,function(ss,data,
 return(dxt)
 }
 
-#' Calculate regression coefficients and resistance ratios
+#' Calculate lethal dosage, resistance ratios, and regression coefficients and tests for linearity
 #'
-#' This function calculates coefficients of the linear regression and the LD values for the strains tested using a GLM. Further it also outputs 95 percent confidence intervals of the RR (log-dose), according to Robertson and Preisler 1992 (also check references).
+#' Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 50% and 95% of the population (LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default), using a script modified from Johnson et al (2013), which allows taking the g factor into account ("With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4." Finney, 1971) and the heterogeneity (h) of the data (Finney, 1971) to calculate the confidence intervals (i.e. a larger heterogeneity will increase the confidence intervals). It also computes the corresponding resistance ratios (RR), i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively for RR50 and RR95 (usually, it is the susceptible reference strain), with their 95% confidence intervals (RRmin and RRmax), calculated according to Robertson and Preisler (1992). Finally, it also computes the coefficients (slope and intercept, with their standard error) of the linear regressions) and tests for the linearity of the dose-mortality response using a chi-square test (Chi(p)) between the observed dead numbers (data) and the dead numbers predicted by the regression (the test is significant if the data is not linear, e.g. mixed populations).
 #'
-#' @param data a data frame of probit transformed mortality data using the function probit.trans
-#' @param conf.level numerical. confidence level for the LD calculation (default 0.95)
+#' @param data a data frame of probit-transformed mortality data using the function probit.trans()
+#' @param conf.level numerical. level for confidence intervals of the LD50 and LD95 (default 0.95)
 #' @param ref.strain character. name of the reference strain if present (see details)
-#' @param plot logical. Whether to plot the mortality plot
-#' @param plot.conf logical. If plot=TRUE, whether to plot the confidence intervals
-#' @param test.validity logical. (If plot=TRUE) Test and plot the validity of the models
+#' @param plot logical. Whether to draw the plot. Default FALSE
+#' @param plot.conf logical. If plot=TRUE, whether to plot the 95 percent confidence intervals. Default TRUE
+#' @param test.validity logical. If plot=TRUE (default), the regression for a strain that failed the linearity test is not plotted
 #' @param ... parameters to be passed on to graphics for the plot (e.g. col, pch)
 #'
 #' @importFrom graphics abline axis legend lines mtext
 #' @importFrom stats deviance df.residual family pchisq predict.glm qt qnorm
 #'
-#' @details If a name of the reference strain is provided as it appears in the data, it will be used in the model. If not provided, the function will look for strains with the suffix "ref" in their names and will use it as the reference. If this returns NULL, the function will run the model considering no reference strain.
+#' @return Returns a data frame with the various estimates mentioned above. If plot=TRUE, plots the mortality on a probit-transformed scale against the log10 doses.
+#'
+#' @details If a name is provided in ref.strain=, it will be used as the reference to compute the resistance ratios (RR). Alternatively, the function will look for a strain with the suffix "ref" in the dataset. If this returns NULL, the strain with the lowest LD50 will be considered as reference.
 #'
 #' @return returns a data frame of statistical output and if plot=TRUE, plots the mortality on a log transformed scale.
 #'
-#' @author Pascal Milesi, Piyal Karunarathne
+#' @authors Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
 #'
 #' @references Finney DJ(1971). Probitanalysis. Cambridge:Cambridge UniversityPress. 350p.
 #'
@@ -113,7 +115,7 @@ return(dxt)
 #'
 #' @examples
 #' data(bioassay)
-#' transd<-probid.trans(bioassay$assay2)
+#' transd<-probit.trans(bioassay$assay2)
 #' data<-transd$tr.data
 #' resist.ratio(data,plot=TRUE)
 #'
@@ -151,9 +153,9 @@ resist.ratio<-function(data,conf.level=0.95,ref.strain=NULL,plot=FALSE,plot.conf
 
 
 
-#' Test mortality model significance
+#' Test the significance of dose-mortality response differences
 #'
-#' This function tests whether there are differences between the regression of mortality between the strains (likelihood ratio test); It compares a model with and without different strains (i.e. to compare the significance if the data came from one strain or different strains)
+#' This function is used when comparing at least two strains. It tests whether the mortality-dose regressions are similar for different strains, using a likelihood ratio test (LRT). If there are more than two strains, it also computes pairwise tests, using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
 #'
 #' @param data a data frame of probit transformed mortality data using the function probit.trans
 #' @importFrom stats anova
@@ -161,11 +163,17 @@ resist.ratio<-function(data,conf.level=0.95,ref.strain=NULL,plot=FALSE,plot.conf
 #'
 #' @return a list with model outputs: a chi-square test if there only two strains or bonferroni test significance from a pariwise model comparison if there are more than two strains
 #'
-#' @author Pascal Milesi, Piyal Karunarathne
+#' @details A global LRT test assesses a strain’s effect, by comparing two models, one with and one without this effect (i.e. comparing a model with several strains to a model where all the data originate from a single strain).
+#' If there are more than two strains, pairwise tests are computed, and p-values of significance are assessed using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
+#'
+#' Warning: We strongly encourage users to not use this function when the dose-mortality response for at least one strain significantly deviates from linearity (see resist.ratio() function for more details): in such cases the test cannot be interpreted.
+
+#'
+#' @authors Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
 #'
 #' @examples
 #' data(bioassay)
-#' transd<-probid.trans(bioassay$assay2)
+#' transd<-probit.trans(bioassay$assay2)
 #' data<-transd$tr.data
 #' model.signif(data)
 #'

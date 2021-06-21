@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 [![Github All Releases](https://img.shields.io/github/downloads/milesilab/BioRssay/total.svg)]()
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![Codecov test coverage](https://codecov.io/gh/milesilab/BioRssay/branch/master/graph/badge.svg)](https://codecov.io/gh/milesilab/BioRssay?branch=master)
 <!-- badges: end -->
 
 **BioRssay** will help you to analyze mortality data from bioassays of any kind (e.g.,insecti/pesti/herbi-cides, antibiotics, etc.).
@@ -20,13 +21,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r,echo=FALSE}
 library(BioRssay)
 data(bioassay)
-transd<-probid.trans(bioassay$assay2)
+transd<-probit.trans(bioassay$assay2)
 data<-transd$tr.data
 strains<-levels(data$strain)
 mort.plot(data,strains)
 ```
 
-***For a comprehensive tutorial on the package, go to <https://milesilab.github.io/BioRssay/> and navigate to "Get started" where all the functions and usage is explained with ample examples.***
+***For a comprehensive tutorial on the package, go to <https://milesilab.github.io/BioRssay/> and navigate to "Get started" where all the functions and usage are explained with ample examples.***
 
 **Installation**
 ```{r,results = "hide",eval=FALSE}

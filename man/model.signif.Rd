@@ -2,7 +2,7 @@
 % Please edit documentation in R/ratios.R
 \name{model.signif}
 \alias{model.signif}
-\title{Test mortality model significance}
+\title{Test the significance of dose-mortality response differences}
 \usage{
 model.signif(data)
 }
@@ -13,15 +13,18 @@ model.signif(data)
 a list with model outputs: a chi-square test if there only two strains or bonferroni test significance from a pariwise model comparison if there are more than two strains
 }
 \description{
-This function tests whether there are differences between the regression of mortality between the strains (likelihood ratio test); It compares a model with and without different strains (i.e. to compare the significance if the data came from one strain or different strains)
+This function is used when comparing at least two strains. It tests whether the mortality-dose regressions are similar for different strains, using a likelihood ratio test (LRT). If there are more than two strains, it also computes pairwise tests, using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
+}
+\details{
+A global LRT test assesses a strain’s effect, by comparing two models, one with and one without this effect (i.e. comparing a model with several strains to a model where all the data originate from a single strain).
+If there are more than two strains, pairwise tests are computed, and p-values of significance are assessed using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
+
+Warning: We strongly encourage users to not use this function when the dose-mortality response for at least one strain significantly deviates from linearity (see resist.ratio() function for more details): in such cases the test cannot be interpreted.
 }
 \examples{
 data(bioassay)
-transd<-probid.trans(bioassay$assay2)
+transd<-probit.trans(bioassay$assay2)
 data<-transd$tr.data
 model.signif(data)
 
-}
-\author{
-Pascal Milesi, Piyal Karunarathne
 }

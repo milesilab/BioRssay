@@ -3,7 +3,7 @@
 \docType{data}
 \name{bioassay}
 \alias{bioassay}
-\title{Example bioassy data set}
+\title{Example bioassay data set}
 \format{
 An object of class \code{list} of length 2.
 }
@@ -11,7 +11,7 @@ An object of class \code{list} of length 2.
 data(bioassay)
 }
 \description{
-Example bioassy data set
+Example bioassay data set
 }
 \examples{
 data(bioassay)
