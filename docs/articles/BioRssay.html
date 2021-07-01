@@ -179,6 +179,17 @@
 <p><em>The third step, when analysing more than one strain, is now to test for difference in dose-mortality responses between strains using the “model.signif” function.</em></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span><span class="op">)</span>
+<span class="co">#&gt; Analysis of Deviance Table</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model 1: mortality ~ data$strain/log10(data$dose) - 1</span>
+<span class="co">#&gt; Model 2: mortality ~ log10(data$dose)</span>
+<span class="co">#&gt;   Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    </span>
+<span class="co">#&gt; 1        28      70.69                          </span>
+<span class="co">#&gt; 2        32     936.46 -4  -865.77 &lt; 2.2e-16 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; complete model is significant against a NULL model </span>
+<span class="co">#&gt;  continueing to pair-wise comparison</span>
 <span class="co">#&gt; $model</span>
 <span class="co">#&gt;   strain1 strain2           model.pval          deviance df bonferroni</span>
 <span class="co">#&gt; 1    DZOU   DZOU2    0.264023226942502 -5.52847606655654 -2        sig</span>
@@ -255,6 +266,17 @@
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#To then test the difference in dose-mortality response between the strains</span>
 <span class="va">t.models</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">data.b</span><span class="op">)</span>
+<span class="co">#&gt; Analysis of Deviance Table</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Model 1: mortality ~ data$strain/log10(data$dose) - 1</span>
+<span class="co">#&gt; Model 2: mortality ~ log10(data$dose)</span>
+<span class="co">#&gt;   Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    </span>
+<span class="co">#&gt; 1        98      107.8                          </span>
+<span class="co">#&gt; 2       102     1981.5 -4  -1873.7 &lt; 2.2e-16 ***</span>
+<span class="co">#&gt; ---</span>
+<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class="co">#&gt; complete model is significant against a NULL model </span>
+<span class="co">#&gt;  continueing to pair-wise comparison</span>
 <span class="va">t.models</span>
 <span class="co">#&gt; $model</span>
 <span class="co">#&gt;   strain1 strain2           model.pval          deviance df bonferroni</span>

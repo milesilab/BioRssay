@@ -183,6 +183,8 @@ model.signif<-function(data){
     if(length(strains)>2 & Test$`Pr(>Chi)`[2]>0.05){
       message("effect on strains are non-significant \n all strains come from the same population")
     } else if(length(strains)>2 & Test$`Pr(>Chi)`[2]<0.05){
+      print(Test)
+      message("complete model is significant against a NULL model \n continueing to pair-wise comparison")
       Test<-sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Pr[2]}},data=data),data=data)
       dv<-sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Deviance[2]}},data=data),data=data)
       dff=sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Df[2]}},data=data),data=data)
