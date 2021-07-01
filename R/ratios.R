@@ -76,7 +76,7 @@ return(dxt)
 
 #' Calculate lethal dosage, resistance ratios, and regression coefficients and tests for linearity
 #'
-#' Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 25%, 50% and 95% (unless otherwise provided) of the population (LD25, LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default). See details for mor info.
+#' Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 25%, 50% and 95% (unless otherwise provided) of the population (LD25, LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default). See details for more info.
 #'
 #' @param data a data frame of probit-transformed mortality data using the function probit.trans()
 #' @param conf.level numerical. level for confidence intervals to be applied to the models (default 0.95)

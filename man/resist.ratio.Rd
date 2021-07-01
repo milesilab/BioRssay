@@ -38,7 +38,7 @@ Returns a data frame with the various estimates mentioned above. If plot=TRUE, p
 returns a data frame of statistical output and if plot=TRUE, plots the mortality on a log transformed scale.
 }
 \description{
-Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 25\%, 50\% and 95\% (unless otherwise provided) of the population (LD25, LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default). See details for mor info.
+Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 25\%, 50\% and 95\% (unless otherwise provided) of the population (LD25, LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default). See details for more info.
 }
 \details{
 If a name is provided in ref.strain=, it will be used as the reference to compute the resistance ratios (RR). Alternatively, the function will look for a strain with the suffix "ref" in the dataset. If this returns NULL, the strain with the lowest LD50 will be considered as reference.
