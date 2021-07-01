@@ -34,8 +34,6 @@ resist.ratio(
 }
 \value{
 Returns a data frame with the various estimates mentioned above. If plot=TRUE, plots the mortality on a probit-transformed scale against the log10 doses.
-
-returns a data frame of statistical output and if plot=TRUE, plots the mortality on a log transformed scale.
 }
 \description{
 Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 25\%, 50\% and 95\% (unless otherwise provided) of the population (LD25, LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default). See details for more info.
