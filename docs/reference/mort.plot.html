@@ -120,6 +120,7 @@
   strains <span class='op'>=</span> <span class='cn'>NULL</span>,
   plot.conf <span class='op'>=</span> <span class='cn'>TRUE</span>,
   conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  LD.value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>95</span><span class='op'>)</span>,
   test.validity <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -142,6 +143,10 @@
     <tr>
       <th>conf.level</th>
       <td><p>numerical. The confidence interval to be plotted</p></td>
+    </tr>
+    <tr>
+      <th>LD.value</th>
+      <td><p>numerical. Level of lethal dose to be tested. default=c(25,50,95)</p></td>
     </tr>
     <tr>
       <th>test.validity</th>
@@ -179,7 +184,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Piyal Karunarathne, Pascal Milesi.</p>
+  <p>Developed by Piyal Karunarathne, Pascal Milesi, Pierrick Labbé.</p>
 </div>
 
 <div class="pkgdown">

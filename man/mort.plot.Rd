@@ -9,6 +9,7 @@ mort.plot(
   strains = NULL,
   plot.conf = TRUE,
   conf.level = 0.95,
+  LD.value = c(25, 50, 95),
   test.validity = TRUE,
   ...
 )
@@ -21,6 +22,8 @@ mort.plot(
 \item{plot.conf}{logical. Whether to plot the confidence intervals for each strain, default TRUE}
 
 \item{conf.level}{numerical. The confidence interval to be plotted}
+
+\item{LD.value}{numerical. Level of lethal dose to be tested. default=c(25,50,95)}
 
 \item{test.validity}{logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.}
 

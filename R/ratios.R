@@ -15,9 +15,9 @@ CIplot<-function(mods,pmort_min,pmort_max,conf.level){
   return(probitci)
 }
 
-#2. glm?
-LD <- function(mod, conf.level) { ## mod=glm regression, d=dose (untransformed), confidence interval level
-  p <- c(50,95) # the LD values of interest
+#2. lethal dose glm test
+LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
+  p <- LD.value # leathal dose
   het = deviance(mod)/df.residual(mod)
   if(het < 1){het = 1} # Heterogeneity cannot be less than 1
   summary <- summary(mod, dispersion=het, cor = F)
@@ -34,18 +34,11 @@ LD <- function(mod, conf.level) { ## mod=glm regression, d=dose (untransformed),
   var.b1<-vcov[2,2] # Slope variance
   cov.b0.b1<-vcov[1,2] # Slope intercept covariance
 
-  # Adjust alpha depending on heterogeneity (Finney, 1971, p. 76)
   alpha<-1-conf.level
   if(het > 1) {talpha <- -qt(alpha/2, df=df.residual(mod))} else {talpha <- -qnorm(alpha/2)}
-
-  ## Calculate g (Finney, 1971, p 78, eq. 4.36)
-  # "With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4."
   g <- het * ((talpha^2 * var.b1)/b1^2)
-
-  # Calculate theta.hat for all LD levels based on probits in eta (Robertson et al., 2007, pg. 27; or "m" in Finney, 1971, p. 78)
   eta = family(mod)$linkfun(p/100)  #probit distribution curve
   theta.hat <- (eta - b0)/b1
-  # Calculate correction of fiducial limits according to Fieller method (Finney, 1971, p. 78-79. eq. 4.35)
   const1 <- (g/(1-g))*(theta.hat + cov.b0.b1/var.b1) # const1 <- (g/(1-g))*(theta.hat -   cov.b0.b1/var.b1)
   const2a <- var.b0 + 2*cov.b0.b1*theta.hat + var.b1*theta.hat^2 - g*(var.b0 - (cov.b0.b1^2/var.b1))
   const2 <- talpha/((1-g)*b1) * sqrt(het * (const2a))
@@ -54,40 +47,40 @@ LD <- function(mod, conf.level) { ## mod=glm regression, d=dose (untransformed),
   UCL <- (theta.hat + const1 + const2)
   #Calculate variance for theta.hat (Robertson et al., 2007, pg. 27)
   var.theta.hat <- (1/(theta.hat^2)) * ( var.b0 + 2*cov.b0.b1*theta.hat + var.b1*theta.hat^2 )
-
-  # Make a vector of the different values of interest
-  ECtable <- c(10^theta.hat[1],10^LCL[1],10^UCL[1],var.theta.hat[1],10^theta.hat[2],10^LCL[2],10^UCL[2],var.theta.hat[2],slope,slopeSE,intercept,interceptSE,het,g)
+  ECtable <- c(10^c(rbind(theta.hat,LCL,UCL,var.theta.hat)),slope,slopeSE,intercept,interceptSE,het,g)
   return(ECtable)
 }
 
+
 #3. test the significance of model pairs of strains
 reg.pair<-function(data){
-yy<-cbind(data$dead,data$total-data$dead)
-mod1<-glm(yy~data$strain/log10(data$dose)-1,family = quasibinomial(link=probit))
-mod2<-glm(yy~log10(data$dose),family = quasibinomial(link=probit))
-anova(mod1,mod2,test="Chi")
+mortality<-cbind(data$dead,data$total-data$dead)
+mod1<-glm(mortality~data$strain/log10(data$dose)-1,family = quasibinomial(link=probit))
+mod2<-glm(mortality~log10(data$dose),family = quasibinomial(link=probit))
+return(anova(mod1,mod2,test="Chi"))
 }
 
-#3. get dxt
-get.dxt<-function(strains,data,conf.level){dxt<-lapply(strains,function(ss,data,conf.level){
+#4. get dxt
+get.dxt<-function(strains,data,conf.level,LD.value){dxt<-lapply(strains,function(ss,data,conf.level,LD.value){
   tmp<-data[data$strain == ss,]
   y<-with(tmp,cbind(dead,total-dead))
   mods<-glm(y~log10(dose),data=tmp,family = quasibinomial(link=probit))
-  res.strain <- LD(mods, conf.level)
-  dat<-res.strain
+  dat <- LD(mods, conf.level,LD.value=LD.value)
   chq<-sum(((mods$fitted.values*tmp$total-tmp$dead)^2)/(mods$fitted.values*tmp$total))
   dat<-c(dat,pchisq(q=chq,df=length(tmp$dead)-2,lower.tail=FALSE))
   return(list(mods,dat))
-},data=data,conf.level=conf.level)
+},data=data,conf.level=conf.level,LD.value=LD.value)
 return(dxt)
 }
+
 
 #' Calculate lethal dosage, resistance ratios, and regression coefficients and tests for linearity
 #'
 #' Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 50% and 95% of the population (LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default), using a script modified from Johnson et al (2013), which allows taking the g factor into account ("With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4." Finney, 1971) and the heterogeneity (h) of the data (Finney, 1971) to calculate the confidence intervals (i.e. a larger heterogeneity will increase the confidence intervals). It also computes the corresponding resistance ratios (RR), i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively for RR50 and RR95 (usually, it is the susceptible reference strain), with their 95% confidence intervals (RRmin and RRmax), calculated according to Robertson and Preisler (1992). Finally, it also computes the coefficients (slope and intercept, with their standard error) of the linear regressions) and tests for the linearity of the dose-mortality response using a chi-square test (Chi(p)) between the observed dead numbers (data) and the dead numbers predicted by the regression (the test is significant if the data is not linear, e.g. mixed populations).
 #'
 #' @param data a data frame of probit-transformed mortality data using the function probit.trans()
-#' @param conf.level numerical. level for confidence intervals of the LD50 and LD95 (default 0.95)
+#' @param conf.level numerical. level for confidence intervals to be applied to the models (default 0.95)
+#' @param LD.value numerical. Level of lethal dose to be tested. default=c(25,50,95)
 #' @param ref.strain character. name of the reference strain if present (see details)
 #' @param plot logical. Whether to draw the plot. Default FALSE
 #' @param plot.conf logical. If plot=TRUE, whether to plot the 95 percent confidence intervals. Default TRUE
@@ -103,7 +96,7 @@ return(dxt)
 #'
 #' @return returns a data frame of statistical output and if plot=TRUE, plots the mortality on a log transformed scale.
 #'
-#' @authors Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
+#' @author Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
 #'
 #' @references Finney DJ(1971). Probitanalysis. Cambridge:Cambridge UniversityPress. 350p.
 #'
@@ -120,15 +113,18 @@ return(dxt)
 #' resist.ratio(data,plot=TRUE)
 #'
 #' @export
-resist.ratio<-function(data,conf.level=0.95,ref.strain=NULL,plot=FALSE,plot.conf=TRUE,test.validity=TRUE,...) {
+resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
+                       ref.strain=NULL,plot=FALSE,plot.conf=TRUE,test.validity=TRUE,...) {
+  if(!any(LD.value==50)){LD.value<-sort(c(LD.value,50))}
+
   data$strain<-as.factor(data$strain)
   strains<-levels(data$strain)
-  dxt<-get.dxt(strains,data,conf.level)
+  dxt<-get.dxt(strains,data,conf.level,LD.value=LD.value)
   dat<-do.call(rbind,lapply(dxt,function(x){x[[2]]}))
-  colnames(dat)<-c("LD50", "LD50min","LD50max","varLD50","LD95", "LD95min","LD95max","varLD95",
-                   "Slope", "SlopeSE", "Intercept", "InterceptSE", "h", "g", "Chi(p)")
+  colnames(dat)<-c(paste0(paste0("LD",rep(LD.value,each=4)),
+                          rep(c("","min","max","var"),2)),"Slope", "SlopeSE",
+                   "Intercept", "InterceptSE", "h", "g", "Chi(p)")
   rownames(dat)<-strains
-
   if(is.null(ref.strain)){
     ref <- which(strains == strains[grep("-ref$",as.character(strains))], arr.ind=TRUE)
   } else {
@@ -136,22 +132,24 @@ resist.ratio<-function(data,conf.level=0.95,ref.strain=NULL,plot=FALSE,plot.conf
   }
   if (length(ref)==0) refrow <- which(dat[,"LD50"]==min(dat[,"LD50"]),arr.ind=TRUE) else refrow <-ref
 
-  rr50<-dat[,"LD50"]/dat[refrow,"LD50"]
-  rr95<-dat[,"LD95"]/dat[refrow,"LD95"]
-  CI50<-1.96*sqrt(dat[,"varLD50"]+dat[refrow,"varLD50"])
-  rr50max<-10^(log10(rr50)+CI50);rr50max[refrow]<-0
-  rr50min<-10^(log10(rr50)-CI50);rr50min[refrow]<-0
-  CI95<-1.96*sqrt(dat[,"varLD95"]+dat[refrow,"varLD95"])
-  rr95max<-10^(log10(rr95)+CI50);rr95max[refrow]<-0
-  rr95min<-10^(log10(rr95)-CI50);rr95min[refrow]<-0
+  for(l in seq_along(LD.value)){
+    assign(paste0("rr",LD.value[l]),dat[,paste0("LD",LD.value[l])]/dat[refrow,paste0("LD",LD.value[l])])
+    assign(paste0("CI",LD.value[l]),1.96*sqrt(dat[,paste0("LD",LD.value[l],"var")]+dat[refrow,paste0("LD",LD.value[l],"var")]))
+    assign(paste0("rr",LD.value[l],"max"),10^(log10(get(paste0("rr",LD.value[l])))+get(paste0("CI",LD.value[l]))))
+    assign(paste0("rr",LD.value[l],"min"),10^(log10(get(paste0("rr",LD.value[l])))-get(paste0("CI",LD.value[l]))))
+    ggl<-get(paste0("rr",LD.value[l],"max"));ggl[refrow]<-0
+    ggl2<-get(paste0("rr",LD.value[l],"min"));ggl2[refrow]<-0
+  }
+  RR<-mget(c(paste0("rr",rep(LD.value,each=3),c("","max","min"))))
+  RR<-do.call(cbind,RR)
+
   if(plot){
     mort.plot(data,strains,plot.conf,test.validity=test.validity,conf.level=conf.level,...)
   }
-  dat<-cbind(dat,rr50,rr50max,rr50min,rr95,rr95max,rr95min)
+  dat<-cbind(dat,RR)
+  dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
   return(dat)
 }
-
-
 
 #' Test the significance of dose-mortality response differences
 #'
@@ -167,9 +165,8 @@ resist.ratio<-function(data,conf.level=0.95,ref.strain=NULL,plot=FALSE,plot.conf
 #' If there are more than two strains, pairwise tests are computed, and p-values of significance are assessed using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
 #'
 #' Warning: We strongly encourage users to not use this function when the dose-mortality response for at least one strain significantly deviates from linearity (see resist.ratio() function for more details): in such cases the test cannot be interpreted.
-
 #'
-#' @authors Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
+#' @author Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
 #'
 #' @examples
 #' data(bioassay)
@@ -182,9 +179,10 @@ model.signif<-function(data){
   data$strain<-as.factor(data$strain)
   strains<-levels(data$strain)
   if (length(strains)>=2) {
-    if (length(strains)==2) {
-      Test<-reg.pair(data)
-    } else {
+    Test<-reg.pair(data)
+    if(length(strains)>2 & Test$`Pr(>Chi)`[2]>0.05){
+      message("effect on strains are non-significant \n all strains come from the same population")
+    } else if(length(strains)>2 & Test$`Pr(>Chi)`[2]<0.05){
       Test<-sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Pr[2]}},data=data),data=data)
       dv<-sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Deviance[2]}},data=data),data=data)
       dff=sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Df[2]}},data=data),data=data)

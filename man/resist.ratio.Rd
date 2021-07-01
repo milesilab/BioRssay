@@ -7,6 +7,7 @@
 resist.ratio(
   data,
   conf.level = 0.95,
+  LD.value = c(25, 50, 95),
   ref.strain = NULL,
   plot = FALSE,
   plot.conf = TRUE,
@@ -17,7 +18,9 @@ resist.ratio(
 \arguments{
 \item{data}{a data frame of probit-transformed mortality data using the function probit.trans()}
 
-\item{conf.level}{numerical. level for confidence intervals of the LD50 and LD95 (default 0.95)}
+\item{conf.level}{numerical. level for confidence intervals to be applied to the models (default 0.95)}
+
+\item{LD.value}{numerical. Level of lethal dose to be tested. default=c(25,50,95)}
 
 \item{ref.strain}{character. name of the reference strain if present (see details)}
 
@@ -55,4 +58,7 @@ HommelG(1988). A stage wise rejective multiple test procedure based on a modifie
 Johnson RM, Dahlgren L, Siegfried BD,EllisMD(2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
 
 Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with arthropods. CRC, Boca Raton, FL.
+}
+\author{
+Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
 }

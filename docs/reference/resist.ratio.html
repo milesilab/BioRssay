@@ -118,6 +118,7 @@
     <pre class="usage"><span class='fu'>resist.ratio</span><span class='op'>(</span>
   <span class='va'>data</span>,
   conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  LD.value <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>50</span>, <span class='fl'>95</span><span class='op'>)</span>,
   ref.strain <span class='op'>=</span> <span class='cn'>NULL</span>,
   plot <span class='op'>=</span> <span class='cn'>FALSE</span>,
   plot.conf <span class='op'>=</span> <span class='cn'>TRUE</span>,
@@ -134,7 +135,11 @@
     </tr>
     <tr>
       <th>conf.level</th>
-      <td><p>numerical. level for confidence intervals of the LD50 and LD95 (default 0.95)</p></td>
+      <td><p>numerical. level for confidence intervals to be applied to the models (default 0.95)</p></td>
+    </tr>
+    <tr>
+      <th>LD.value</th>
+      <td><p>numerical. Level of lethal dose to be tested. default=c(25,50,95)</p></td>
     </tr>
     <tr>
       <th>ref.strain</th>
@@ -171,28 +176,27 @@
 <p>HommelG(1988). A stage wise rejective multiple test procedure based on a modified Bonferroni test. Biometrika 75, 383-6.</p>
 <p>Johnson RM, Dahlgren L, Siegfried BD,EllisMD(2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.</p>
 <p>Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with arthropods. CRC, Boca Raton, FL.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Pascal Milesi, Piyal Karunarathne, Pierrick Labbé</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>)</span>
 <span class='va'>transd</span><span class='op'>&lt;-</span><span class='fu'><a href='probit.trans.html'>probit.trans</a></span><span class='op'>(</span><span class='va'>bioassay</span><span class='op'>$</span><span class='va'>assay2</span><span class='op'>)</span>
 <span class='va'>data</span><span class='op'>&lt;-</span><span class='va'>transd</span><span class='op'>$</span><span class='va'>tr.data</span>
 <span class='fu'>resist.ratio</span><span class='op'>(</span><span class='va'>data</span>,plot<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='resist.ratio-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;                LD50     LD50min     LD50max      varLD50        LD95    LD95min
-#&gt; DZOU    0.007360928 0.006136601 0.009107134 0.0004813749 0.064493518 0.04099287
-#&gt; DZOU2   0.006156279 0.005043721 0.007720790 0.0003991162 0.057611139 0.03537616
-#&gt; KIS-ref 0.001519579 0.001163367 0.001819190 0.0006597966 0.005011012 0.00414955
-#&gt;             LD95max     varLD95    Slope   SlopeSE Intercept InterceptSE
-#&gt; DZOU    0.125240023 0.012002361 1.745048 0.1537397  3.722305   0.3579163
-#&gt; DZOU2   0.121382718 0.010222512 1.693651 0.1657277  3.744123   0.3906964
-#&gt; KIS-ref 0.006666735 0.001109805 3.174155 0.3811593  8.945646   0.9848957
-#&gt;                h          g    Chi(p)     rr50  rr50max  rr50min     rr95
-#&gt; DZOU    1.905596 0.03971941 0.3606160 4.844057 5.641835 4.159087 12.87036
-#&gt; DZOU2   2.326646 0.04899907 0.3568112 4.051305 4.692185 3.497959 11.49691
-#&gt; KIS-ref 3.259672 0.07158818 0.5714766 1.000000 0.000000 0.000000  1.00000
-#&gt;          rr95max   rr95min
-#&gt; DZOU    14.99001 11.050435
-#&gt; DZOU2   13.31562  9.926605
-#&gt; KIS-ref  0.00000  0.000000</div><div class='input'>
+</div><div class='img'><img src='resist.ratio-1.png' alt='' width='700' height='433' /></div><div class='output co'>#&gt;           LD25 LD25min LD25max LD25var   LD50 LD50min LD50max LD50var   LD95
+#&gt; DZOU    0.0030  0.0024  0.0037       1 0.0074  0.0061  0.0091       1 0.0645
+#&gt; DZOU2   0.0025  0.0018  0.0031       1 0.0062  0.0050  0.0077       1 0.0576
+#&gt; KIS-ref 0.0009  0.0006  0.0012       1 0.0015  0.0012  0.0018       1 0.0050
+#&gt;         LD95min LD95max LD95var Slope SlopeSE Intercept InterceptSE    h      g
+#&gt; DZOU     0.0410  0.1252    1.03  1.75  0.1537      3.72      0.3579 1.91 0.0397
+#&gt; DZOU2    0.0354  0.1214    1.02  1.69  0.1657      3.74      0.3907 2.33 0.0490
+#&gt; KIS-ref  0.0041  0.0067    1.00  3.17  0.3812      8.95      0.9849 3.26 0.0716
+#&gt;         Chi(p) rr25 rr25max rr25min rr50 rr50max rr50min rr95 rr95max rr95min
+#&gt; DZOU    0.3606 3.24    1931  0.0055 4.84    2877  0.0082   13    7990  0.0207
+#&gt; DZOU2   0.3568 2.64    1572  0.0044 4.05    2405  0.0068   11    7090  0.0186
+#&gt; KIS-ref 0.5715 1.00     597  0.0017 1.00     594  0.0017    1     596  0.0017</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -205,7 +209,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Piyal Karunarathne, Pascal Milesi.</p>
+  <p>Developed by Piyal Karunarathne, Pascal Milesi, Pierrick Labbé.</p>
 </div>
 
 <div class="pkgdown">

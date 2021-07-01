@@ -161,22 +161,18 @@
 <code class="sourceCode R"><span class="va">data</span><span class="op">&lt;-</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span> <span class="co">#probid transformed data</span>
 <span class="va">RR</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 <span class="va">RR</span>
-<span class="co">#&gt;                LD50     LD50min     LD50max      varLD50        LD95    LD95min</span>
-<span class="co">#&gt; DZOU    0.007360928 0.006136601 0.009107134 0.0004813749 0.064493518 0.04099287</span>
-<span class="co">#&gt; DZOU2   0.006156279 0.005043721 0.007720790 0.0003991162 0.057611139 0.03537616</span>
-<span class="co">#&gt; KIS-ref 0.001519579 0.001163367 0.001819190 0.0006597966 0.005011012 0.00414955</span>
-<span class="co">#&gt;             LD95max     varLD95    Slope   SlopeSE Intercept InterceptSE</span>
-<span class="co">#&gt; DZOU    0.125240023 0.012002361 1.745048 0.1537397  3.722305   0.3579163</span>
-<span class="co">#&gt; DZOU2   0.121382718 0.010222512 1.693651 0.1657277  3.744123   0.3906964</span>
-<span class="co">#&gt; KIS-ref 0.006666735 0.001109805 3.174155 0.3811593  8.945646   0.9848957</span>
-<span class="co">#&gt;                h          g    Chi(p)     rr50  rr50max  rr50min     rr95</span>
-<span class="co">#&gt; DZOU    1.905596 0.03971941 0.3606160 4.844057 5.641835 4.159087 12.87036</span>
-<span class="co">#&gt; DZOU2   2.326646 0.04899907 0.3568112 4.051305 4.692185 3.497959 11.49691</span>
-<span class="co">#&gt; KIS-ref 3.259672 0.07158818 0.5714766 1.000000 0.000000 0.000000  1.00000</span>
-<span class="co">#&gt;          rr95max   rr95min</span>
-<span class="co">#&gt; DZOU    14.99001 11.050435</span>
-<span class="co">#&gt; DZOU2   13.31562  9.926605</span>
-<span class="co">#&gt; KIS-ref  0.00000  0.000000</span></code></pre></div>
+<span class="co">#&gt;           LD25 LD25min LD25max LD25var   LD50 LD50min LD50max LD50var   LD95</span>
+<span class="co">#&gt; DZOU    0.0030  0.0024  0.0037       1 0.0074  0.0061  0.0091       1 0.0645</span>
+<span class="co">#&gt; DZOU2   0.0025  0.0018  0.0031       1 0.0062  0.0050  0.0077       1 0.0576</span>
+<span class="co">#&gt; KIS-ref 0.0009  0.0006  0.0012       1 0.0015  0.0012  0.0018       1 0.0050</span>
+<span class="co">#&gt;         LD95min LD95max LD95var Slope SlopeSE Intercept InterceptSE    h      g</span>
+<span class="co">#&gt; DZOU     0.0410  0.1252    1.03  1.75  0.1537      3.72      0.3579 1.91 0.0397</span>
+<span class="co">#&gt; DZOU2    0.0354  0.1214    1.02  1.69  0.1657      3.74      0.3907 2.33 0.0490</span>
+<span class="co">#&gt; KIS-ref  0.0041  0.0067    1.00  3.17  0.3812      8.95      0.9849 3.26 0.0716</span>
+<span class="co">#&gt;         Chi(p) rr25 rr25max rr25min rr50 rr50max rr50min rr95 rr95max rr95min</span>
+<span class="co">#&gt; DZOU    0.3606 3.24    1931  0.0055 4.84    2877  0.0082   13    7990  0.0207</span>
+<span class="co">#&gt; DZOU2   0.3568 2.64    1572  0.0044 4.05    2405  0.0068   11    7090  0.0186</span>
+<span class="co">#&gt; KIS-ref 0.5715 1.00     597  0.0017 1.00     594  0.0017    1     596  0.0017</span></code></pre></div>
 <p><em>Note that we did not specify the reference strain here as it is already labeled in the data</em></p>
 <p><em>For each strain, you have first the LD50 and LD95 and their upper and lower limits (defaults is 95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971).</em></p>
 <p><em>The result of the chi test (Chi(p)) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD50 and LD95 (RR50 and RR95), as well as their upper and lower limits.</em></p>
@@ -239,22 +235,22 @@
 <p><img src="BioRssay_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">RR.b</span><span class="op">)</span>
-<span class="co">#&gt;               LD50    LD50min    LD50max     varLD50       LD95    LD95min</span>
-<span class="co">#&gt; Acerkis 56.5098989 53.2114813 59.6792554 0.001786642 107.634086 100.302691</span>
-<span class="co">#&gt; AgRR5   79.1108266 74.7149834 83.1800402 0.001573892 123.408708 115.649404</span>
-<span class="co">#&gt; Kisumu   0.2726414  0.2587263  0.2860428 0.022377514   0.446101   0.415979</span>
-<span class="co">#&gt;             LD95max     varLD95    Slope   SlopeSE  Intercept InterceptSE</span>
-<span class="co">#&gt; Acerkis 117.1146160 0.002410525 5.878145 0.3656493 -10.299242   0.6734320</span>
-<span class="co">#&gt; AgRR5   134.1446941 0.002449533 8.517708 0.6962015 -16.168620   1.3613946</span>
-<span class="co">#&gt; Kisumu    0.4878805 0.144419248 7.691933 0.6055473   4.341389   0.3281966</span>
-<span class="co">#&gt;                h          g       Chi(p)     rr50  rr50max  rr50min     rr95</span>
-<span class="co">#&gt; Acerkis 1.000000 0.01486432 9.995387e-01 207.2682 418.0336 102.7671 241.2774</span>
-<span class="co">#&gt; AgRR5   1.612638 0.02786453 9.609371e-01 290.1644 583.4161 144.3144 276.6385</span>
-<span class="co">#&gt; Kisumu  1.000000 0.02380791 7.672306e-24   1.0000   0.0000   0.0000   1.0000</span>
-<span class="co">#&gt;          rr95max  rr95min</span>
-<span class="co">#&gt; Acerkis 486.6258 119.6294</span>
-<span class="co">#&gt; AgRR5   556.2204 137.5873</span>
-<span class="co">#&gt; Kisumu    0.0000   0.0000</span></code></pre></div>
+<span class="co">#&gt;            LD25 LD25min LD25max LD25var    LD50 LD50min LD50max LD50var</span>
+<span class="co">#&gt; Acerkis 43.0000 40.0000 47.0000    1.01 57.0000 53.0000  60.000    1.00</span>
+<span class="co">#&gt; AgRR5   66.0000 61.0000 70.0000    1.01 79.0000 75.0000  83.000    1.00</span>
+<span class="co">#&gt; Kisumu   0.2228  0.2069  0.2365    1.07  0.2726  0.2587   0.286    1.05</span>
+<span class="co">#&gt;             LD95 LD95min  LD95max LD95var Slope SlopeSE Intercept InterceptSE</span>
+<span class="co">#&gt; Acerkis 108.0000 100.000 117.0000    1.01  5.88  0.3656  -10.2992      0.6734</span>
+<span class="co">#&gt; AgRR5   123.0000 116.000 134.0000    1.01  8.52  0.6962  -16.1686      1.3600</span>
+<span class="co">#&gt; Kisumu    0.4461   0.416   0.4879    1.39  7.69  0.6055    4.3400      0.3282</span>
+<span class="co">#&gt;            h      g Chi(p) rr25 rr25max rr25min rr50 rr50max rr50min rr95</span>
+<span class="co">#&gt; Acerkis 1.00 0.0149 0.9995  195  130322  0.2910  207  134157  0.3202  241</span>
+<span class="co">#&gt; AgRR5   1.61 0.0279 0.9609  296  197599  0.4431  290  187667  0.4486  277</span>
+<span class="co">#&gt; Kisumu  1.00 0.0238 0.0000    1     736  0.0014    1     699  0.0014    1</span>
+<span class="co">#&gt;         rr95max rr95min</span>
+<span class="co">#&gt; Acerkis  262409  0.2218</span>
+<span class="co">#&gt; AgRR5    300907  0.2543</span>
+<span class="co">#&gt; Kisumu     1876  0.0005</span></code></pre></div>
 <p><em>Note that we have enabled the arguments “plot=” with “plot.conf=” and “test.validity=”. When the log-dose-response is not linear for a strain (Chi-square p-value &lt; 0.05), it will be plotted without forcing linearity as for ,“Kisumu” strain in this example.</em></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#To then test the difference in dose-mortality response between the strains</span>
@@ -293,7 +289,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Piyal Karunarathne, Pascal Milesi.</p>
+  <p>Developed by Piyal Karunarathne, Pascal Milesi, Pierrick Labbé.</p>
 </div>
 
 <div class="pkgdown">

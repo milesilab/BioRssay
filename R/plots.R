@@ -22,6 +22,7 @@ validity<-function(strains,data){
 #' @param strains character. list of test strains to be plotted. If not provided, the function will plot all the strains in the data set.
 #' @param plot.conf logical. Whether to plot the confidence intervals for each strain, default TRUE
 #' @param conf.level numerical. The confidence interval to be plotted
+#' @param LD.value numerical. Level of lethal dose to be tested. default=c(25,50,95)
 #' @param test.validity logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.
 #' @param ... parameters to be passed on to graphics for the plot (e.g. col, pch)
 #'
@@ -40,7 +41,7 @@ validity<-function(strains,data){
 #' mort.plot(data,strains)
 #'
 #' @export
-mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,test.validity=TRUE,...){
+mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,LD.value=c(25,50,95),test.validity=TRUE,...){
   data$strain<-as.factor(data$strain)
   if(is.null(strains)){
     strains<-levels(data$strain)
@@ -56,7 +57,7 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,test.validi
   if(is.null(ll$pch)) {if(length(strains)<=6)ll$pch=15:20 else ll$pch=1:20}
   if(is.null(ll$conf.level)) ll$conf.level=0.95
   if(is.null(ll$lwd)) ll$lwd=1.5
-  dxt<-get.dxt(strains,data,ll$conf.level)
+  dxt<-get.dxt(strains,data,ll$conf.level,LD.value=LD.value)
 
   plot(data$dose,data$probmort,log="x",xlim=c(dose_min,dose_max),
        ylim=c(floor(pmort_min*100)/100,ceiling(pmort_max*100)/100),

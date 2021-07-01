@@ -28,3 +28,6 @@ data<-transd$tr.data
 model.signif(data)
 
 }
+\author{
+Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
+}
