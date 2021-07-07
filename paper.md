@@ -8,7 +8,6 @@ tags:
 - Exposure tests
 date: "29 June 2021"
 output:
-  html_document: default
   md_document: default
 authors:
 - name: Piyal Karunarathne^[first author]
