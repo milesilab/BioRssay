@@ -7,3 +7,8 @@
 ^\.github$
 ^codecov\.yml$
 ^LICENSE\.md$
+^README.Rmd
+^README_files
+^paper.bib
+^paper.md
+^unnamed-chunk-1-1.png
