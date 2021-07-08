@@ -6,9 +6,11 @@ tags:
 - Bioassays
 - Probit analysis
 - Exposure tests
-date: "29 June 2021"
+date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   md_document: default
+  pdf_document:
+    latex_engine: xelatex
 authors:
 - name: Piyal Karunarathne^[first author]
   orcid: 0000-0002-1934-145X
