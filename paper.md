@@ -8,9 +8,9 @@ tags:
 - Exposure tests
 date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
+  md_document: default
   pdf_document:
     latex_engine: xelatex
-  md_document: default
 authors:
 - name: Piyal Karunarathne
   orcid: 0000-0002-1934-145X
