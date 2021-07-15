@@ -82,14 +82,14 @@
 <p><em>Piyal Karunarathne, Nicolas Pocquet, Pascal Milesi, and Pierrick Labbé</em></p>
 <p>This package is designed to analyze mortality data from bioassays of one or several strains/lines/populations. As of now, the functions in the package allow adjusting for mortality in the controls with Abott’s correction. For each strain, functions are available to generate a mortality-dose regression using a generalized linear model (which take over-dispersion into account and allow mortality of 0 or 1), and plot the regressions with or without the desired confidence interval (e.g. 95%).</p>
 <p>The package also provides functions to test the linearity of the log-dose response using a chi-square test between model predictions and observed data (significant deviations from linearity may reflect mixed populations for example).</p>
-<p>The package also allows computing the lethal dose for 50% and 95% of the populations (LD50 and LD95 respectively), with their 95% confidence intervals (CI), following Johnson et al. 2013 approach, which allows taking the heterogeneity of the data into account (<em>Finney 1971</em>) to calculate the CI (i.e. a larger heterogeneity will increase the CI).</p>
-<p>The methods implemented here use a likelihood ratio test (LRT) to test for differences in resistance levels among different strains. Finally, resistance ratios (RR) at LD50 and LD95, i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively (usually it is the susceptible reference), with their 95% confidence intervals, are calculated according to Robertson and <em>Preisler (1992)</em>.</p>
+<p>The package also allows computing the lethal dose for 25%, 50% and 95% of the populations (LD25, LD50 and LD95 respectively) or the level as specified by the user, with their 95% confidence intervals (CI) and variance of each (e.g., LD25var, LD50var, etc.), following Johnson et al. 2013 approach, which allows taking the heterogeneity of the data into account (<em>Finney 1971</em>) to calculate the CI (i.e. a larger heterogeneity will increase the CI).</p>
+<p>The methods implemented here use a likelihood ratio test (LRT) to test for differences in resistance levels among different strains. Finally, resistance ratios (RR) at LD25, LD50 and LD95, i.e. the ratios between a given strain and the strain with the lowest LD50 and a given LD value (e.g. LD25,LD50, and LD95); usually it is the susceptible reference, with their 95% confidence intervals, are calculated according to Robertson and <em>Preisler (1992)</em>.</p>
 </div>
 <div id="data-preparation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#data-preparation" class="anchor"></a>1. <strong>DATA PREPARATION</strong>
 </h1>
-<p>BioRssay can import data in any format that is compatible with base R data import functions (e.g. read.table, read.csv). However, for the functions in BioRssay to work, the data <strong>must</strong> have at least the following columns (other columns won’t be used, but are no hindrance): * strain: a column containing the strains tested * dose: dosage tested on each strain/sample. controls should be entered as 0 * total: total number of samples tested * dead: number of dead samples See the examples below.</p>
+<p>BioRssay can import data in any format that is compatible with base R data import functions (e.g. read.table, read.csv). However, for the functions in BioRssay to work, the data <strong>must</strong> have at least the following columns (other columns won’t be used, but are no hindrance): * strain: a column containing the strains tested * dose: dosage tested on each strain/sample. controls should be entered as 0 * total: total number of samples tested * dead: number of dead (or knock down) samples See the examples below.</p>
 <p><strong>Example 1</strong></p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">bioassay</span><span class="op">)</span>
@@ -139,7 +139,7 @@
 <span class="co">#&gt; 6    temephos KIS-ref 0.007    99   97         1 26/01/11</span>
 <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">exm1</span><span class="op">$</span><span class="va">strain</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "KIS-ref" "DZOU"    "DZOU2"</span></code></pre></div>
-<p>This example contains the mortality data of three strains (KIS, DZOU, and KIS-ref); KIS is used as the reference, as indicated by the “ref” suffix.</p>
+<p>This example contains the mortality data of three strains (KIS-ref, DZOU, and DZOU2 ); KIS is used as the reference, as indicated by the “ref” suffix.</p>
 <p>The first step is to check whether the controls have a non-negligible mortality, in which case a correction should be applied to the data, before probit transformation. This is easily achieved with the function “probit.trans”.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dataT</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/probit.trans.html">probit.trans</a></span><span class="op">(</span><span class="va">exm1</span><span class="op">)</span> <span class="co">#additionally an acceptable threshold for controls' mortality can be set as desired with "conf="; default is 0.05.</span>
@@ -156,7 +156,7 @@
 <p>The output of probit.trans is a list of which the first element (convrg) contains the results of Abott’s correction and convergence values.</p>
 <p>However, since the mortality in the controls (dose=0) is below 5% (conf=0.05) in the present example, data$convrg is NULL and thus no correction is applied to the data . The second element of the list dataT is the probid transformed data with two additional columns: mort, the observed mortalities, and probmort, the observed probit-transformed mortalities. This data frame is what we’ll use in the next steps of the analysis.</p>
 <p><em>If you set the threshold to conf=0.01 with example 1, you can assess the effects of the Abbot’s correction: all mortalities are slightly reduced to take the base control mortality into account.</em></p>
-<p>The second step is to compute the lethal dose values (50% and 95%, LD50 and LD95 respectively) and the corresponding resistance ratios. The function “resist.ratio” allows you to do just that. If no reference strain has been specified in the data file (using the suffix “ref” as mentioned above), it can be specified in “ref.strain=”. Otherwise, the strain with the lowest LD50 will be considered as such. By default, the LDs’ 95% confidence intervals are computed (the min and max values are reported); you can adjust this using “conf.level=”.</p>
+<p>The second step is to compute the lethal dose values (25%, 50% and 95%, LD25, LD50 and LD95 respectively) and the corresponding resistance ratios. The function “resist.ratio” allows you to do just that (user also has the option to calculate these values for different LD values). If no reference strain has been specified in the data file (using the suffix “ref” as mentioned above), it can be specified in “ref.strain=”. Otherwise, the strain with the lowest LD50 will be considered as such. By default, the LDs’ 95% confidence intervals are computed (the min and max values are reported); you can adjust this using “conf.level=”.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data</span><span class="op">&lt;-</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span> <span class="co">#probid transformed data</span>
 <span class="va">RR</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
@@ -174,8 +174,8 @@
 <span class="co">#&gt; DZOU2   0.3568 2.64    1572  0.0044 4.05    2405  0.0068   11    7090  0.0186</span>
 <span class="co">#&gt; KIS-ref 0.5715 1.00     597  0.0017 1.00     594  0.0017    1     596  0.0017</span></code></pre></div>
 <p><em>Note that we did not specify the reference strain here as it is already labeled in the data</em></p>
-<p><em>For each strain, you have first the LD50 and LD95 and their upper and lower limits (defaults is 95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971).</em></p>
-<p><em>The result of the chi test (Chi(p)) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD50 and LD95 (RR50 and RR95), as well as their upper and lower limits.</em></p>
+<p><em>For each strain, you have first the LD25, LD50 and LD95 and their upper and lower limits (defaults is 95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971).</em></p>
+<p><em>The result of the chi test (Chi(p)) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD25, LD50 and LD95 (RR25, RR50 and RR95), as well as their upper and lower limits.</em></p>
 <p><em>The third step, when analysing more than one strain, is now to test for difference in dose-mortality responses between strains using the “model.signif” function.</em></p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span><span class="op">)</span>
@@ -195,7 +195,7 @@
 <span class="co">#&gt; 1    DZOU   DZOU2    0.264023226942502 -5.52847606655654 -2        sig</span>
 <span class="co">#&gt; 2    DZOU KIS-ref  8.3588934657195e-61 -714.373451385791 -2        sig</span>
 <span class="co">#&gt; 3   DZOU2 KIS-ref 3.15241148845391e-48 -603.931258358858 -2    non-sig</span></code></pre></div>
-<p><em>As there are 3 strains, the function first tests whether all strains are similar (i.e. equivalent to 1 strain) or not (3 strains vs 1 strain), using a likelihood ratio test. Here, the test is highly significant, some strains are thus different in terms of resistance.</em></p>
+<p><em>As there are 3 strains, the function first tests whether all strains are similar (i.e. equivalent to 1 strain) or not (i.e. at least one is different from others), using a likelihood ratio test. Here, the test is highly significant, some strains are thus different in terms of dose response.</em></p>
 <p><em>Pairwise tests are then performed and reported below. Here, the KIS strain is different from DZOU and from DZOU2 strains (model.pval &lt;0.05). DZOU and DZOU2 are not different (model.pval &gt;0.05). The bonferroni column indicates whether the p-values &lt;0.05 remain significant (sig vs non-sig) after correction for multiple testing.</em></p>
 <p><strong><em>Data Visualization</em></strong> The data and the regression can be plotted with confidence levels using the “mort.plot” function. It is also possible to take the validity of the linearity test into account for the plots using the “test.validity=” option. The probit-transformed mortalities [probit.trans() function] are plotted as a function of the log10 of the doses.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -262,7 +262,7 @@
 <span class="co">#&gt; Acerkis  262409  0.2218</span>
 <span class="co">#&gt; AgRR5    300907  0.2543</span>
 <span class="co">#&gt; Kisumu     1876  0.0005</span></code></pre></div>
-<p><em>Note that we have enabled the arguments “plot=” with “plot.conf=” and “test.validity=”. When the log-dose-response is not linear for a strain (Chi-square p-value &lt; 0.05), it will be plotted without forcing linearity as for ,“Kisumu” strain in this example.</em></p>
+<p><em>Note that we have enabled the arguments “plot=” with “plot.conf=” and “test.validity=”. When the log-dose-response is not linear for a strain (Chi-square p-value &lt; 0.05), it will be plotted without forcing linearity as for, “Acerkis or AgRR5” strains in this example.</em></p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#To then test the difference in dose-mortality response between the strains</span>
 <span class="va">t.models</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">data.b</span><span class="op">)</span>
@@ -283,7 +283,8 @@
 <span class="co">#&gt; 1 Acerkis   AgRR5 9.81944629906017e-18 -93.3705086548187 -2        sig</span>
 <span class="co">#&gt; 2 Acerkis  Kisumu 4.09605796743876e-78 -1220.98742604214 -2        sig</span>
 <span class="co">#&gt; 3   AgRR5  Kisumu 3.52611879574658e-84 -1433.09904360371 -2        sig</span></code></pre></div>
-<p><em>Note that as one of the strains failed the linearity test, the validity of the dose-mortality response test is, at best, highly questionable. We do not recommend it.</em></p>
+<p><em>Note that at least one of the strains failed the linearity test, the validity of the pairwise dose-mortality response test is, at best, highly questionable. We do not recommend it.</em></p>
+<p><em>If many strains are present and only one (few) fails the linearity tests, we do recommend users to remove such specific strains from the analyses.</em></p>
 <p>These steps can be repeated for the different insecticides, either one by one or or in a loop (e.g. “for” loop function).</p>
 </div>
 </div>

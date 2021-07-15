@@ -159,7 +159,7 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 #' @importFrom stats anova
 #' @importFrom utils combn
 #'
-#' @return a list with model outputs: a chi-square test if there only two strains or bonferroni test significance from a pariwise model comparison if there are more than two strains
+#' @return a list with model outputs: a chi-square test if there are only two strains or if there are more than two strains, first an overall model assessment (i.e. one strain vs. all) and given overall model is significant, then a bonferroni test of significance from a pariwise model comparison.
 #'
 #' @details A global LRT test assesses a strain’s effect, by comparing two models, one with and one without this effect (i.e. comparing a model with several strains to a model where all the data originate from a single strain).
 #' If there are more than two strains, pairwise tests are computed, and p-values of significance are assessed using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
