@@ -23,7 +23,7 @@ authors:
   affiliation: 1
 - name: Pierrick Labbé^[co-last author]
   orcid: 0000-0003-0806-1919
-  affiliation: “3,4”
+  affiliation: “3, 4”
 bibliography: paper.bib
 affiliations:
 - name: Plant Ecology and Evolution, Department of Ecology and Genetics, Evolutionary
