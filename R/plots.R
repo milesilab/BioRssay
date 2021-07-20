@@ -3,11 +3,16 @@ validity<-function(strains,data){
   ndataf<-do.call(rbind,lapply(strains,function(ss,data){
     tmp<-data[data$strain==ss,]
     dss<-unique(tmp$dose)
-    dd<-do.call(rbind,lapply(dss,function(x,tmp){tt<-tmp[tmp$dose==x,];cbind(sum(tt$dead),sum(tt$total))},tmp))
+    dd<-do.call(rbind,lapply(dss,function(x,tmp){
+      tt<-tmp[tmp$dose==x,]
+      cbind(sum(tt$dead),sum(tt$total))
+    },tmp))
     tx<-cbind(ss,dss,dd)
   },data=data))
-  ndataf<-data.frame(strain=ndataf[,1],apply(ndataf[,-1],2,as.numeric));colnames(ndataf)<-c("strain","dose","dead","total")
-  d.ratio<-ifelse(ndataf$dead/ndataf$total==0,0.006,ifelse(ndataf$dead/ndataf$total==1,1-0.006,ndataf$dead/ndataf$total))
+  ndataf<-data.frame(strain=ndataf[,1],apply(ndataf[,-1],2,as.numeric))
+  colnames(ndataf)<-c("strain","dose","dead","total")
+  d.ratio<-ifelse(ndataf$dead/ndataf$total==0,0.006,
+                  ifelse(ndataf$dead/ndataf$total==1,1-0.006,ndataf$dead/ndataf$total))
   p.mortality<-sapply(d.ratio,qnorm)
   ndataf<-cbind(ndataf,d.ratio,p.mortality)
   return(ndataf)
@@ -41,7 +46,8 @@ validity<-function(strains,data){
 #' mort.plot(data,strains)
 #'
 #' @export
-mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,LD.value=c(25,50,95),test.validity=TRUE,...){
+mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
+                    LD.value=c(25,50,95),test.validity=TRUE,...){
   data$strain<-as.factor(data$strain)
   if(is.null(strains)){
     strains<-levels(data$strain)
@@ -91,7 +97,8 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,LD.value=c(
           lines(CIfit[,1],CIfit[,2],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)
           lines(CIfit[,1],CIfit[,3],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)
         } else {
-          points(ndataf$dose[ndataf$strain==strains[i]],ndataf$p.mortality[ndataf$strain==strains[i]],type="l", col=ll$col[i])
+          points(ndataf$dose[ndataf$strain==strains[i]],
+                 ndataf$p.mortality[ndataf$strain==strains[i]],type="l", col=ll$col[i])
         }
       }
     } else {

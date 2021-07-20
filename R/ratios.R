@@ -35,7 +35,11 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
   cov.b0.b1<-vcov[1,2] # Slope intercept covariance
 
   alpha<-1-conf.level
-  if(het > 1) {talpha <- -qt(alpha/2, df=df.residual(mod))} else {talpha <- -qnorm(alpha/2)}
+  if(het > 1) {
+    talpha <- -qt(alpha/2, df=df.residual(mod))
+  } else {
+    talpha <- -qnorm(alpha/2)
+  }
   g <- het * ((talpha^2 * var.b1)/b1^2)
   eta = family(mod)$linkfun(p/100)  #probit distribution curve
   theta.hat <- (eta - b0)/b1
@@ -47,30 +51,33 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
   UCL <- (theta.hat + const1 + const2)
   #Calculate variance for theta.hat (Robertson et al., 2007, pg. 27)
   var.theta.hat <- (1/(theta.hat^2)) * ( var.b0 + 2*cov.b0.b1*theta.hat + var.b1*theta.hat^2 )
-  ECtable <- c(10^c(rbind(theta.hat,LCL,UCL,var.theta.hat)),slope,slopeSE,intercept,interceptSE,het,g)
+  ECtable <- c(10^c(rbind(theta.hat,LCL,UCL,var.theta.hat)),
+               slope,slopeSE,intercept,interceptSE,het,g)
   return(ECtable)
 }
-
 
 #3. test the significance of model pairs of strains
 reg.pair<-function(data){
 mortality<-cbind(data$dead,data$total-data$dead)
-mod1<-glm(mortality~data$strain/log10(data$dose)-1,family = quasibinomial(link=probit))
-mod2<-glm(mortality~log10(data$dose),family = quasibinomial(link=probit))
+mod1<-glm(mortality~data$strain/log10(data$dose)-1,
+          family = quasibinomial(link=probit))
+mod2<-glm(mortality~log10(data$dose),
+          family = quasibinomial(link=probit))
 return(anova(mod1,mod2,test="Chi"))
 }
 
 #4. get dxt
-get.dxt<-function(strains,data,conf.level,LD.value){dxt<-lapply(strains,function(ss,data,conf.level,LD.value){
-  tmp<-data[data$strain == ss,]
-  y<-with(tmp,cbind(dead,total-dead))
-  mods<-glm(y~log10(dose),data=tmp,family = quasibinomial(link=probit))
-  dat <- LD(mods, conf.level,LD.value=LD.value)
-  chq<-sum(((mods$fitted.values*tmp$total-tmp$dead)^2)/(mods$fitted.values*tmp$total))
-  dat<-c(dat,pchisq(q=chq,df=length(tmp$dead)-2,lower.tail=FALSE))
-  return(list(mods,dat))
-},data=data,conf.level=conf.level,LD.value=LD.value)
-return(dxt)
+get.dxt<-function(strains,data,conf.level,LD.value){
+  dxt<-lapply(strains,function(ss,data,conf.level,LD.value){
+    tmp<-data[data$strain == ss,]
+    y<-with(tmp,cbind(dead,total-dead))
+    mods<-glm(y~log10(dose),data=tmp,family = quasibinomial(link=probit))
+    dat <- LD(mods, conf.level,LD.value=LD.value)
+    chq<-sum(((mods$fitted.values*tmp$total-tmp$dead)^2)/(mods$fitted.values*tmp$total))
+    dat<-c(dat,pchisq(q=chq,df=length(tmp$dead)-2,lower.tail=FALSE))
+    return(list(mods,dat))
+  },data=data,conf.level=conf.level,LD.value=LD.value)
+  return(dxt)
 }
 
 
@@ -114,7 +121,8 @@ return(dxt)
 #'
 #' @export
 resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
-                       ref.strain=NULL,plot=FALSE,plot.conf=TRUE,test.validity=TRUE,...) {
+                       ref.strain=NULL,plot=FALSE,plot.conf=TRUE,
+                       test.validity=TRUE,...) {
   if(!any(LD.value==50)){LD.value<-sort(c(LD.value,50))}
 
   data$strain<-as.factor(data$strain)
@@ -126,25 +134,37 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
                    "Intercept", "InterceptSE", "h", "g", "Chi(p)")
   rownames(dat)<-strains
   if(is.null(ref.strain)){
-    ref <- which(strains == strains[grep("-ref$",as.character(strains))], arr.ind=TRUE)
+    ref <- which(strains == strains[grep("-ref$",as.character(strains))],
+                 arr.ind=TRUE)
   } else {
     ref=ref.strain
   }
-  if (length(ref)==0) refrow <- which(dat[,"LD50"]==min(dat[,"LD50"]),arr.ind=TRUE) else refrow <-ref
+  if (length(ref)==0) {
+    refrow <- which(dat[,"LD50"]==min(dat[,"LD50"]),arr.ind=TRUE)
+  } else {
+    refrow <-ref
+  }
 
   for(l in seq_along(LD.value)){
-    assign(paste0("rr",LD.value[l]),dat[,paste0("LD",LD.value[l])]/dat[refrow,paste0("LD",LD.value[l])])
-    assign(paste0("CI",LD.value[l]),1.96*sqrt(dat[,paste0("LD",LD.value[l],"var")]+dat[refrow,paste0("LD",LD.value[l],"var")]))
-    assign(paste0("rr",LD.value[l],"max"),10^(log10(get(paste0("rr",LD.value[l])))+get(paste0("CI",LD.value[l]))))
-    assign(paste0("rr",LD.value[l],"min"),10^(log10(get(paste0("rr",LD.value[l])))-get(paste0("CI",LD.value[l]))))
-    ggl<-get(paste0("rr",LD.value[l],"max"));ggl[refrow]<-0
-    ggl2<-get(paste0("rr",LD.value[l],"min"));ggl2[refrow]<-0
+    assign(paste0("rr",LD.value[l]),
+           dat[,paste0("LD",LD.value[l])]/dat[refrow,paste0("LD",LD.value[l])])
+    assign(paste0("CI",LD.value[l]),
+           1.96*sqrt(dat[,paste0("LD",LD.value[l],"var")]+dat[refrow,paste0("LD",LD.value[l],"var")]))
+    assign(paste0("rr",LD.value[l],"max"),
+           10^(log10(get(paste0("rr",LD.value[l])))+get(paste0("CI",LD.value[l]))))
+    assign(paste0("rr",LD.value[l],"min"),
+           10^(log10(get(paste0("rr",LD.value[l])))-get(paste0("CI",LD.value[l]))))
+    ggl<-get(paste0("rr",LD.value[l],"max"))
+    ggl[refrow]<-0
+    ggl2<-get(paste0("rr",LD.value[l],"min"))
+    ggl2[refrow]<-0
   }
   RR<-mget(c(paste0("rr",rep(LD.value,each=3),c("","max","min"))))
   RR<-do.call(cbind,RR)
 
   if(plot){
-    mort.plot(data,strains,plot.conf,test.validity=test.validity,conf.level=conf.level,...)
+    mort.plot(data,strains,plot.conf,test.validity=test.validity,
+              conf.level=conf.level,...)
   }
   dat<-cbind(dat,RR)
   dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
@@ -185,14 +205,30 @@ model.signif<-function(data){
     } else if(length(strains)>2 & Test$`Pr(>Chi)`[2]<0.05){
       print(Test)
       message("complete model is significant against a NULL model \n continueing to pair-wise comparison")
-      Test<-sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Pr[2]}},data=data),data=data)
-      dv<-sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Deviance[2]}},data=data),data=data)
-      dff=sapply(strains, function(x,data) sapply(strains, function(y,data){if(x!=y){dat<-data[data$strain==x | data$strain==y,];reg.pair(dat)$Df[2]}},data=data),data=data)
+      Test<-sapply(strains, function(x,data) sapply(strains, function(y,data){
+        if(x!=y){
+          dat<-data[data$strain==x | data$strain==y,]
+          reg.pair(dat)$Pr[2]
+        }
+      },data=data),data=data)
+      dv<-sapply(strains, function(x,data) sapply(strains, function(y,data){
+        if(x!=y){
+          dat<-data[data$strain==x | data$strain==y,]
+          reg.pair(dat)$Deviance[2]
+        }
+      },data=data),data=data)
+      dff=sapply(strains, function(x,data) sapply(strains, function(y,data){
+        if(x!=y){
+          dat<-data[data$strain==x | data$strain==y,]
+          reg.pair(dat)$Df[2]
+        }
+      },data=data),data=data)
       pval<-unique(sort(unlist(Test)))
       rk<-(length(strains)*(length(strains)-1)/2):1
       rk<-0.05/rk
       toget<-t(combn(rownames(Test),2))
-      Test<-data.frame(cbind(toget,unlist(Test[toget]),unlist(dv[toget]),unlist(dff[toget]),ifelse(pval<rk,"sig","non-sig")))
+      Test<-data.frame(cbind(toget,unlist(Test[toget]),unlist(dv[toget]),
+                             unlist(dff[toget]),ifelse(pval<rk,"sig","non-sig")))
       colnames(Test)<-c("strain1","strain2","model.pval","deviance","df","bonferroni")
     }
   } else {
@@ -201,9 +237,3 @@ model.signif<-function(data){
   return(list(model=Test))
 }
 # add deviance and degree of freedom to the table
-
-
-
-
-
-

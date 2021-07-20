@@ -33,7 +33,8 @@ probit_C <- function(Cx,ii,dataf,x){
 #' transd<-probit.trans(bioassay)
 #' @export
 probit.trans<-function(dataf,conf=0.05){
-  mort<-ifelse(dataf$dead/dataf$total==0,0.006,ifelse(dataf$dead/dataf$total==1,1-0.006,dataf$dead/dataf$total))
+  mort<-ifelse(dataf$dead/dataf$total==0,0.006,ifelse(dataf$dead/dataf$total==1,
+                                                      1-0.006,dataf$dead/dataf$total))
   dataf<-cbind(dataf,mort)
   if(any(dataf$dose==0)){
     if(any(dataf[dataf$dose==0,"mort"]>conf)){
@@ -44,15 +45,16 @@ probit.trans<-function(dataf,conf=0.05){
         if(!any(data$mort[sig]==0)){
           bottom<-1e-12;top<-min(data$mort[sig])
           pin<-runif(1,min=bottom,max=top)
-          opz<-optim(pin,probit_C,ii=sig,dataf=dataf,x=x,control=list(fnscale=-1,trace=1),method="L-BFGS-B",lower=bottom,upper=top)
+          opz<-optim(pin,probit_C,ii=sig,dataf=dataf,x=x,control=list(fnscale=-1,trace=1),
+                     method="L-BFGS-B",lower=bottom,upper=top)
           val<-c(opz$par,opz$convergence)
         } else {
           val<-c(0,0)
         }
         return(c(x,val))
       },dataf=dataf)
-
-      tt<-data.frame(do.call(rbind,tt));colnames(tt)<-c("Strain","ControlMortality","Convergence(OK if 0)")
+      tt<-data.frame(do.call(rbind,tt))
+      colnames(tt)<-c("Strain","ControlMortality","Convergence(OK if 0)")
       data<-dataf[dataf$dose>0,]
       for(i in seq_along(tt[,1])){
         data$mort[data[,"strain"]==tt[i,1]]<-(data$mort[data[,"strain"]==tt[i,1]]-as.numeric(tt[i,2])/(1-as.numeric(tt[i,2])))
