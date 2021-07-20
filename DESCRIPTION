@@ -18,6 +18,7 @@ Suggests:
     testthat (>= 2.0.0),
     covr
 VignetteBuilder: knitr
-URL: https://github.com/milesilab/BioRssay#readme, https://milesilab.github.io/BioRssay/index.html 
+URL: https://github.com/milesilab/BioRssay#readme
+BugReports: https://github.com/milesilab/BioRssay/issues
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 2
