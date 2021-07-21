@@ -23,19 +23,16 @@ authors:
   affiliation: 1
 - name: Pierrick Labbé^[co-last author]
   orcid: 0000-0003-0806-1919
-  affiliation: '3, 4'
+  affiliation: "3, 4"
 bibliography: paper.bib
 affiliations:
-- name: Plant Ecology and Evolution, Department of Ecology and Genetics, Evolutionary
-    Biology Centre and SciLifeLab, Uppsala University, Uppsala, Sweden
+- name: Plant Ecology and Evolution, Department of Ecology and Genetics, Evolutionary Biology Centre and SciLifeLab, Uppsala University, Uppsala, Sweden
   index: 1
-- name: Institut Pasteur de Nouvelle-Calédonie, URE-Entomologie Médicale, Nouméa,
-    New Caledonia
+- name: Institut Pasteur de Nouvelle-Calédonie, URE-Entomologie Médicale, Nouméa, New Caledonia
   index: 2
-- name: Institut Universitaire de France, 1 Rue Descartes, 75231 Cedex 05, Paris.
+- name: Institut Universitaire de France, 1 Rue Descartes, 75231 Cedex 05, Paris
   index: 3
-- name: Institut des Sciences de l’Evolution de Montpellier (UMR 5554, CNRS-UM-IRD-EPHE),
-    Université de Montpellier, Montpellier, 34095 Cedex 5, France
+- name: Institut des Sciences de l’Evolution de Montpellier (UMR 5554, CNRS-UM-IRD-EPHE), Université de Montpellier, Montpellier, 34095 Cedex 5, France
   index: 4
 ---
 
