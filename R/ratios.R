@@ -211,18 +211,22 @@ model.signif<-function(data){
           reg.pair(dat)$Pr[2]
         }
       },data=data),data=data)
-      dv<-sapply(strains, function(x,data) sapply(strains, function(y,data){
-        if(x!=y){
-          dat<-data[data$strain==x | data$strain==y,]
-          reg.pair(dat)$Deviance[2]
-        }
-      },data=data),data=data)
-      dff=sapply(strains, function(x,data) sapply(strains, function(y,data){
-        if(x!=y){
-          dat<-data[data$strain==x | data$strain==y,]
-          reg.pair(dat)$Df[2]
-        }
-      },data=data),data=data)
+      dv<-sapply(strains, function(x,data){
+        sapply(strains, function(y,data){
+          if(x!=y){
+            dat<-data[data$strain==x | data$strain==y,]
+            reg.pair(dat)$Deviance[2]
+          }
+        },data=data)
+      },data=data)
+      dff=sapply(strains, function(x,data){
+        sapply(strains, function(y,data){
+          if(x!=y){
+            dat<-data[data$strain==x | data$strain==y,]
+            reg.pair(dat)$Df[2]
+          }
+        },data=data)
+      },data=data)
       pval<-unique(sort(unlist(Test)))
       rk<-(length(strains)*(length(strains)-1)/2):1
       rk<-0.05/rk

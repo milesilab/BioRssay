@@ -10,7 +10,8 @@ probit_C <- function(Cx,ii,dataf,x){
   L<--moda$deviance/2
   j<-datac$strain==x
   L<-L+sum(datac$dead[j]*log10(Cx)+(datac$total[j]-datac$dead[j])*log10(1-Cx))
-  return(L)}
+  return(L)
+}
 
 
 #' Probit-transform the data and apply Abbott's correction (if necessary)
@@ -71,5 +72,6 @@ probit.trans<-function(dataf,conf=0.05){
   probmort<-sapply(data$mort,qnorm) # apply probit transformation to the data
   data<-cbind(data,probmort)
   data$strain<-as.factor(data$strain)
-  return(list(convrg=tt,tr.data=data))
+  outdata<-list(convrg=tt,tr.data=data)
+  return(outdata)
 }

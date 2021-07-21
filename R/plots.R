@@ -63,12 +63,13 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
   if(is.null(ll$pch)) {if(length(strains)<=6)ll$pch=15:20 else ll$pch=1:20}
   if(is.null(ll$conf.level)) ll$conf.level=0.95
   if(is.null(ll$lwd)) ll$lwd=1.5
+  if(is.null(ll$cex)) ll$cex=1
   dxt<-get.dxt(strains,data,ll$conf.level,LD.value=LD.value)
 
   plot(data$dose,data$probmort,log="x",xlim=c(dose_min,dose_max),
        ylim=c(floor(pmort_min*100)/100,ceiling(pmort_max*100)/100),
        ylab="mortalit?",yaxt="n",xaxt="n", ann=FALSE ,col=ll$col[data$strain],
-       pch=ll$pch[data$strain])
+       pch=ll$pch[data$strain],cex=ll$cex)
   abline(v = dose_min, col = "grey95", lwd = 180000)
   points(data$dose,data$probmort,col=ll$col[data$strain],
          pch=ll$pch[data$strain])
@@ -77,7 +78,10 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
   axis(2, at=qnorm(labely/100),labels=labely,las=2, adj=0)
   axis(4, at=qnorm(labely/100),labels=FALSE)
   mtext("Mortality (%)", side=2, line=3)
-  for (i in dmin:dmax) axis(1,at=10^i,labels=substitute(10^k,list(k=i)))
+
+  for (i in dmin:dmax) {
+    axis(1,at=10^i,labels=substitute(10^k,list(k=i)))
+  }
   axis.at <- 10 ^ c(dmin:dmax)
   axis(1, at = 2:9 * rep(axis.at[-1] / 10, each = 8),
        tcl = -0.5, labels = FALSE)
