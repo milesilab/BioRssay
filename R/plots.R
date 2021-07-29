@@ -1,4 +1,5 @@
-#1. test validity of the model
+#' Test validity of the probit model
+#' @noRd
 validity<-function(strains,data){
   ndataf<-do.call(rbind,lapply(strains,function(ss,data){
     tmp<-data[data$strain==ss,]
@@ -68,7 +69,7 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
 
   plot(data$dose,data$probmort,log="x",xlim=c(dose_min,dose_max),
        ylim=c(floor(pmort_min*100)/100,ceiling(pmort_max*100)/100),
-       ylab="mortalit?",yaxt="n",xaxt="n", ann=FALSE ,col=ll$col[data$strain],
+       ylab="mortality",yaxt="n",xaxt="n", ann=FALSE ,col=ll$col[data$strain],
        pch=ll$pch[data$strain],cex=ll$cex)
   abline(v = dose_min, col = "grey95", lwd = 180000)
   points(data$dose,data$probmort,col=ll$col[data$strain],

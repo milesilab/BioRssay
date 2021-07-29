@@ -20,5 +20,5 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://github.com/milesilab/BioRssay#readme
 BugReports: https://github.com/milesilab/BioRssay/issues
-Roxygen: list(markdown = TRUE)
+Roxygen: list (markdown = TRUE, roclets = c ("namespace", "rd", "srr::srr_stats_roclet"))
 Config/testthat/edition: 2

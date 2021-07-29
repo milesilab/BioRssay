@@ -1,5 +1,5 @@
-# helpers
-#1. function to calculate the CI of the regressions for each strain
+#' Calculate confidence range for regressions
+#' @noRd
 CIplot<-function(mods,pmort_min,pmort_max,conf.level){
   summ<-summary(mods)
   zz<-qnorm((1-conf.level)/2,lower.tail=FALSE)
@@ -15,7 +15,8 @@ CIplot<-function(mods,pmort_min,pmort_max,conf.level){
   return(probitci)
 }
 
-#2. lethal dose glm test
+#' Lethal dose glm test
+#' @noRd
 LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
   p <- LD.value # leathal dose
   het = deviance(mod)/df.residual(mod)
@@ -56,7 +57,8 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
   return(ECtable)
 }
 
-#3. test the significance of model pairs of strains
+#' Test the significance of model pairs of strains
+#' @noRd
 reg.pair<-function(data){
 mortality<-cbind(data$dead,data$total-data$dead)
 mod1<-glm(mortality~data$strain/log10(data$dose)-1,
@@ -66,7 +68,8 @@ mod2<-glm(mortality~log10(data$dose),
 return(anova(mod1,mod2,test="Chi"))
 }
 
-#4. get dxt
+#' Get LD and RR values for each strain
+#' @noRd
 get.dxt<-function(strains,data,conf.level,LD.value){
   dxt<-lapply(strains,function(ss,data,conf.level,LD.value){
     tmp<-data[data$strain == ss,]
@@ -240,4 +243,3 @@ model.signif<-function(data){
   }
   return(list(model=Test))
 }
-# add deviance and degree of freedom to the table

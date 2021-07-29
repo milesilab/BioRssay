@@ -1,5 +1,7 @@
-# Helpers
-#1. creates a function which applies the Abbott's correction to the data for a given C
+#' Apply Abbott's correction
+#'
+#' Apply Abbott's correction to morbidity data
+#' @noRd
 probit_C <- function(Cx,ii,dataf,x){
   datac<-dataf[dataf$dose==0,]
   data<-dataf[dataf$dose>0,]

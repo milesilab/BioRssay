@@ -10,7 +10,7 @@ model.signif(data)
 \item{data}{a data frame of probit transformed mortality data using the function probit.trans}
 }
 \value{
-a list with model outputs: a chi-square test if there only two strains or bonferroni test significance from a pariwise model comparison if there are more than two strains
+a list with model outputs: a chi-square test if there are only two strains or if there are more than two strains, first an overall model assessment (i.e. one strain vs. all) and given overall model is significant, then a bonferroni test of significance from a pariwise model comparison.
 }
 \description{
 This function is used when comparing at least two strains. It tests whether the mortality-dose regressions are similar for different strains, using a likelihood ratio test (LRT). If there are more than two strains, it also computes pairwise tests, using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
