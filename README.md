@@ -5,7 +5,6 @@ Releases](https://img.shields.io/github/downloads/milesilab/BioRssay/total.svg)]
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
-[![status](https://joss.theoj.org/papers/73183faaf2c750eaaf0adaecc75d1f8f/status.svg)](https://joss.theoj.org/papers/73183faaf2c750eaaf0adaecc75d1f8f)
 <!-- badges: end -->
 
 **BioRssay** will help you to analyze mortality data from bioassays of
