@@ -11,7 +11,7 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 **BioRssay** will help you to analyze mortality data from bioassays of
 any kind (e.g.,insecti/pesti/herbi-cides, antibiotics, etc.).
 
-![](README_files/figure-markdown_strict/unnamed-chunk-1-1.png)
+![](unnamed-chunk-1-1.png)
 
 ***For a comprehensive tutorial on the package, go to
 <a href="https://milesilab.github.io/BioRssay/" class="uri">https://milesilab.github.io/BioRssay/</a>
