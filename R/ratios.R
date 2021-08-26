@@ -83,6 +83,59 @@ get.dxt<-function(strains,data,conf.level,LD.value){
   return(dxt)
 }
 
+## test resist
+resist.ratio2<-function(data,conf.level=0.95,LD.value=c(25,50,95),
+                        ref.strain=NULL,plot=FALSE,plot.conf=TRUE,
+                        test.validity=TRUE,...) {
+  if(!any(LD.value==50)){LD.value<-sort(c(LD.value,50))}
+
+  data$strain<-as.factor(data$strain)
+  strains<-levels(data$strain)
+  dxt<-BioRssay:::get.dxt(strains,data,conf.level,LD.value=LD.value)
+  dat<-do.call(rbind,lapply(dxt,function(x){x[[2]]}))
+  colnames(dat)<-c(paste0(paste0("LD",rep(LD.value,each=4)),
+                          rep(c("","min","max","var"),2)),"Slope", "SlopeSE",
+                   "Intercept", "InterceptSE", "h", "g", "Chi(p)")
+  rownames(dat)<-strains
+  if(is.null(ref.strain)){
+    ref <- which(strains == strains[grep("-ref$",as.character(strains))],
+                 arr.ind=TRUE)
+  } else {
+    ref=ref.strain
+  }
+  if (length(ref)==0) {
+    refrow <- which(dat[,"LD50"]==min(dat[,"LD50"]),arr.ind=TRUE)
+  } else {
+    refrow <-ref
+  }
+
+  for(l in seq_along(LD.value)){
+    assign(paste0("rr",LD.value[l]),
+           dat[,paste0("LD",LD.value[l])]/dat[refrow,paste0("LD",LD.value[l])])
+    assign(paste0("CI",LD.value[l]),
+           1.96*sqrt(log10(dat[,paste0("LD",LD.value[l],"var")])+log10(dat[refrow,paste0("LD",LD.value[l],"var")])))
+    assign(paste0("rr",LD.value[l],"max"),
+           10^(log10(get(paste0("rr",LD.value[l])))+get(paste0("CI",LD.value[l]))))
+    assign(paste0("rr",LD.value[l],"min"),
+           10^(log10(get(paste0("rr",LD.value[l])))-get(paste0("CI",LD.value[l]))))
+    ggl<-get(paste0("rr",LD.value[l],"max"))
+    ggl[refrow]<-0
+    ggl2<-get(paste0("rr",LD.value[l],"min"))
+    ggl2[refrow]<-0
+  }
+  RR<-mget(c(paste0("rr",rep(LD.value,each=3),c("","max","min"))))
+  RR<-do.call(cbind,RR)
+
+  if(plot){
+    mort.plot(data,strains,plot.conf,test.validity=test.validity,
+              conf.level=conf.level,...)
+  }
+  dat<-cbind(dat,RR)
+  dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
+  return(dat)
+}
+
+
 
 #' Calculate lethal dosage, resistance ratios, and regression coefficients and tests for linearity
 #'
