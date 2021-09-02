@@ -60,7 +60,7 @@ probit.trans<-function(dataf,conf=0.05){
       colnames(tt)<-c("Strain","ControlMortality","Convergence(OK if 0)")
       data<-dataf[dataf$dose>0,]
       for(i in seq_along(tt[,1])){
-        data$mort[data[,"strain"]==tt[i,1]]<-(data$mort[data[,"strain"]==tt[i,1]]-as.numeric(tt[i,2])/(1-as.numeric(tt[i,2])))
+        data$mort[data[,"strain"]==tt[i,1]]<-(data$mort[data[,"strain"]==tt[i,1]]-as.numeric(tt[i,2]))/(1-as.numeric(tt[i,2]))
         data$dead[data[,"strain"]==tt[i,1]]<-data$mort[data[,"strain"]==tt[i,1]]*data$total[data[,"strain"]==tt[i,1]]
       }
     } else {
