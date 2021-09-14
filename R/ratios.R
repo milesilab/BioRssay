@@ -61,12 +61,13 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
 #' @noRd
 reg.pair<-function(data){
 mortality<-cbind(data$dead,data$total-data$dead)
-mod1<-glm(mortality~data$strain/log10(data$dose)-1,
+mod1<-glm(mortality~log10(data$dose)*data$strain,
           family = quasibinomial(link=probit))
 mod2<-glm(mortality~log10(data$dose),
           family = quasibinomial(link=probit))
 return(anova(mod1,mod2,test="Chi"))
 }
+
 
 #' Get LD and RR values for each strain
 #' @noRd
@@ -77,7 +78,7 @@ get.dxt<-function(strains,data,conf.level,LD.value){
     mods<-glm(y~log10(dose),data=tmp,family = quasibinomial(link=probit))
     dat <- LD(mods, conf.level,LD.value=LD.value)
     chq<-sum(((mods$fitted.values*tmp$total-tmp$dead)^2)/(mods$fitted.values*tmp$total))
-    dat<-c(dat,pchisq(q=chq,df=length(tmp$dead)-2,lower.tail=FALSE))
+    dat<-c(dat,pchisq(q=chq,df=length(tmp$dead)-1,lower.tail=FALSE))
     return(list(mods,dat))
   },data=data,conf.level=conf.level,LD.value=LD.value)
   return(dxt)

@@ -77,3 +77,5 @@ probit.trans<-function(dataf,conf=0.05){
   outdata<-list(convrg=tt,tr.data=data)
   return(outdata)
 }
+
+
