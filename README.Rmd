@@ -33,7 +33,7 @@ mort.plot(data,strains)
 ```{r,results = "hide",eval=FALSE}
 if (!requireNamespace("devtools", quietly = TRUE)) 
     install.packages("devtools") 
-devtools::install_github("milesilab/BioRssay")
+devtools::install_github("milesilab/BioRssay",build_vignettes = TRUE)
 
 ```
 

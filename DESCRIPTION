@@ -9,7 +9,7 @@ License: AGPL (>= 3)
 Imports: colorspace, markdown
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10)
 Suggests: 
@@ -20,5 +20,4 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://github.com/milesilab/BioRssay#readme
 BugReports: https://github.com/milesilab/BioRssay/issues
-Roxygen: list (markdown = TRUE, roclets = c ("namespace", "rd", "srr::srr_stats_roclet"))
 Config/testthat/edition: 2

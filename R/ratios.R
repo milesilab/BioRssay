@@ -44,8 +44,8 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
   g <- het * ((talpha^2 * var.b1)/b1^2)
   eta = family(mod)$linkfun(p/100)  #probit distribution curve
   theta.hat <- (eta - b0)/b1
-  const1 <- (g/(1-g))*(theta.hat + cov.b0.b1/var.b1) # const1 <- (g/(1-g))*(theta.hat -   cov.b0.b1/var.b1)
-  const2a <- var.b0 + 2*cov.b0.b1*theta.hat + var.b1*theta.hat^2 - g*(var.b0 - (cov.b0.b1^2/var.b1))
+  const1 <- (g/(1-g))*(theta.hat - cov.b0.b1/var.b1) # const1 <- (g/(1-g))*(theta.hat -   cov.b0.b1/var.b1)
+  const2a <- var.b0 - 2*cov.b0.b1*theta.hat + var.b1*theta.hat^2 - g*(var.b0 - (cov.b0.b1^2/var.b1))
   const2 <- talpha/((1-g)*b1) * sqrt(het * (const2a))
   #Calculate the confidence intervals LCL=lower, UCL=upper (Finney, 1971, p. 78-79. eq. 4.35)
   LCL <- (theta.hat + const1 - const2)
@@ -162,11 +162,11 @@ resist.ratio.old<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 #'
 #' @author Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
 #'
-#' @references Finney DJ(1971). Probitanalysis. Cambridge:Cambridge UniversityPress. 350p.
+#' @references Finney DJ (1971). Probitanalysis. Cambridge:Cambridge UniversityPress. 350p.
 #'
-#' HommelG(1988). A stage wise rejective multiple test procedure based on a modified Bonferroni test. Biometrika 75, 383-6.
+#' Hommel G (1988). A stage wise rejective multiple test procedure based on a modified Bonferroni test. Biometrika 75, 383-6.
 #'
-#' Johnson RM, Dahlgren L, Siegfried BD,EllisMD(2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
+#' Johnson RM, Dahlgren L, Siegfried BD,Ellis MD (2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
 #'
 #' Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with arthropods. CRC, Boca Raton, FL.
 #'

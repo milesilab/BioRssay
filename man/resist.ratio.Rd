@@ -36,12 +36,12 @@ resist.ratio(
 Returns a data frame with the various estimates mentioned above. If plot=TRUE, plots the mortality on a probit-transformed scale against the log10 doses.
 }
 \description{
-Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 25\%, 50\% and 95\% (unless otherwise provided) of the population (LD25, LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default). See details for more info.
+Using a generalised linear model (GLM, logit link function), this function computes the lethal doses for 25%, 50% and 95% (unless otherwise provided) of the population (LD25, LD50 and LD95, resp.), and their confidence intervals (LDmax and LDmin, 0.95 by default). See details for more info.
 }
 \details{
 If a name is provided in ref.strain=, it will be used as the reference to compute the resistance ratios (RR). Alternatively, the function will look for a strain with the suffix "-ref" in the dataset. If this returns NULL, the strain with the lowest LD50 will be considered as reference.
 
-In addition to LD values, the function in a nutshell uses a script modified from Johnson et al (2013), which allows taking the g factor into account ("With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4." Finney, 1971) and the heterogeneity (h) of the data (Finney, 1971) to calculate the confidence intervals (i.e. a larger heterogeneity will increase the confidence intervals). It also computes the corresponding resistance ratios (RR), i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively for RR50 and RR95 (usually, it is the susceptible reference strain), with their 95\% confidence intervals (RRmin and RRmax), calculated according to Robertson and Preisler (1992). Finally, it also computes the coefficients (slope and intercept, with their standard error) of the linear regressions) and tests for the linearity of the dose-mortality response using a chi-square test (Chi(p)) between the observed dead numbers (data) and the dead numbers predicted by the regression (the test is significant if the data is not linear, e.g. mixed populations).
+In addition to LD values, the function in a nutshell uses a script modified from Johnson et al (2013), which allows taking the g factor into account ("With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4." Finney, 1971) and the heterogeneity (h) of the data (Finney, 1971) to calculate the confidence intervals (i.e. a larger heterogeneity will increase the confidence intervals). It also computes the corresponding resistance ratios (RR), i.e. the ratios between a given strain and the strain with the lower LD50 and LD95, respectively for RR50 and RR95 (usually, it is the susceptible reference strain), with their 95% confidence intervals (RRmin and RRmax), calculated according to Robertson and Preisler (1992). Finally, it also computes the coefficients (slope and intercept, with their standard error) of the linear regressions) and tests for the linearity of the dose-mortality response using a chi-square test (Chi(p)) between the observed dead numbers (data) and the dead numbers predicted by the regression (the test is significant if the data is not linear, e.g. mixed populations).
 }
 \examples{
 data(bioassay)
@@ -51,11 +51,11 @@ resist.ratio(data,plot=TRUE)
 
 }
 \references{
-Finney DJ(1971). Probitanalysis. Cambridge:Cambridge UniversityPress. 350p.
+Finney DJ (1971). Probitanalysis. Cambridge:Cambridge UniversityPress. 350p.
 
-HommelG(1988). A stage wise rejective multiple test procedure based on a modified Bonferroni test. Biometrika 75, 383-6.
+Hommel G (1988). A stage wise rejective multiple test procedure based on a modified Bonferroni test. Biometrika 75, 383-6.
 
-Johnson RM, Dahlgren L, Siegfried BD,EllisMD(2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
+Johnson RM, Dahlgren L, Siegfried BD,Ellis MD (2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
 
 Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with arthropods. CRC, Boca Raton, FL.
 }
