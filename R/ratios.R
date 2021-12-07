@@ -166,7 +166,7 @@ resist.ratio.old<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 #'
 #' Hommel G (1988). A stage wise rejective multiple test procedure based on a modified Bonferroni test. Biometrika 75, 383-6.
 #'
-#' Johnson RM, Dahlgren L, Siegfried BD,Ellis MD (2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
+#' Johnson RM, Dahlgren L, Siegfried BD, Ellis MD (2013). Acaricide,fungicide and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
 #'
 #' Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with arthropods. CRC, Boca Raton, FL.
 #'
