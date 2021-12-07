@@ -22,7 +22,7 @@ explained with ample examples.***
 
     if (!requireNamespace("devtools", quietly = TRUE)) 
         install.packages("devtools") 
-    devtools::install_github("milesilab/BioRssay")
+    devtools::install_github("milesilab/BioRssay",build_vignettes = TRUE)
 
 Please don’t forget to cite us if you use the package.
 
