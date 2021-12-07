@@ -6,7 +6,7 @@ Authors@R: c(person(given="Piyal",family="Karunarathne", email="piyal.karunarath
 Maintainer: Piyal Karunarathne <piyal.karunarathne@ebc.uu.se>
 Description: A robust framework for analyzing mortality data from bioassays for one or several strains/lines/populations.
 License: AGPL (>= 3)
-Imports: colorspace
+Imports: colorspace, rmarkdown
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
