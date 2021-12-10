@@ -96,7 +96,7 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
     if(test.validity){
       ndataf<-validity(strains,data)
       for(i in 1:length(strains)){
-        if(dxt[[i]][[2]][[15]]>0.05){
+        if(dxt[[i]][[2]][[length(dxt[[i]][[2]])]]>0.05){ # dxt[[i]][[2]][[15]]
           abline(dxt[[i]][[1]], col=ll$col[i],lwd=ll$lwd)
           CIfit<-CIplot(dxt[[i]][[1]],pmort_min,pmort_max,conf.level=conf.level)
           lines(CIfit[,1],CIfit[,2],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)

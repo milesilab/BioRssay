@@ -44,7 +44,7 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
   g <- het * ((talpha^2 * var.b1)/b1^2)
   eta = family(mod)$linkfun(p/100)  #probit distribution curve
   theta.hat <- (eta - b0)/b1
-  const1 <- (g/(1-g))*(theta.hat - cov.b0.b1/var.b1) # const1 <- (g/(1-g))*(theta.hat -   cov.b0.b1/var.b1)
+  const1 <- (g/(1-g))*(theta.hat - cov.b0.b1/var.b1)
   const2a <- var.b0 - 2*cov.b0.b1*theta.hat + var.b1*theta.hat^2 - g*(var.b0 - (cov.b0.b1^2/var.b1))
   const2 <- talpha/((1-g)*b1) * sqrt(het * (const2a))
   #Calculate the confidence intervals LCL=lower, UCL=upper (Finney, 1971, p. 78-79. eq. 4.35)
@@ -84,57 +84,6 @@ get.dxt<-function(strains,data,conf.level,LD.value){
   return(dxt)
 }
 
-### older version of resist.ratio
-resist.ratio.old<-function(data,conf.level=0.95,LD.value=c(25,50,95),
-                       ref.strain=NULL,plot=FALSE,plot.conf=TRUE,
-                       test.validity=TRUE,...) {
-  if(!any(LD.value==50)){LD.value<-sort(c(LD.value,50))}
-
-  data$strain<-as.factor(data$strain)
-  strains<-levels(data$strain)
-  dxt<-get.dxt(strains,data,conf.level,LD.value=LD.value)
-  dat<-do.call(rbind,lapply(dxt,function(x){x[[2]]}))
-  colnames(dat)<-c(paste0(paste0("LD",rep(LD.value,each=4)),
-                          rep(c("","min","max","var"),2)),"Slope", "SlopeSE",
-                   "Intercept", "InterceptSE", "h", "g", "Chi(p)")
-  rownames(dat)<-strains
-  if(is.null(ref.strain)){
-    ref <- which(strains == strains[grep("-ref$",as.character(strains))],
-                 arr.ind=TRUE)
-  } else {
-    ref=ref.strain
-  }
-  if (length(ref)==0) {
-    refrow <- which(dat[,"LD50"]==min(dat[,"LD50"]),arr.ind=TRUE)
-  } else {
-    refrow <-ref
-  }
-
-  for(l in seq_along(LD.value)){
-    assign(paste0("rr",LD.value[l]),
-           dat[,paste0("LD",LD.value[l])]/dat[refrow,paste0("LD",LD.value[l])])
-    assign(paste0("CI",LD.value[l]),
-           1.96*sqrt(dat[,paste0("LD",LD.value[l],"var")]+dat[refrow,paste0("LD",LD.value[l],"var")]))
-    assign(paste0("rr",LD.value[l],"max"),
-           10^(log10(get(paste0("rr",LD.value[l])))+get(paste0("CI",LD.value[l]))))
-    assign(paste0("rr",LD.value[l],"min"),
-           10^(log10(get(paste0("rr",LD.value[l])))-get(paste0("CI",LD.value[l]))))
-    ggl<-get(paste0("rr",LD.value[l],"max"))
-    ggl[refrow]<-0
-    ggl2<-get(paste0("rr",LD.value[l],"min"))
-    ggl2[refrow]<-0
-  }
-  RR<-mget(c(paste0("rr",rep(LD.value,each=3),c("","max","min"))))
-  RR<-do.call(cbind,RR)
-
-  if(plot){
-    mort.plot(data,strains,plot.conf,test.validity=test.validity,
-              conf.level=conf.level,...)
-  }
-  dat<-cbind(dat,RR)
-  dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
-  return(dat)
-}
 
 ###########
 
@@ -260,7 +209,7 @@ model.signif<-function(data){
     Test<-reg.pair(data)
     if(length(strains)>2 & Test$`Pr(>Chi)`[2]>0.05){
       message("effect on strains are non-significant \n all strains come from the same population")
-    } else if(length(strains)>2 & Test$`Pr(>Chi)`[2]<0.05){
+    } else if(length(strains)>2 & Test$`Pr(>Chi)`[2]<=0.05){
       print(Test)
       message("complete model is significant against a NULL model \n continueing to pair-wise comparison")
       Test<-sapply(strains, function(x,data) sapply(strains, function(y,data){
@@ -285,11 +234,11 @@ model.signif<-function(data){
           }
         },data=data)
       },data=data)
-      pval<-unique(sort(unlist(Test)))
       rk<-(length(strains)*(length(strains)-1)/2):1
       rk<-0.05/rk
       toget<-t(combn(rownames(Test),2))
-      Test<-data.frame(cbind(toget,unlist(Test[toget]),unlist(dv[toget]),
+      pval<-unlist(Test[toget])
+      Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),round(unlist(dv[toget]),5),
                              unlist(dff[toget]),ifelse(pval<rk,"sig","non-sig")))
       colnames(Test)<-c("strain1","strain2","model.pval","deviance","df","bonferroni")
     }
