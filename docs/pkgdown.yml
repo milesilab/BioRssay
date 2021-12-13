@@ -1,10 +1,7 @@
-pandoc: 2.7.3
-pkgdown: 1.6.1
+pandoc: 2.14.0.3
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   BioRssay: BioRssay.html
-last_built: 2021-08-09T12:37Z
-urls:
-  reference: https://milesilab.github.io/BioRssay//reference
-  article: https://milesilab.github.io/BioRssay//articles
+last_built: 2021-12-13T13:21Z
 
