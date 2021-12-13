@@ -166,13 +166,14 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
     ggl2<-get(paste0("rr",LD.value[l],"min"))
     ggl2[refrow]<-0
   }
-  RR<-mget(c(paste0("rr",rep(LD.value,each=3),c("","max","min"))))
+  RR<-mget(c(paste0("rr",rep(LD.value,each=3),c("","min","max"))))
   RR<-do.call(cbind,RR)
 
   if(plot){
     mort.plot(data,strains,plot.conf,test.validity=test.validity,
               conf.level=conf.level,...)
   }
+  dat<-dat[,-(grep("var",colnames(dat)))]
   dat<-cbind(dat,RR)
   dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
   return(dat)
