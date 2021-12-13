@@ -77,7 +77,8 @@ get.dxt<-function(strains,data,conf.level,LD.value){
     y<-with(tmp,cbind(dead,total-dead))
     mods<-glm(y~log10(dose),data=tmp,family = quasibinomial(link=probit))
     dat <- LD(mods, conf.level,LD.value=LD.value)
-    chq<-sum(((mods$fitted.values*tmp$total-tmp$dead)^2)/(mods$fitted.values*tmp$total))
+    E<-mods$fitted.values*tmp$total # expected dead
+    chq<-sum(((E-tmp$dead)^2)/(ifelse(E<1,1,E))) #if E is lower than 1 chi-sq fails to detect the significance, ~change denominator to 1
     dat<-c(dat,pchisq(q=chq,df=length(tmp$dead)-1,lower.tail=FALSE))
     return(list(mods,dat))
   },data=data,conf.level=conf.level,LD.value=LD.value)

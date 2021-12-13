@@ -14,15 +14,14 @@ any kind (e.g.,insecti/pesti/herbi-cides, antibiotics, etc.).
 ![](unnamed-chunk-1-1.png)
 
 ***For a comprehensive tutorial on the package, go to
-<a href="https://milesilab.github.io/BioRssay/" class="uri">https://milesilab.github.io/BioRssay/</a>
-and navigate to “Get started” where all the functions and usage are
-explained with ample examples.***
+<https://milesilab.github.io/BioRssay/> and navigate to “Get started”
+where all the functions and usage are explained with ample examples.***
 
 **Installation**
 
     if (!requireNamespace("devtools", quietly = TRUE)) 
         install.packages("devtools") 
-    devtools::install_github("milesilab/BioRssay",build_vignettes = TRUE)
+    devtools::install_github("milesilab/BioRssay", build_vignettes = TRUE)
 
 Please don’t forget to cite us if you use the package.
 
