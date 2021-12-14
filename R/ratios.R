@@ -65,7 +65,7 @@ mod1<-glm(mortality~log10(data$dose)*data$strain,
           family = quasibinomial(link=probit))
 mod2<-glm(mortality~log10(data$dose),
           family = quasibinomial(link=probit))
-return(anova(mod1,mod2,test="Chi"))
+return(anova(mod2,mod1,test="Chi"))
 }
 
 
@@ -79,7 +79,8 @@ get.dxt<-function(strains,data,conf.level,LD.value){
     dat <- LD(mods, conf.level,LD.value=LD.value)
     E<-mods$fitted.values*tmp$total # expected dead
     chq<-sum(((E-tmp$dead)^2)/(ifelse(E<1,1,E))) #if E is lower than 1 chi-sq fails to detect the significance, ~change denominator to 1
-    dat<-c(dat,pchisq(q=chq,df=length(tmp$dead)-1,lower.tail=FALSE))
+    df<-length(tmp$dead)-1
+    dat<-c(dat,chq,df,pchisq(q=chq,df=df,lower.tail=FALSE))
     return(list(mods,dat))
   },data=data,conf.level=conf.level,LD.value=LD.value)
   return(dxt)
@@ -138,7 +139,7 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
   dat<-do.call(rbind,lapply(dxt,function(x){x[[2]]}))
   colnames(dat)<-c(paste0(paste0("LD",rep(LD.value,each=4)),
                           rep(c("","min","max","var"),2)),"Slope", "SlopeSE",
-                   "Intercept", "InterceptSE", "h", "g", "Chi(p)")
+                   "Intercept", "InterceptSE", "h", "g","Chi2","df","Chi(p)")
   rownames(dat)<-strains
   if(is.null(ref.strain)){
     ref <- which(strains == strains[grep("-ref$",as.character(strains))],
@@ -174,7 +175,7 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
               conf.level=conf.level,...)
   }
   dat<-dat[,-(grep("var",colnames(dat)))]
-  dat<-cbind(dat,RR)
+  dat<-cbind(dat[,(ncol(dat)-8):ncol(dat)],dat[,1:(ncol(dat)-9)],RR)
   dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
   return(dat)
 }

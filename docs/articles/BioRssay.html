@@ -64,7 +64,7 @@
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>BioRssay</h1>
             
-            <h4 data-toc-skip class="date">13 December, 2021</h4>
+            <h4 data-toc-skip class="date">14 December, 2021</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/milesilab/BioRssay/blob/HEAD/vignettes/BioRssay.Rmd" class="external-link"><code>vignettes/BioRssay.Rmd</code></a></small>
       <div class="d-none name"><code>BioRssay.Rmd</code></div>
@@ -165,18 +165,18 @@
 <code class="sourceCode R"><span class="va">data</span><span class="op">&lt;-</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span> <span class="co">#probid transformed data</span>
 <span class="va">RR</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>
 <span class="va">RR</span>
-<span class="co">#&gt;           LD25 LD25min LD25max   LD50 LD50min LD50max   LD95 LD95min LD95max</span>
-<span class="co">#&gt; DZOU    0.0030   2e-04  0.0192 0.0074   6e-04  0.0404 0.0645  0.0087  0.2472</span>
-<span class="co">#&gt; DZOU2   0.0025   1e-04  0.0194 0.0062   3e-04  0.0412 0.0576  0.0055  0.2578</span>
-<span class="co">#&gt; KIS-ref 0.0009   0e+00  0.0142 0.0015   0e+00  0.0209 0.0050  0.0001  0.0537</span>
-<span class="co">#&gt;         Slope SlopeSE Intercept InterceptSE    h      g Chi(p) rr25 rr25min</span>
-<span class="co">#&gt; DZOU     1.75  0.1537      3.72      0.3579 1.91 0.0397 0.4514 3.24  2.7000</span>
-<span class="co">#&gt; DZOU2    1.69  0.1657      3.74      0.3907 2.33 0.0490 0.4473 2.64  2.1900</span>
-<span class="co">#&gt; KIS-ref  3.17  0.3812      8.95      0.9849 3.26 0.0716 0.6597 1.00  0.7947</span>
-<span class="co">#&gt;         rr25max rr50 rr50min rr50max rr95 rr95min rr95max</span>
-<span class="co">#&gt; DZOU       3.91 4.84  4.1600    5.64   13  7.6800   22.00</span>
-<span class="co">#&gt; DZOU2      3.18 4.05  3.5000    4.69   11  7.1100   19.00</span>
-<span class="co">#&gt; KIS-ref    1.26 1.00  0.8488    1.18    1  0.8085    1.24</span></code></pre></div>
+<span class="co">#&gt;         Slope SlopeSE Intercept InterceptSE    h      g Chi2 df Chi(p)   LD25</span>
+<span class="co">#&gt; DZOU     1.75  0.1537      3.72      0.3579 1.91 0.0397 9.88 10 0.4514 0.0030</span>
+<span class="co">#&gt; DZOU2    1.69  0.1657      3.74      0.3907 2.33 0.0490 9.92 10 0.4473 0.0025</span>
+<span class="co">#&gt; KIS-ref  3.17  0.3812      8.95      0.9849 3.26 0.0716 8.59 11 0.6597 0.0009</span>
+<span class="co">#&gt;         LD25min LD25max   LD50 LD50min LD50max   LD95 LD95min LD95max rr25</span>
+<span class="co">#&gt; DZOU      2e-04  0.0192 0.0074   6e-04  0.0404 0.0645  0.0087  0.2472 3.24</span>
+<span class="co">#&gt; DZOU2     1e-04  0.0194 0.0062   3e-04  0.0412 0.0576  0.0055  0.2578 2.64</span>
+<span class="co">#&gt; KIS-ref   0e+00  0.0142 0.0015   0e+00  0.0209 0.0050  0.0001  0.0537 1.00</span>
+<span class="co">#&gt;         rr25min rr25max rr50 rr50min rr50max rr95 rr95min rr95max</span>
+<span class="co">#&gt; DZOU     2.7000    3.91 4.84  4.1600    5.64   13  7.6800   22.00</span>
+<span class="co">#&gt; DZOU2    2.1900    3.18 4.05  3.5000    4.69   11  7.1100   19.00</span>
+<span class="co">#&gt; KIS-ref  0.7947    1.26 1.00  0.8488    1.18    1  0.8085    1.24</span></code></pre></div>
 <p>Note that we did not specify the reference strain here as it is already labeled in the data</p>
 <p>For each strain, you have first the LD25, LD50 and LD95 and their upper and lower limits (defaults is 95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971).</p>
 <p>The result of the chi test (Chi(p)) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD25, LD50 and LD95 (RR25, RR50 and RR95), as well as their upper and lower limits.</p>
@@ -185,20 +185,20 @@
 <code class="sourceCode R"><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span><span class="op">)</span>
 <span class="co">#&gt; Analysis of Deviance Table</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Model 1: mortality ~ log10(data$dose) * data$strain</span>
-<span class="co">#&gt; Model 2: mortality ~ log10(data$dose)</span>
+<span class="co">#&gt; Model 1: mortality ~ log10(data$dose)</span>
+<span class="co">#&gt; Model 2: mortality ~ log10(data$dose) * data$strain</span>
 <span class="co">#&gt;   Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    </span>
-<span class="co">#&gt; 1        28      70.69                          </span>
-<span class="co">#&gt; 2        32     936.46 -4  -865.77 &lt; 2.2e-16 ***</span>
+<span class="co">#&gt; 1        32     936.46                          </span>
+<span class="co">#&gt; 2        28      70.69  4   865.77 &lt; 2.2e-16 ***</span>
 <span class="co">#&gt; ---</span>
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
 <span class="co">#&gt; complete model is significant against a NULL model </span>
 <span class="co">#&gt;  continueing to pair-wise comparison</span>
 <span class="co">#&gt; $model</span>
-<span class="co">#&gt;   strain1 strain2 model.pval   deviance df bonferroni</span>
-<span class="co">#&gt; 1    DZOU   DZOU2    0.26402   -5.52848 -2    non-sig</span>
-<span class="co">#&gt; 2    DZOU KIS-ref          0 -714.37345 -2        sig</span>
-<span class="co">#&gt; 3   DZOU2 KIS-ref          0 -603.93126 -2        sig</span></code></pre></div>
+<span class="co">#&gt;   strain1 strain2 model.pval  deviance df bonferroni</span>
+<span class="co">#&gt; 1    DZOU   DZOU2    0.26402   5.52848  2    non-sig</span>
+<span class="co">#&gt; 2    DZOU KIS-ref          0 714.37345  2        sig</span>
+<span class="co">#&gt; 3   DZOU2 KIS-ref          0 603.93126  2        sig</span></code></pre></div>
 <p>As there are 3 strains, the function first tests whether all strains are similar (i.e. equivalent to 1 strain) or not (i.e. at least one is different from others), using a likelihood ratio test. Here, the test is highly significant, some strains are thus different in terms of dose response.</p>
 <p>Pairwise tests are then performed and reported below. Here, the KIS strain is different from DZOU and from DZOU2 strains (model.pval &lt;0.05). DZOU and DZOU2 are not different (model.pval &gt;0.05). The bonferroni column indicates whether the p-values &lt;0.05 remain significant (sig vs non-sig) after correction for multiple testing.</p>
 <p><strong><em>Data Visualization</em></strong> The data and the regression can be plotted with confidence levels using the “mort.plot” function. It is also possible to take the validity of the linearity test into account for the plots using the “test.validity=” option. The probit-transformed mortalities [probit.trans() function] are plotted as a function of the log10 of the doses.</p>
@@ -252,14 +252,14 @@
 <p><img src="BioRssay_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">RR.b</span><span class="op">)</span>
-<span class="co">#&gt;            LD25 LD25min LD25max    LD50 LD50min  LD50max     LD95 LD95min</span>
-<span class="co">#&gt; Acerkis 43.0000 18.0000 132.000 57.0000  23.000 178.0000 108.0000 41.0000</span>
-<span class="co">#&gt; AgRR5   66.0000 19.0000 376.000 79.0000  22.000 468.0000 123.0000 33.0000</span>
-<span class="co">#&gt; Kisumu   0.2228  0.1355   0.321  0.2726   0.172   0.3824   0.4461  0.3077</span>
-<span class="co">#&gt;          LD95max Slope SlopeSE Intercept InterceptSE    h      g Chi(p) rr25</span>
-<span class="co">#&gt; Acerkis 371.0000  5.88  0.3656  -10.2992      0.6734 1.00 0.0149 0.9997  195</span>
-<span class="co">#&gt; AgRR5   798.0000  8.52  0.6962  -16.1686      1.3600 1.61 0.0279 0.9716  296</span>
-<span class="co">#&gt; Kisumu    0.5862  7.69  0.6055    4.3400      0.3282 1.00 0.0238 1.0000    1</span>
+<span class="co">#&gt;         Slope SlopeSE Intercept InterceptSE    h      g  Chi2 df Chi(p)    LD25</span>
+<span class="co">#&gt; Acerkis  5.88  0.3656  -10.2992      0.6734 1.00 0.0149 11.00 31 0.9997 43.0000</span>
+<span class="co">#&gt; AgRR5    8.52  0.6962  -16.1686      1.3600 1.61 0.0279 18.00 31 0.9716 66.0000</span>
+<span class="co">#&gt; Kisumu   7.69  0.6055    4.3400      0.3282 1.00 0.0238  7.34 39 1.0000  0.2228</span>
+<span class="co">#&gt;         LD25min LD25max    LD50 LD50min  LD50max     LD95 LD95min  LD95max rr25</span>
+<span class="co">#&gt; Acerkis 18.0000 132.000 57.0000  23.000 178.0000 108.0000 41.0000 371.0000  195</span>
+<span class="co">#&gt; AgRR5   19.0000 376.000 79.0000  22.000 468.0000 123.0000 33.0000 798.0000  296</span>
+<span class="co">#&gt; Kisumu   0.1355   0.321  0.2726   0.172   0.3824   0.4461  0.3077   0.5862    1</span>
 <span class="co">#&gt;          rr25min rr25max rr50  rr50min rr50max rr95 rr95min rr95max</span>
 <span class="co">#&gt; Acerkis  86.0000  442.00  207 103.0000   418.0  241 43.0000    1360</span>
 <span class="co">#&gt; AgRR5   131.0000  666.00  290 144.0000   583.0  277 49.0000    1560</span>
@@ -270,21 +270,21 @@
 <span class="va">t.models</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">data.b</span><span class="op">)</span>
 <span class="co">#&gt; Analysis of Deviance Table</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Model 1: mortality ~ log10(data$dose) * data$strain</span>
-<span class="co">#&gt; Model 2: mortality ~ log10(data$dose)</span>
+<span class="co">#&gt; Model 1: mortality ~ log10(data$dose)</span>
+<span class="co">#&gt; Model 2: mortality ~ log10(data$dose) * data$strain</span>
 <span class="co">#&gt;   Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    </span>
-<span class="co">#&gt; 1        98      107.8                          </span>
-<span class="co">#&gt; 2       102     1981.5 -4  -1873.7 &lt; 2.2e-16 ***</span>
+<span class="co">#&gt; 1       102     1981.5                          </span>
+<span class="co">#&gt; 2        98      107.8  4   1873.7 &lt; 2.2e-16 ***</span>
 <span class="co">#&gt; ---</span>
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
 <span class="co">#&gt; complete model is significant against a NULL model </span>
 <span class="co">#&gt;  continueing to pair-wise comparison</span>
 <span class="va">t.models</span>
 <span class="co">#&gt; $model</span>
-<span class="co">#&gt;   strain1 strain2 model.pval    deviance df bonferroni</span>
-<span class="co">#&gt; 1 Acerkis   AgRR5          0   -93.37051 -2        sig</span>
-<span class="co">#&gt; 2 Acerkis  Kisumu          0 -1220.98743 -2        sig</span>
-<span class="co">#&gt; 3   AgRR5  Kisumu          0 -1433.09904 -2        sig</span></code></pre></div>
+<span class="co">#&gt;   strain1 strain2 model.pval   deviance df bonferroni</span>
+<span class="co">#&gt; 1 Acerkis   AgRR5          0   93.37051  2        sig</span>
+<span class="co">#&gt; 2 Acerkis  Kisumu          0 1220.98743  2        sig</span>
+<span class="co">#&gt; 3   AgRR5  Kisumu          0 1433.09904  2        sig</span></code></pre></div>
 <p>Note that at least one of the strains failed the linearity test, the validity of the pairwise dose-mortality response test is, at best, highly questionable. We do not recommend it.</p>
 <p>If many strains are present and only one (few) fails the linearity tests, we do recommend users to remove specific strains from the analyses.</p>
 <p>These steps can be repeated for the different insecticides, either one by one or or in a loop (e.g. “for” loop function).</p>
@@ -299,21 +299,24 @@
 <span class="va">trnd</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/probit.trans.html">probit.trans</a></span><span class="op">(</span><span class="va">exm3</span><span class="op">)</span> <span class="co">#probit transformation and correction of data</span>
 <span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">trnd</span><span class="op">$</span><span class="va">tr.data</span>,LD.value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>,<span class="fl">95</span><span class="op">)</span>,plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="co">#get LD and RR values with the mortality plot</span></code></pre></div>
 <p><img src="BioRssay_files/figure-html/unnamed-chunk-12-1.png" width="576"></p>
-<pre><code><span class="co">#&gt;        LD50 LD50min LD50max   LD95 LD95min LD95max Slope SlopeSE Intercept</span>
-<span class="co">#&gt; DZOU 0.0050   2e-04  0.0408 0.0504  0.0034  0.2650  1.64  0.1857      3.77</span>
-<span class="co">#&gt; KIS  0.0016   1e-04  0.0099 0.0048  0.0005  0.0254  3.46  0.2648      9.64</span>
-<span class="co">#&gt;      InterceptSE    h      g Chi(p) rr50 rr50min rr50max rr95 rr95min rr95max</span>
-<span class="co">#&gt; DZOU      0.4515 7.94 0.0579  0.000 3.07  2.7700    3.40   10  7.6200   14.00</span>
-<span class="co">#&gt; KIS       0.7206 3.09 0.0279  0.358 1.00  0.8991    1.11    1  0.8157    1.23</span>
+<pre><code><span class="co">#&gt;      Slope SlopeSE Intercept InterceptSE    h      g Chi2 df Chi(p)   LD50</span>
+<span class="co">#&gt; DZOU  1.64  0.1857      3.77      0.4515 7.94 0.0579   61 17  0.000 0.0050</span>
+<span class="co">#&gt; KIS   3.46  0.2648      9.64      0.7206 3.09 0.0279   14 13  0.358 0.0016</span>
+<span class="co">#&gt;      LD50min LD50max   LD95 LD95min LD95max rr50 rr50min rr50max rr95 rr95min</span>
+<span class="co">#&gt; DZOU   2e-04  0.0408 0.0504  0.0034  0.2650 3.07  2.7700    3.40   10  7.6200</span>
+<span class="co">#&gt; KIS    1e-04  0.0099 0.0048  0.0005  0.0254 1.00  0.8991    1.11    1  0.8157</span>
+<span class="co">#&gt;      rr95max</span>
+<span class="co">#&gt; DZOU   14.00</span>
+<span class="co">#&gt; KIS     1.23</span>
 <span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">trnd</span><span class="op">$</span><span class="va">tr.data</span><span class="op">)</span> <span class="co"># test the models significance for each strain</span>
 <span class="co">#&gt; $model</span>
 <span class="co">#&gt; Analysis of Deviance Table</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Model 1: mortality ~ log10(data$dose) * data$strain</span>
-<span class="co">#&gt; Model 2: mortality ~ log10(data$dose)</span>
+<span class="co">#&gt; Model 1: mortality ~ log10(data$dose)</span>
+<span class="co">#&gt; Model 2: mortality ~ log10(data$dose) * data$strain</span>
 <span class="co">#&gt;   Resid. Df Resid. Dev Df Deviance  Pr(&gt;Chi)    </span>
-<span class="co">#&gt; 1        28     164.17                          </span>
-<span class="co">#&gt; 2        30     703.60 -2  -539.43 &lt; 2.2e-16 ***</span>
+<span class="co">#&gt; 1        30     703.60                          </span>
+<span class="co">#&gt; 2        28     164.17  2   539.43 &lt; 2.2e-16 ***</span>
 <span class="co">#&gt; ---</span>
 <span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></code></pre>
 </div>
