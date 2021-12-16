@@ -21,15 +21,12 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
   p <- LD.value # leathal dose
   het = deviance(mod)/df.residual(mod)
   if(het < 1){het = 1} # Heterogeneity cannot be less than 1
-  summary <- summary(mod, dispersion=het, cor = F)
-  intercept <- summary$coefficients[1]
-  interceptSE <- summary$coefficients[3]
-  slope <- summary$coefficients[2]
-  slopeSE <- summary$coefficients[4]
-  z.value <- summary$coefficients[6]
-
-  b0<-intercept # Intercept (alpha)
-  b1<-slope # Slope (beta)
+  m.stats <- summary(mod, dispersion=het, cor = F)
+  b0<-m.stats$coefficients[1] # Intercept (alpha)
+  b1<-m.stats$coefficients[2] # Slope (beta)
+  interceptSE <- m.stats$coefficients[3]
+  slopeSE <- m.stats$coefficients[4]
+  z.value <- m.stats$coefficients[6]
   vcov = summary(mod)$cov.unscaled
   var.b0<-vcov[1,1] # Intercept variance
   var.b1<-vcov[2,2] # Slope variance
@@ -53,7 +50,7 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
   #Calculate variance for theta.hat (Robertson et al., 2007, pg. 27)
   var.theta.hat <- (1/(theta.hat^2)) * ( var.b0 + 2*cov.b0.b1*theta.hat + var.b1*theta.hat^2 )
   ECtable <- c(10^c(rbind(theta.hat,LCL,UCL,var.theta.hat)),
-               slope,slopeSE,intercept,interceptSE,het,g)
+               b1,slopeSE,b0,interceptSE,het,g)
   return(ECtable)
 }
 
