@@ -3,7 +3,7 @@ pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   BioRssay: BioRssay.html
-last_built: 2021-12-17T13:26Z
+last_built: 2021-12-17T13:46Z
 urls:
   reference: https://milesilab.github.io/BioRssay/index.html/reference
   article: https://milesilab.github.io/BioRssay/index.html/articles
