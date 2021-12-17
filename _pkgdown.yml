@@ -1,4 +1,7 @@
-url: ~
+url: https://milesilab.github.io/BioRssay/index.html
 template:
   bootstrap: 5
+  bootswatch: cerulean
+  lang: en
+
 

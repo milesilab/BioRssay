@@ -172,10 +172,7 @@ exm3<-read.table(file,header=TRUE)
 trnd<-probit.trans(exm3) #probit transformation and correction of data
 resist.ratio(trnd$tr.data,LD.value = c(50,95),plot = T) #get LD and RR values with the mortality plot
 model.signif(trnd$tr.data) # test the models significance for each strain
-
 ```
-
-
 
 # 3. **REFERENCES**
   1. Finney DJ(1971). Probitanalysis. Cambridge:Cambridge UniversityPress. 350p.
