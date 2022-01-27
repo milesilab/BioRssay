@@ -27,4 +27,6 @@ Please don’t forget to cite us if you use the package.
 
 **How to cite**
 
-\*Publication to be added
+Karunarathne, P., Pocquet, N., Labbé, P. et al. BioRssay: an R package
+for analyses of bioassays and probit graphs. Parasites Vectors 15, 35
+(2022). <https://doi.org/10.1186/s13071-021-05146-x>
