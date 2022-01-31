@@ -1,0 +1,17 @@
+citHeader("To cite BioRssay in publications use: \n
+Karunarathne, P., Pocquet, N., Labbé, P. et al. BioRssay: an R package for analyses of bioassays and probit graphs. Parasites Vectors 15, 35 (2022). https://doi.org/10.1186/s13071-021-05146-x")
+
+citEntry(
+  entry    = "Article",
+  title    = "BioRssay: an R package for analyses of bioassays and probit graphs",
+  author   = "Karunarathne, Piyal and Pocquet, Nicolas and Labb{\'e}, Pierrick and Milesi, Pascal",
+  journal  = "Parasites & Vectors",
+  year     = "2022",
+  volume   = "15",
+  number   = "1",
+  pages    = "1-6",
+  url      = "https://doi.org/10.1186/s13071-021-05146-x",
+  textVersion = paste(
+
+  )
+)
