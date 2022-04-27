@@ -32,7 +32,7 @@ validity<-function(strains,data){
 #' @param test.validity logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.
 #' @param ... parameters to be passed on to graphics for the plot (e.g. col, pch)
 #'
-#' @importFrom graphics points
+#' @importFrom graphics points layout par
 #' @importFrom colorspace rainbow_hcl
 #'
 #' @return A plot of dose-mortality responses for bioassays
@@ -48,7 +48,9 @@ validity<-function(strains,data){
 #'
 #' @export
 mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
-                    LD.value=c(25,50,95),test.validity=TRUE,...){
+                     LD.value=c(25,50,95),test.validity=TRUE,...){
+  opars<-par(no.readonly = TRUE)
+  on.exit(par(opars))
   data$strain<-as.factor(data$strain)
   if(is.null(strains)){
     strains<-levels(data$strain)
@@ -67,6 +69,16 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
   if(is.null(ll$cex)) ll$cex=1
   dxt<-get.dxt(strains,data,ll$conf.level,LD.value=LD.value)
 
+  #layout for the plot
+  layout(1:2, heights=c(1, 5))
+  # Legend panel
+  par(mar=rep(0,4))
+  plot(0, 0, type="n", ann=FALSE, axes=FALSE)
+  legend("center", strains, col = ll$col, pch=ll$pch, cex = 0.8,
+         inset=c(0,1), horiz=TRUE, bty="n",ncol=ifelse(length(strains)<5,1,2))
+
+  #main plot panel
+  par(mar=c(5,4,0,2))
   plot(data$dose,data$probmort,log="x",xlim=c(dose_min,dose_max),
        ylim=c(floor(pmort_min*100)/100,ceiling(pmort_max*100)/100),
        ylab="mortality",yaxt="n",xaxt="n", ann=FALSE ,col=ll$col[data$strain],
@@ -87,8 +99,6 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
   axis(1, at = 2:9 * rep(axis.at[-1] / 10, each = 8),
        tcl = -0.5, labels = FALSE)
   mtext(expression(Dose (mg.L^-1) ), side=1, line=3)
-  legend("bottomright", strains, col = ll$col, pch=ll$pch, cex = 0.8,
-         inset=c(0,1), xpd=TRUE, horiz=TRUE, bty="n")
   abline(h=pmort_min, lty=3)
   abline(h=pmort_max, lty=3)
 
