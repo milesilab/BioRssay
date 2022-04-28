@@ -69,16 +69,8 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
   if(is.null(ll$cex)) ll$cex=1
   dxt<-get.dxt(strains,data,ll$conf.level,LD.value=LD.value)
 
-  #layout for the plot
-  layout(1:2, heights=c(1, 5))
-  # Legend panel
-  par(mar=rep(0,4))
-  plot(0, 0, type="n", ann=FALSE, axes=FALSE)
-  legend("center", strains, col = ll$col, pch=ll$pch, cex = 0.8,
-         inset=c(0,1), horiz=TRUE, bty="n",ncol=ifelse(length(strains)<5,1,2))
-
-  #main plot panel
-  par(mar=c(5,4,0,2))
+  layout(matrix(1:2,ncol=2), widths = c(3,1),heights = c(1,1))
+  par(mar=c(4,4,3,0))
   plot(data$dose,data$probmort,log="x",xlim=c(dose_min,dose_max),
        ylim=c(floor(pmort_min*100)/100,ceiling(pmort_max*100)/100),
        ylab="mortality",yaxt="n",xaxt="n", ann=FALSE ,col=ll$col[data$strain],
@@ -129,5 +121,9 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
       abline(dxt[[i]][[1]], col=ll$col[i],lwd=ll$lwd)
     }
   }
+  par(mar=c(3,0.5,7,1))
+  plot(0, type="n", ann=FALSE, axes=FALSE)
+  legend("center", strains, col = ll$col, pch=ll$pch, inset=c(1,1),
+         bty="n",cex=ifelse(any(nchar(strains)>15),0.5,0.8),y.intersp = 1)
 }
 

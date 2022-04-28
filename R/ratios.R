@@ -56,13 +56,24 @@ LD <- function(mod, conf.level,LD.value=c(25,50,95)) {
 
 #' Test the significance of model pairs of strains
 #' @noRd
-reg.pair<-function(data){
+reg.pair0<-function(data){
 mortality<-cbind(data$dead,data$total-data$dead)
 mod1<-glm(mortality~log10(data$dose)*data$strain,
           family = quasibinomial(link=probit))
 mod2<-glm(mortality~log10(data$dose),
           family = quasibinomial(link=probit))
 return(anova(mod2,mod1,test="Chi"))
+}
+
+reg.pair<-function(data){
+  mortality<-cbind(data$dead,data$total-data$dead)
+  mod1<-glm(mortality~log10(data$dose)*data$strain,
+            family = quasibinomial(link=probit))
+  mod2<-glm(mortality~log10(data$dose),
+            family = quasibinomial(link=probit))
+  Test<-anova(mod2,mod1,test="Chi")
+  an<-as.data.frame(anova(mod1,test="F"))
+  return(list(pairT=Test,fullM=an))
 }
 
 
@@ -207,22 +218,22 @@ model.signif<-function(data){
   strains<-levels(data$strain)
   if (length(strains)>=2) {
     Test<-reg.pair(data)
-    if(length(strains)>2 & Test$`Pr(>Chi)`[2]>0.05){
+    if(length(strains)>2 & Test$pairT$`Pr(>Chi)`[2]>0.05){
       message("effect on strains are non-significant \n all strains come from the same population")
-    } else if(length(strains)>2 & Test$`Pr(>Chi)`[2]<=0.05){
-      print(Test)
+    } else if(length(strains)>2 & Test$pairT$`Pr(>Chi)`[2]<=0.05){
+      print(Test$pairT)
       message("complete model is significant against a NULL model \n continueing to pair-wise comparison")
       Test<-sapply(strains, function(x,data) sapply(strains, function(y,data){
         if(x!=y){
           dat<-data[data$strain==x | data$strain==y,]
-          reg.pair(dat)$Pr[2]
+          reg.pair(dat)$pairT$Pr[2]
         }
       },data=data),data=data)
       dv<-sapply(strains, function(x,data){
         sapply(strains, function(y,data){
           if(x!=y){
             dat<-data[data$strain==x | data$strain==y,]
-            reg.pair(dat)$Deviance[2]
+            reg.pair(dat)$pairT$Deviance[2]
           }
         },data=data)
       },data=data)
@@ -230,17 +241,34 @@ model.signif<-function(data){
         sapply(strains, function(y,data){
           if(x!=y){
             dat<-data[data$strain==x | data$strain==y,]
-            reg.pair(dat)$Df[2]
+            reg.pair(dat)$pairT$Df[2]
           }
         },data=data)
       },data=data)
+
+      rd=sapply(strains, function(x,data){
+        sapply(strains, function(y,data){
+          if(x!=y){
+            dat<-data[data$strain==x | data$strain==y,]
+            reg.pair(dat)$fullM
+          }
+        },data=data)
+      },data=data,simplify = T)
+
+      rdl<-combn(strains,2,function(x,data){
+        dat<-data[data$strain==x[1] | data$strain==x[2],]
+        tmp<-reg.pair(dat)$fullM
+        list(c(tmp$Df[c(3,4)],round(as.numeric(tmp$`Resid. Dev`[3:4]),3),round(as.numeric(tmp$`Pr(>F)`[3:4]),3)))
+      },data=data)
+      rdl<-do.call(rbind,rdl)
+
       rk<-(length(strains)*(length(strains)-1)/2):1
       rk<-0.05/rk
       toget<-t(combn(rownames(Test),2))
       pval<-unlist(Test[toget])
       Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),round(unlist(dv[toget]),5),
-                             unlist(dff[toget]),ifelse(pval<rk,"sig","non-sig")))
-      colnames(Test)<-c("strain1","strain2","model.pval","deviance","df","bonferroni")
+                             unlist(dff[toget]),ifelse(pval<rk,"sig","non-sig"),rdl))
+      colnames(Test)<-c("strain1","strain2","model.pval","deviance","df","bonferroni","df.str","df.int","res.Dv.str","res.Dv.int","Fp.str","Fp.int")
     }
   } else {
     message("Only one strain present; check your data")
