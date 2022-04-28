@@ -258,7 +258,7 @@ model.signif<-function(data){
       rdl<-combn(strains,2,function(x,data){
         dat<-data[data$strain==x[1] | data$strain==x[2],]
         tmp<-reg.pair(dat)$fullM
-        list(c(tmp$Df[c(3,4)],round(as.numeric(tmp$`Resid. Dev`[3:4]),3),round(as.numeric(tmp$`Pr(>F)`[3:4]),3)))
+        list(c(round(tmp$`Resid. Dev`[1],2),round(as.numeric(tmp$`Resid. Dev`[3:4]),3),round(as.numeric(tmp$`Pr(>F)`[3:4]),3)))
       },data=data)
       rdl<-do.call(rbind,rdl)
 
@@ -266,9 +266,9 @@ model.signif<-function(data){
       rk<-0.05/rk
       toget<-t(combn(rownames(Test),2))
       pval<-unlist(Test[toget])
-      Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),round(unlist(dv[toget]),5),
-                             unlist(dff[toget]),ifelse(pval<rk,"sig","non-sig"),rdl))
-      colnames(Test)<-c("strain1","strain2","model.pval","deviance","df","bonferroni","df.str","df.int","res.Dv.str","res.Dv.int","Fp.str","Fp.int")
+      Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),
+                             ifelse(pval<rk,"sig","non-sig"),rdl,round(rk,4)))
+      colnames(Test)<-c("strain1","strain2","model.pval","bonferroni","res.Dv.Null","res.Dv.str","res.Dv.int","str.pval","int.pval","thresh")
     }
   } else {
     message("Only one strain present; check your data")

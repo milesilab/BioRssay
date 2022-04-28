@@ -30,6 +30,8 @@ validity<-function(strains,data){
 #' @param conf.level numerical. The confidence interval to be plotted
 #' @param LD.value numerical. Level of lethal dose to be tested. default=c(25,50,95)
 #' @param test.validity logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.
+#' @param leg.pos character. Positioning of the legend as in \code{\link[graphics]{legend}}. default \code{bottomleft}
+#' @param leg.cex numeric. size of the legend
 #' @param ... parameters to be passed on to graphics for the plot (e.g. col, pch)
 #'
 #' @importFrom graphics points layout par
@@ -48,9 +50,9 @@ validity<-function(strains,data){
 #'
 #' @export
 mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
-                     LD.value=c(25,50,95),test.validity=TRUE,...){
-  opars<-par(no.readonly = TRUE)
-  on.exit(par(opars))
+                    LD.value=c(25,50,95),test.validity=TRUE,leg.pos="bottomleft",leg.cex=0.8,...){
+  #opars<-par(no.readonly = TRUE)
+  #on.exit(par(opars))
   data$strain<-as.factor(data$strain)
   if(is.null(strains)){
     strains<-levels(data$strain)
@@ -69,12 +71,11 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
   if(is.null(ll$cex)) ll$cex=1
   dxt<-get.dxt(strains,data,ll$conf.level,LD.value=LD.value)
 
-  layout(matrix(1:2,ncol=2), widths = c(3,1),heights = c(1,1))
-  par(mar=c(4,4,3,0))
   plot(data$dose,data$probmort,log="x",xlim=c(dose_min,dose_max),
        ylim=c(floor(pmort_min*100)/100,ceiling(pmort_max*100)/100),
        ylab="mortality",yaxt="n",xaxt="n", ann=FALSE ,col=ll$col[data$strain],
        pch=ll$pch[data$strain],cex=ll$cex)
+
   abline(v = dose_min, col = "grey95", lwd = 180000)
   points(data$dose,data$probmort,col=ll$col[data$strain],
          pch=ll$pch[data$strain])
@@ -121,9 +122,6 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
       abline(dxt[[i]][[1]], col=ll$col[i],lwd=ll$lwd)
     }
   }
-  par(mar=c(3,0.5,7,1))
-  plot(0, type="n", ann=FALSE, axes=FALSE)
-  legend("center", strains, col = ll$col, pch=ll$pch, inset=c(1,1),
-         bty="n",cex=ifelse(any(nchar(strains)>15),0.5,0.8),y.intersp = 1)
+  legend(leg.pos, strains, col = ll$col, pch=ll$pch,bty="o",
+         box.col=NA,cex=leg.cex,bg="grey60")
 }
-
