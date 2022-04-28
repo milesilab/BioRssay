@@ -268,6 +268,7 @@ model.signif<-function(data){
       pval<-unlist(Test[toget])
       Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),
                              ifelse(pval<rk,"sig","non-sig"),rdl,round(rk,4)))
+      Test[which(Test[,4]=="non-sig"),5:10]<-NA
       colnames(Test)<-c("strain1","strain2","model.pval","bonferroni","res.Dv.Null","res.Dv.str","res.Dv.int","str.pval","int.pval","thresh")
     }
   } else {
