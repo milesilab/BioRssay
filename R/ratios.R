@@ -194,7 +194,7 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 #' This function is used when comparing at least two strains. It tests whether the mortality-dose regressions are similar for different strains, using a likelihood ratio test (LRT). If there are more than two strains, it also computes pairwise tests, using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
 #'
 #' @param data a data frame of probit transformed mortality data using the function probit.trans
-#' @importFrom stats anova
+#' @importFrom stats anova na.omit
 #' @importFrom utils combn
 #'
 #' @return a list with model outputs: a chi-square test if there are only two strains or if there are more than two strains, first an overall model assessment (i.e. one strain vs. all) and given overall model is significant, then a bonferroni test of significance from a pariwise model comparison.
@@ -237,23 +237,76 @@ model.signif<-function(data){
           }
         },data=data)
       },data=data)
-      dff=sapply(strains, function(x,data){
+
+      rdl<-combn(strains,2,function(x,data){
+        dat<-data[data$strain==x[1] | data$strain==x[2],]
+        tmp<-reg.pair(dat)$fullM
+        list(c(round(tmp$`Resid. Dev`[1],2),round(as.numeric(tmp$`Resid. Dev`[3:4]),3),round(as.numeric(tmp$`Pr(>F)`[3:4]),3)))
+      },data=data)
+      rdl<-do.call(rbind,rdl)
+
+      rk<-(length(strains)*(length(strains)-1)/2):1
+      rk<-0.05/rk
+      toget<-t(combn(rownames(Test),2))
+      pval<-unlist(Test[toget])
+
+      pval<-cbind(1:length(pval),pval)
+      pval<-pval[order(pval[,2],decreasing = T),]
+      pval<-cbind(pval,rk)
+      pval<-pval[order(pval[,1]),]
+
+
+      Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),
+                             ifelse(pval[,2]<pval[,3],"sig","non-sig")))
+      rdl[which(Test[,3]>0.05),]<-NA
+
+      ### bonferr for pvals
+      bp<-cbind(1:(nrow(Test)*2),as.numeric(unlist(rdl[,4:5])))
+      bp<-bp[order(unlist(bp[,2])),]
+      bp0<-length(na.omit(unlist(bp[,2])))
+      th<-unlist(lapply(1:bp0,function(x){0.05/(bp0-x+1)}))
+      tmp<-suppressWarnings(cbind(bp,th))
+      tmp[which(is.na(tmp[,2])),3]<-NA
+      tmp<-round(tmp[order(tmp[,1]),3],5)
+      tmp<-split(tmp,cut(seq_along(tmp),2,labels = F))
+
+      Test<-cbind(Test,rdl[,1:3],rdl[,4],tmp$`1`,rdl[,5],tmp$`2`)
+      colnames(Test)<-c("strain1","strain2","model.pval","bonferroni","res.Dv.Null","res.Dv.str","res.Dv.int","str.pval","str.thr","int.pval","int.thr")
+    }
+  } else {
+    message("Only one strain present; check your data")
+  }
+  return(list(model=Test))
+}
+
+
+
+
+
+model.signif1<-function(data){
+  data$strain<-as.factor(data$strain)
+  strains<-levels(data$strain)
+  if (length(strains)>=2) {
+    Test<-reg.pair(data)
+    if(length(strains)>2 & Test$pairT$`Pr(>Chi)`[2]>0.05){
+      message("effect on strains are non-significant \n all strains come from the same population")
+    } else if(length(strains)>2 & Test$pairT$`Pr(>Chi)`[2]<=0.05){
+      print(Test$pairT)
+      message("complete model is significant against a NULL model \n continueing to pair-wise comparison")
+      Test<-sapply(strains, function(x,data) sapply(strains, function(y,data){
+        if(x!=y){
+          dat<-data[data$strain==x | data$strain==y,]
+          reg.pair(dat)$pairT$Pr[2]
+        }
+      },data=data),data=data)
+      dv<-sapply(strains, function(x,data){
         sapply(strains, function(y,data){
           if(x!=y){
             dat<-data[data$strain==x | data$strain==y,]
-            reg.pair(dat)$pairT$Df[2]
+            reg.pair(dat)$pairT$Deviance[2]
           }
         },data=data)
       },data=data)
-
-      rd=sapply(strains, function(x,data){
-        sapply(strains, function(y,data){
-          if(x!=y){
-            dat<-data[data$strain==x | data$strain==y,]
-            reg.pair(dat)$fullM
-          }
-        },data=data)
-      },data=data,simplify = T)
 
       rdl<-combn(strains,2,function(x,data){
         dat<-data[data$strain==x[1] | data$strain==x[2],]
@@ -267,9 +320,21 @@ model.signif<-function(data){
       toget<-t(combn(rownames(Test),2))
       pval<-unlist(Test[toget])
       Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),
-                             ifelse(pval<rk,"sig","non-sig"),rdl,round(rk,4)))
-      Test[which(Test[,4]=="non-sig"),5:10]<-NA
-      colnames(Test)<-c("strain1","strain2","model.pval","bonferroni","res.Dv.Null","res.Dv.str","res.Dv.int","str.pval","int.pval","thresh")
+                             ifelse(pval<rk,"sig","non-sig")))
+      rdl[which(Test[,3]>0.05),]<-NA
+
+      ### bonferr for pvals
+      bp<-cbind(1:(nrow(Test)*2),as.numeric(unlist(rdl[,4:5])))
+      bp<-bp[order(unlist(bp[,2])),]
+      bp0<-length(na.omit(unlist(bp[,2])))
+      th<-unlist(lapply(1:bp0,function(x){0.05/(bp0-x+1)}))
+      tmp<-suppressWarnings(cbind(bp,th))
+      tmp[which(is.na(tmp[,2])),3]<-NA
+      tmp<-round(tmp[order(tmp[,1]),3],5)
+      tmp<-split(tmp,cut(seq_along(tmp),2,labels = F))
+
+      Test<-cbind(Test,rdl[,1:3],rdl[,4],tmp$`1`,rdl[,5],tmp$`2`)
+      colnames(Test)<-c("strain1","strain2","model.pval","bonferroni","res.Dv.Null","res.Dv.str","res.Dv.int","str.pval","str.thr","int.pval","int.thr")
     }
   } else {
     message("Only one strain present; check your data")
