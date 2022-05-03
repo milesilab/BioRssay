@@ -58,6 +58,8 @@
   conf.level <span class="op">=</span> <span class="fl">0.95</span>,
   LD.value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">50</span>, <span class="fl">95</span><span class="op">)</span>,
   test.validity <span class="op">=</span> <span class="cn">TRUE</span>,
+  leg.pos <span class="op">=</span> <span class="st">"bottomleft"</span>,
+  leg.cex <span class="op">=</span> <span class="fl">0.8</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -76,6 +78,10 @@
 <dd><p>numerical. Level of lethal dose to be tested. default=c(25,50,95)</p></dd>
 <dt>test.validity</dt>
 <dd><p>logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.</p></dd>
+<dt>leg.pos</dt>
+<dd><p>character. Positioning of the legend as in <code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></code>. default <code>bottomleft</code></p></dd>
+<dt>leg.cex</dt>
+<dd><p>numeric. size of the legend</p></dd>
 <dt>...</dt>
 <dd><p>parameters to be passed on to graphics for the plot (e.g. col, pch)</p></dd>
 </dl></div>

@@ -58,7 +58,7 @@ file <- paste0(path.package("BioRssay"), "/Test.BioRssay.txt")
 test<-read.table(file,header=TRUE)
 head(test)
 ```
-NOTE: It is also possible to include a reference strain/population with the suffix "ref" in the strain column (see example 1), or the reference strain can be specified later in the function "resist.ratio" to obtain the resistance ratios for each strain (see below).
+NOTE: It is also possible to include a reference strain/population with the suffix "ref" in the strain column (see example 1), or the reference strain can be specified later in the function `resist.ratio` to obtain the resistance ratios for each strain (see below).
 
 # 2. **Analysis**
 
@@ -74,7 +74,7 @@ unique(as.character(exm1$strain))
 ```
 This example contains the mortality data of three strains (KIS-ref, DZOU, and DZOU2 ); KIS is used as the reference, as indicated by the “ref” suffix.
 
-The first step is to check whether the controls have a non-negligible mortality, in which case a correction should be applied to the data, before probit transformation. This is easily achieved with the function “probit.trans”.
+The first step is to check whether the controls have a non-negligible mortality, in which case a correction should be applied to the data, before probit transformation. This is easily achieved with the function `probit.trans()`.
 
 ```{r}
 dataT<-probit.trans(exm1) #additionally an acceptable threshold for controls' mortality can be set as desired with "conf="; default is 0.05.
@@ -82,13 +82,13 @@ dataT$convrg
 head(dataT$tr.data)
 
 ```
-The output of probit.trans is a list of which the first element (convrg) contains the results of Abott’s correction and convergence values.
+The output of probit.trans is a list of which the first element (`convrg`) contains the results of Abott’s correction and convergence values.
 
-However, since the mortality in the controls (dose=0) is below 5% (conf=0.05) in the present example, data$convrg is NULL and thus no correction is applied to the data . The second element of the list dataT is the probid transformed data with two additional columns: *mort*, the observed mortalities, and *probmort*, the observed probit-transformed mortalities. This data frame is what we’ll use in the next steps of the analysis.
+However, since the mortality in the controls (dose=0) is below 5% (`conf=0.05`) in the present example, `data$convrg` is NULL and thus no correction is applied to the data . The second element of the list dataT is the probid transformed data with two additional columns: *mort*, the observed mortalities, and *probmort*, the observed probit-transformed mortalities. This data frame is what we’ll use in the next steps of the analysis.
 
   *If you set the threshold to conf=0.01 with example 1, you can assess the effects of the Abbot’s correction: all mortalities are slightly reduced to take the base control mortality into account.*
 
-The second step is to compute the lethal dose values (25%, 50% and 95%, LD25, LD50 and LD95 respectively) and the corresponding resistance ratios. The function “resist.ratio” allows you to do just that (user also has the option to calculate these values for different LD values). If no reference strain has been specified in the data file (using the suffix “ref” as mentioned above), it can be specified in “ref.strain=”. Otherwise, the strain with the lowest LD50 will be considered as such. By default, the LDs’ 95% confidence intervals are computed (the min and max values are reported); you can adjust this using “conf.level=”. 
+The second step is to compute the lethal dose values (25%, 50% and 95%, LD25, LD50 and LD95 respectively) and the corresponding resistance ratios. The function `resist.ratio` allows you to do just that (user also has the option to calculate these values for different LD values). If no reference strain has been specified in the data file (using the suffix “ref” as mentioned above), it can be specified in `ref.strain=`. Otherwise, the strain with the lowest LD50 will be considered as such. By default, the LDs’ 95% confidence intervals are computed (the min and max values are reported); you can adjust this using `conf.level=`.
 
 
 ```{r}
@@ -100,9 +100,9 @@ Note that we did not specify the reference strain here as it is already labeled 
 
 For each strain, you have first the LD25, LD50 and LD95 and their upper and lower limits (defaults is 95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971).
 
-The result of the chi test (Chi(p)) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD25, LD50 and LD95 (RR25, RR50 and RR95), as well as their upper and lower limits.
+The result of the chi test (`Chi(p)`) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD25, LD50 and LD95 (RR25, RR50 and RR95), as well as their upper and lower limits.
 
-The third step, when analysing more than one strain, is now to test for difference in dose-mortality responses between strains using the “model.signif” function.
+The third step, when analysing more than one strain, is now to test for difference in dose-mortality responses between strains using the `model.signif()` function.
 
 
 ```{r}
@@ -111,10 +111,18 @@ model.signif(dataT$tr.data)
 
 As there are 3 strains, the function first tests whether all strains are similar (i.e. equivalent to 1 strain) or not (i.e. at least one is different from others), using a likelihood ratio test. Here, the test is highly significant, some strains are thus different in terms of dose response.
 
-Pairwise tests are then performed and reported below. Here, the KIS strain is different from DZOU and from DZOU2 strains (model.pval <0.05). DZOU and DZOU2 are not different (model.pval >0.05). The bonferroni column indicates whether the p-values <0.05 remain significant (sig vs non-sig) after correction for multiple testing.
+Pairwise tests are then performed and reported below. Here, the KIS strain is different from DZOU and from DZOU2 strains (model.pval <0.05). DZOU and DZOU2 are not different (model.pval >0.05). The `bonferroni` column indicates whether the p-values <0.05 remain significant (sig vs non-sig) after correction for multiple testing.
+
+Further, the function outputs seven more columns with statistical outputs from the model evaluation between strains and strain-dose to a null model. The abbreviations are as follows:  
+`res.Dv` - residual deviance  
+`thr` - threshold for the significance of the pvalue  
+`str` - values for the strains  
+`int` - values for the interaction between the strain and the dose  
+
+*Note: the pvalues for strain and strain-dose interaction is from a F-test for a bionomial model.*  
 
 ***Data Visualization***
-The data and the regression can be plotted with confidence levels using the “mort.plot” function. It is also possible to take the validity of the linearity test into account for the plots using the “test.validity=” option. The probit-transformed mortalities [probit.trans() function] are plotted as a function of the log10 of the doses.
+The data and the regression can be plotted with confidence levels using the `mort.plot()` function. It is also possible to take the validity of the linearity test into account for the plots using the `test.validity=` option. The probit-transformed mortalities (`probit.trans()` function) are plotted as a function of the log10 of the doses.
 
 ```{r,fig.dim=c(8,4)}
 #strains<-levels(data$strain)
@@ -128,13 +136,13 @@ par(mfrow=c(1,2))
 mort.plot(data,plot.conf=TRUE,test.validity=FALSE)
 mort.plot(data,plot.conf=TRUE,test.validity=FALSE,pch=NA)
 ```
-It is also possible to plot different confidence intervals with the “conf.level=” option (the default is 0.95). It is possible to plot only a subset of strains using the “strains=” option to list the desired strains; if not provided, all the strains will be plotted.
+It is also possible to plot different confidence intervals with the `conf.level=` option (the default is 0.95). It is possible to plot only a subset of strains using the `strains=` option to list the desired strains; if not provided, all the strains will be plotted.
 
-Note that the plots can be generated directly from the “resist.ratio” function using the “plot=T” option.
+Note that the plots can be generated directly from the “resist.ratio” function using the `plot=TRUE` option.
 
 
 ## **Example 2**
-We follow the same workflow (using the plot option in “resist.ratio”). However, there are more than one insecticide tested in this experiment. Therefore, we need to subset the data for each insecticide, and carry out the analysis as before.
+We follow the same workflow (using the plot option in `resist.ratio()`). However, there are more than one insecticide tested in this experiment. Therefore, we need to subset the data for each insecticide, and carry out the analysis as before.
 
 ```{r}
 head(test)
@@ -151,7 +159,7 @@ data.b<-dataT.b$tr.data
 RR.b<-resist.ratio(data.b,plot = T,ref.strain = "Kisumu",plot.conf = T, test.validity = T)
 head(RR.b)
 ```
-Note that we have enabled the arguments “plot=” with “plot.conf=” and “test.validity=”. When the log-dose-response is not linear for a strain (Chi-square p-value < 0.05), it will be plotted without forcing linearity as for “Acerkis or AgRR5” strains in this example.
+Note that we have enabled the arguments “plot=” with “plot.conf=” and `test.validity=`. When the log-dose-response is not linear for a strain (Chi-square p-value < 0.05), it will be plotted without forcing linearity as for “Acerkis or AgRR5” strains in this example.
 
 ```{r}
 #To then test the difference in dose-mortality response between the strains

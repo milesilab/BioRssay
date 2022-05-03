@@ -92,10 +92,14 @@ If there are more than two strains, pairwise tests are computed, and p-values of
 <span class="r-msg co"><span class="r-pr">#&gt;</span> complete model is significant against a NULL model </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  continueing to pair-wise comparison</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $model</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   strain1 strain2 model.pval  deviance df bonferroni</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    DZOU   DZOU2    0.26402   5.52848  2    non-sig</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    DZOU KIS-ref          0 714.37345  2        sig</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   DZOU2 KIS-ref          0 603.93126  2        sig</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   strain1 strain2 model.pval bonferroni res.Dv.Null res.Dv.str res.Dv.int</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    DZOU   DZOU2    0.26402    non-sig          NA         NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    DZOU KIS-ref          0        sig     1150.41     87.892     49.747</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   DZOU2 KIS-ref          0        sig     1064.79     95.043     53.537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   str.pval str.thr int.pval int.thr</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1       NA      NA       NA      NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0 0.01250    0.001   0.025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0 0.01667    0.001   0.050</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 </code></pre></div>

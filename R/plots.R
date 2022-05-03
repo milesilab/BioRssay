@@ -122,6 +122,11 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
       abline(dxt[[i]][[1]], col=ll$col[i],lwd=ll$lwd)
     }
   }
-  legend(leg.pos, strains, col = ll$col, pch=ll$pch,bty="o",
+  if(any(is.na(ll$pch))){
+    legend(leg.pos, strains, col = ll$col, lty=1,lwd=ll$lwd,bty="o",
          box.col=NA,cex=leg.cex,bg="grey60")
+    } else if(any(!is.na(ll$pch))){
+           legend(leg.pos, strains, col = ll$col, pch=ll$pch,bty="o",
+                  box.col=NA,cex=leg.cex,bg="grey60")
+        }
 }
