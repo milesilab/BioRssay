@@ -138,7 +138,9 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
 
   llg<-as.list(legend.par)
   lpos<-c("bottomleft","bottomright","topleft","topright","top","bottom","center")
-  if(any(lpos==llg[[1]])) {llg$x<-llg[[1]]} else {llg$x <-"bottomleft"}
+  ps<-match(lpos,legend.par)
+  #if(any(lpos==llg[[1]])) {llg$x<-llg[[1]]} else {llg$x <-"bottomleft"}
+  if(!any(is.na(ps))){x<-llg[na.omit(ps)];llg<-llg[-na.omit(ps)];llg$x<-x} else {llg$x <-"bottomleft"}
   if(any(names(llg)=="y")) llg$y<-llg$y
   if(!any(names(llg)=="legend")) llg$legend<-strains
   if(is.null(llg$col)) llg$col=rainbow_hcl(length(strains))
@@ -157,87 +159,3 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
   do.call("legend",llg[names(llg)%in%lnames])
 }
 
-
-
-
-mort.plot1<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
-                    LD.value=c(25,50,95),test.validity=TRUE,leg.pos="bottomleft",leg.cex=0.8,...){
-  #opars<-par(no.readonly = TRUE)
-  #on.exit(par(opars))
-  data$strain<-as.factor(data$strain)
-  if(is.null(strains)){
-    strains<-levels(data$strain)
-  }
-  dmin<-floor(log10(min(data$dose)))
-  dmax<-ceiling(log10(max(data$dose)))
-  dose_min<- 10^(dmin)
-  dose_max<- 10^(dmax)
-  pmort_min<- qnorm(0.006)
-  pmort_max<- qnorm(1-0.006)
-  ll<-list(...)
-  if(is.null(ll$col)) ll$col=rainbow_hcl(length(strains))
-  if(is.null(ll$pch)) {if(length(strains)<=6)ll$pch=15:20 else ll$pch=1:20}
-  if(is.null(ll$conf.level)) ll$conf.level=0.95
-  if(is.null(ll$lwd)) ll$lwd=1.5
-  if(is.null(ll$cex)) ll$cex=1
-  dxt<-get.dxt(strains,data,ll$conf.level,LD.value=LD.value)
-
-  plot(data$dose,data$probmort,log="x",xlim=c(dose_min,dose_max),
-       ylim=c(floor(pmort_min*100)/100,ceiling(pmort_max*100)/100),
-       ylab="mortality",yaxt="n",xaxt="n", ann=FALSE ,col=ll$col[data$strain],
-       pch=ll$pch[data$strain],cex=ll$cex)
-
-  abline(v = dose_min, col = "grey95", lwd = 180000)
-  points(data$dose,data$probmort,col=ll$col[data$strain],
-         pch=ll$pch[data$strain])
-
-  labely<-c(1,5,seq(10,90,10),95,99)
-  axis(2, at=qnorm(labely/100),labels=labely,las=2, adj=0)
-  axis(4, at=qnorm(labely/100),labels=FALSE)
-  mtext("Mortality (%)", side=2, line=3)
-
-  for (i in dmin:dmax) {
-    axis(1,at=10^i,labels=substitute(10^k,list(k=i)))
-  }
-  axis.at <- 10 ^ c(dmin:dmax)
-  axis(1, at = 2:9 * rep(axis.at[-1] / 10, each = 8),
-       tcl = -0.5, labels = FALSE)
-  mtext(expression(Dose (mg.L^-1) ), side=1, line=3)
-  abline(h=pmort_min, lty=3)
-  abline(h=pmort_max, lty=3)
-
-  if(plot.conf){
-    if(test.validity){
-      ndataf<-validity(strains,data)
-      for(i in 1:length(strains)){
-        if(dxt[[i]][[2]][[length(dxt[[i]][[2]])]]>0.05){ # dxt[[i]][[2]][[15]]
-          abline(dxt[[i]][[1]], col=ll$col[i],lwd=ll$lwd)
-          CIfit<-CIplot(dxt[[i]][[1]],pmort_min,pmort_max,conf.level=conf.level)
-          lines(CIfit[,1],CIfit[,2],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)
-          lines(CIfit[,1],CIfit[,3],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)
-        } else {
-          points(ndataf$dose[ndataf$strain==strains[i]],
-                 ndataf$p.mortality[ndataf$strain==strains[i]],type="l", col=ll$col[i])
-        }
-      }
-    } else {
-      for(i in 1:length(strains)){
-        abline(dxt[[i]][[1]], col=ll$col[i],lwd=ll$lwd)
-        CIfit<-CIplot(dxt[[i]][[1]],pmort_min,pmort_max,conf.level=conf.level)
-        lines(CIfit[,1],CIfit[,2],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)
-        lines(CIfit[,1],CIfit[,3],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)
-      }
-    }
-  } else {
-    for(i in 1:length(strains)){
-      abline(dxt[[i]][[1]], col=ll$col[i],lwd=ll$lwd)
-    }
-  }
-  if(any(is.na(ll$pch))){
-    legend(leg.pos, strains, col = ll$col, lty=1,lwd=ll$lwd,bty="o",
-         box.col=NA,cex=leg.cex,bg="grey60")
-    } else if(any(!is.na(ll$pch))){
-           legend(leg.pos, strains, col = ll$col, pch=ll$pch,bty="o",
-                  box.col=NA,cex=leg.cex,bg="grey60")
-        }
-}
