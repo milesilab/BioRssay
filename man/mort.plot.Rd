@@ -11,8 +11,7 @@ mort.plot(
   conf.level = 0.95,
   LD.value = c(25, 50, 95),
   test.validity = TRUE,
-  leg.pos = "bottomleft",
-  leg.cex = 0.8,
+  legend.par = c("bottomleft"),
   ...
 )
 }
@@ -29,9 +28,7 @@ mort.plot(
 
 \item{test.validity}{logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.}
 
-\item{leg.pos}{character. Positioning of the legend as in \code{\link[graphics]{legend}}. default \code{bottomleft}}
-
-\item{leg.cex}{numeric. size of the legend}
+\item{legend.par}{multi-type. Arguments to be passed to the legend as in \code{\link[graphics]{legend}}. default position \code{bottomleft}}
 
 \item{...}{parameters to be passed on to graphics for the plot (e.g. col, pch)}
 }
