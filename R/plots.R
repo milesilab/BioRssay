@@ -28,7 +28,8 @@ ps<-match(lpos,legend.par)
 if(sum(ps,na.rm = TRUE)>0){x<-unlist(llg[na.omit(ps)]);llg<-llg[-na.omit(ps)];llg$x<-x} else {llg$x <-"bottomleft"}
 if(any(names(llg)=="y")) llg$y<-llg$y
 if(!any(names(llg)=="legend")) llg$legend<-strains
-if(is.null(llg$col)) llg$col=rainbow_hcl(length(strains))
+if(!is.null(ll$col)){llg$col<-ll$col}
+#if(is.null(llg$col)) llg$col=rainbow_hcl(length(strains))
 #if(is.null(llg$pch)) {if(length(strains)<=6)llg$pch=15:20 else llg$pch=1:20}
 if(!is.null(ll$pch)){llg$pch<-ll$pch}
 if(is.null(llg$lwd)) llg$lwd=1.5
