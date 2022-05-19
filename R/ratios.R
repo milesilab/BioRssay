@@ -108,6 +108,7 @@ get.dxt<-function(strains,data,conf.level,LD.value){
 #' @param plot logical. Whether to draw the plot. Default FALSE
 #' @param plot.conf logical. If plot=TRUE, whether to plot the 95 percent confidence intervals. Default TRUE
 #' @param test.validity logical. If plot=TRUE (default), the regression for a strain that failed the linearity test is not plotted
+#' @param legend.par arguments to be passed on to \code{legend()} as in \code{mort.plot()}
 #' @param ... parameters to be passed on to graphics for the plot (e.g. col, pch)
 #'
 #' @importFrom graphics abline axis legend lines mtext
@@ -138,7 +139,7 @@ get.dxt<-function(strains,data,conf.level,LD.value){
 #' @export
 resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
                         ref.strain=NULL,plot=FALSE,plot.conf=TRUE,
-                        test.validity=TRUE,...) {
+                        test.validity=TRUE,legend.par=c("bottomleft"),...) {
   if(!any(LD.value==50)){LD.value<-sort(c(LD.value,50))}
 
   data$strain<-as.factor(data$strain)
@@ -180,7 +181,7 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 
   if(plot){
     mort.plot(data,strains,plot.conf,test.validity=test.validity,
-              conf.level=conf.level,...)
+              conf.level=conf.level,legend.par=legend.par...)
   }
   dat<-dat[,-(grep("var",colnames(dat)))]
   dat<-cbind(dat[,(ncol(dat)-8):ncol(dat)],dat[,1:(ncol(dat)-9)],RR)

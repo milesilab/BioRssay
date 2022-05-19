@@ -12,6 +12,7 @@ resist.ratio(
   plot = FALSE,
   plot.conf = TRUE,
   test.validity = TRUE,
+  legend.par = c("bottomleft"),
   ...
 )
 }
@@ -29,6 +30,8 @@ resist.ratio(
 \item{plot.conf}{logical. If plot=TRUE, whether to plot the 95 percent confidence intervals. Default TRUE}
 
 \item{test.validity}{logical. If plot=TRUE (default), the regression for a strain that failed the linearity test is not plotted}
+
+\item{legend.par}{arguments to be passed on to \code{legend()} as in \code{mort.plot()}}
 
 \item{...}{parameters to be passed on to graphics for the plot (e.g. col, pch)}
 }
