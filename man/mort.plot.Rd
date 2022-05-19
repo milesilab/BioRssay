@@ -28,7 +28,7 @@ mort.plot(
 
 \item{test.validity}{logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.}
 
-\item{legend.par}{multi-type. Arguments to be passed to the legend as in \code{\link[graphics]{legend}}. default position \code{bottomleft}}
+\item{legend.par}{multi-type. Arguments to be passed to the legend as in \code{\link[graphics]{legend}}. default position \code{bottomleft}. If no legend desired use FALSE. Note: if pch, lty, and col are passed to the plot, they don't need to be passed to \code{legend()}}
 
 \item{...}{parameters to be passed on to graphics for the plot (e.g. col, pch)}
 }

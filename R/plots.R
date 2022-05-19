@@ -19,6 +19,29 @@ validity<-function(strains,data){
   return(ndataf)
 }
 
+#' Legend assembly
+#' @noRd
+lgas<-function(legend.par){llg<-as.list(legend.par)
+lpos<-c("bottomleft","bottomright","topleft","topright","top","bottom","center")
+ps<-match(lpos,legend.par)
+#if(any(lpos==llg[[1]])) {llg$x<-llg[[1]]} else {llg$x <-"bottomleft"}
+if(sum(ps,na.rm = TRUE)>0){x<-unlist(llg[na.omit(ps)]);llg<-llg[-na.omit(ps)];llg$x<-x} else {llg$x <-"bottomleft"}
+if(any(names(llg)=="y")) llg$y<-llg$y
+if(!any(names(llg)=="legend")) llg$legend<-strains
+if(is.null(llg$col)) llg$col=rainbow_hcl(length(strains))
+if(is.null(llg$pch)) {if(length(strains)<=6)llg$pch=15:20 else llg$pch=1:20}
+if(is.null(llg$lwd)) llg$lwd=1.5
+llg$lwd<-as.numeric(llg$lwd)
+if(is.null(llg$cex)) llg$cex=0.8
+llg$cex<-as.numeric(llg$cex)
+if(any(is.na(ll$pch))) {llg$lty=1;llg$pch=NA}
+llg$lty<-as.numeric(llg$lty)
+if(is.null(llg$bg)) llg$bg="grey60"
+if(is.null(llg$bty)) llg$bty="o"
+if(is.null(llg$box.col)) llg$box.col=NA
+lnames<-names(formals(legend))
+
+do.call("legend",llg[names(llg)%in%lnames])}
 
 #' Plot dose-mortality response for each strain
 #'
@@ -30,7 +53,7 @@ validity<-function(strains,data){
 #' @param conf.level numerical. The confidence interval to be plotted
 #' @param LD.value numerical. Level of lethal dose to be tested. default=c(25,50,95)
 #' @param test.validity logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.
-#' @param legend.par multi-type. Arguments to be passed to the legend as in \code{\link[graphics]{legend}}. default position \code{bottomleft}
+#' @param legend.par multi-type. Arguments to be passed to the legend as in \code{\link[graphics]{legend}}. default position \code{bottomleft}. If no legend desired use FALSE. Note: if pch, lty, and col are passed to the plot, they don't need to be passed to \code{legend()}
 #' @param ... parameters to be passed on to graphics for the plot (e.g. col, pch)
 #'
 #' @importFrom graphics points layout par plot.default title
@@ -136,26 +159,12 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
     }
   }
 
-  llg<-as.list(legend.par)
-  lpos<-c("bottomleft","bottomright","topleft","topright","top","bottom","center")
-  ps<-match(lpos,legend.par)
-  #if(any(lpos==llg[[1]])) {llg$x<-llg[[1]]} else {llg$x <-"bottomleft"}
-  if(!any(is.na(ps))){x<-llg[na.omit(ps)];llg<-llg[-na.omit(ps)];llg$x<-x} else {llg$x <-"bottomleft"}
-  if(any(names(llg)=="y")) llg$y<-llg$y
-  if(!any(names(llg)=="legend")) llg$legend<-strains
-  if(is.null(llg$col)) llg$col=rainbow_hcl(length(strains))
-  if(is.null(llg$pch)) {if(length(strains)<=6)llg$pch=15:20 else llg$pch=1:20}
-  if(is.null(llg$lwd)) llg$lwd=1.5
-  llg$lwd<-as.numeric(llg$lwd)
-  if(is.null(llg$cex)) llg$cex=0.8
-  llg$cex<-as.numeric(llg$cex)
-  if(any(is.na(ll$pch))) {llg$lty=1;llg$pch=NA}
-  llg$lty<-as.numeric(llg$lty)
-  if(is.null(llg$bg)) llg$bg="grey60"
-  if(is.null(llg$bty)) llg$bty="o"
-  if(is.null(llg$box.col)) llg$box.col=NA
-  lnames<-names(formals(legend))
-
-  do.call("legend",llg[names(llg)%in%lnames])
+  if(length(legend.par)<2){
+    if(!isFALSE(legend.par)){
+      lgas(legend.par)
+    }
+  } else {
+    lgas(legend.par)
+  }
 }
 
