@@ -12,7 +12,7 @@ resist.ratio(
   plot = FALSE,
   plot.conf = TRUE,
   test.validity = TRUE,
-  legend.par = c("bottomleft"),
+  legend.par = c("bottomright"),
   ...
 )
 }

@@ -139,7 +139,7 @@ get.dxt<-function(strains,data,conf.level,LD.value){
 #' @export
 resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
                         ref.strain=NULL,plot=FALSE,plot.conf=TRUE,
-                        test.validity=TRUE,legend.par=c("bottomleft"),...) {
+                        test.validity=TRUE,legend.par=c("bottomright"),...) {
   if(!any(LD.value==50)){LD.value<-sort(c(LD.value,50))}
 
   data$strain<-as.factor(data$strain)
@@ -181,7 +181,7 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 
   if(plot){
     mort.plot(data,strains,plot.conf,test.validity=test.validity,
-              conf.level=conf.level,legend.par=legend.par...)
+              conf.level=conf.level,legend.par=legend.par,...)
   }
   dat<-dat[,-(grep("var",colnames(dat)))]
   dat<-cbind(dat[,(ncol(dat)-8):ncol(dat)],dat[,1:(ncol(dat)-9)],RR)
