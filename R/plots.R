@@ -21,7 +21,7 @@ validity<-function(strains,data){
 
 #' Legend assembly
 #' @noRd
-lgas<-function(legend.par){llg<-as.list(legend.par)
+lgas<-function(legend.par, ll,strains){llg<-as.list(legend.par)
 lpos<-c("bottomleft","bottomright","topleft","topright","top","bottom","center")
 ps<-match(lpos,legend.par)
 #if(any(lpos==llg[[1]])) {llg$x<-llg[[1]]} else {llg$x <-"bottomleft"}
@@ -29,7 +29,8 @@ if(sum(ps,na.rm = TRUE)>0){x<-unlist(llg[na.omit(ps)]);llg<-llg[-na.omit(ps)];ll
 if(any(names(llg)=="y")) llg$y<-llg$y
 if(!any(names(llg)=="legend")) llg$legend<-strains
 if(is.null(llg$col)) llg$col=rainbow_hcl(length(strains))
-if(is.null(llg$pch)) {if(length(strains)<=6)llg$pch=15:20 else llg$pch=1:20}
+#if(is.null(llg$pch)) {if(length(strains)<=6)llg$pch=15:20 else llg$pch=1:20}
+if(!is.null(ll$pch)){llg$pch<-ll$pch}
 if(is.null(llg$lwd)) llg$lwd=1.5
 llg$lwd<-as.numeric(llg$lwd)
 if(is.null(llg$cex)) llg$cex=0.8
@@ -161,10 +162,10 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
 
   if(length(legend.par)<2){
     if(!isFALSE(legend.par)){
-      lgas(legend.par)
+      lgas(legend.par,ll,strains)
     }
   } else {
-    lgas(legend.par)
+    lgas(legend.par,ll,strains)
   }
 }
 

@@ -125,7 +125,7 @@ Further, the function outputs seven more columns with statistical outputs from t
 The data and the regression can be plotted with confidence levels using the `mort.plot()` function. It is also possible to take the validity of the linearity test into account for the plots using the `test.validity=` option. The probit-transformed mortalities (`probit.trans()` function) are plotted as a function of the log10 of the doses.
 
 ```{r,fig.dim=c(8,4)}
-#strains<-levels(data$strain)
+strains<-levels(data$strain)
 par(mfrow=c(1,2)) # set plot rows
 # plot without confidence intervals and test of validity of the model
 mort.plot(data,plot.conf=FALSE,test.validity=FALSE) 
