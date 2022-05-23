@@ -16,27 +16,41 @@ mort.plot(
 )
 }
 \arguments{
-\item{data}{a data frame of probit transformed mortality data using the function probit.trans()}
+\item{data}{a data frame of probit transformed mortality data using the
+function \code{probit.trans()}}
 
-\item{strains}{character. list of test strains to be plotted. If not provided, the function will plot all the strains in the data set.}
+\item{strains}{character. list of test strains to be plotted. If not
+provided, the function will plot all the strains in the data set.}
 
-\item{plot.conf}{logical. Whether to plot the confidence intervals for each strain, default TRUE}
+\item{plot.conf}{logical. Whether to plot the confidence intervals for
+each strain, default TRUE}
 
 \item{conf.level}{numerical. The confidence interval to be plotted}
 
-\item{LD.value}{numerical. Level of lethal dose to be tested. default=c(25,50,95)}
+\item{LD.value}{numerical. Level of lethal dose to be tested.
+default=c(25,50,95)}
 
-\item{test.validity}{logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.}
+\item{test.validity}{logical. When TRUE (default), if a strain
+mortality-dose response fails the chi-square test for linearity in the
+\code{resist.ratio()} function, no regression will be plotted, only the
+observed data.}
 
-\item{legend.par}{multi-type. Arguments to be passed to the legend as in \code{\link[graphics]{legend}}. default position \code{bottomleft}. If no legend desired use FALSE. Note: if pch, lty, and col are passed to the plot, they don't need to be passed to \code{legend()}}
+\item{legend.par}{multi-type. Arguments to be passed to the legend as in
+\code{\link[graphics]{legend}}. default position \code{bottomleft}.
+If no legend desired use FALSE. Note: if pch, lty, and col are passed to
+the plot, they don't need to be passed to \code{legend()}}
 
-\item{...}{parameters to be passed on to graphics for the plot (e.g. col, pch)}
+\item{...}{parameters to be passed on to graphics for the plot
+(e.g. col, pch)}
 }
 \value{
 A plot of dose-mortality responses for bioassays
 }
 \description{
-This function plots the probit-transformed mortalities (probit.trans() function) as a function of the log10 of the dose, the regressions predicted by the resist.ratio() function,  with or without confidence levels, if the dose-mortality responses are linear (option).
+This function plots the probit-transformed mortalities (\code{probit.trans()}
+ function) as a function of the log10 of the dose, the regressions predicted
+  by the resist.ratio() function,  with or without confidence levels, if the
+   dose-mortality responses are linear (option).
 }
 \examples{
 data(bioassay)

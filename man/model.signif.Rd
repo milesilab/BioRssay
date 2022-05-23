@@ -7,19 +7,35 @@
 model.signif(data)
 }
 \arguments{
-\item{data}{a data frame of probit transformed mortality data using the function probit.trans}
+\item{data}{a data frame of probit transformed mortality data using the
+function probit.trans}
 }
 \value{
-a list with model outputs: a chi-square test if there are only two strains or if there are more than two strains, first an overall model assessment (i.e. one strain vs. all) and given overall model is significant, then a bonferroni test of significance from a pariwise model comparison.
+a list with model outputs: a chi-square test if there are only two
+strains or if there are more than two strains, first an overall model
+assessment (i.e. one strain vs. all) and given overall model is significant,
+ then a bonferroni test of significance from a pariwise model comparison.
 }
 \description{
-This function is used when comparing at least two strains. It tests whether the mortality-dose regressions are similar for different strains, using a likelihood ratio test (LRT). If there are more than two strains, it also computes pairwise tests, using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
+This function is used when comparing at least two strains. It tests whether
+ the mortality-dose regressions are similar for different strains, using a
+ likelihood ratio test (LRT). If there are more than two strains, it also
+ computes pairwise tests, using sequential Bonferroni correction
+ (Hommel, 1988) to account for multiple testing.
 }
 \details{
-A global LRT test assesses a strain’s effect, by comparing two models, one with and one without this effect (i.e. comparing a model with several strains to a model where all the data originate from a single strain).
-If there are more than two strains, pairwise tests are computed, and p-values of significance are assessed using sequential Bonferroni correction (Hommel, 1988) to account for multiple testing.
+A global LRT test assesses a strain’s effect, by comparing two
+models, one with and one without this effect (i.e. comparing a model with
+several strains to a model where all the data originate from a single
+strain).
+If there are more than two strains, pairwise tests are computed, and
+p-values of significance are assessed using sequential Bonferroni correction
+ (Hommel, 1988) to account for multiple testing.
 
-Warning: We strongly encourage users to not use this function when the dose-mortality response for at least one strain significantly deviates from linearity (see resist.ratio() function for more details): in such cases the test cannot be interpreted.
+Warning: We strongly encourage users to not use this function when the
+dose-mortality response for at least one strain significantly deviates
+from linearity (see resist.ratio() function for more details): in such
+cases the test cannot be interpreted.
 }
 \examples{
 data(bioassay)
