@@ -16,20 +16,27 @@ probit_C <- function(Cx,ii,dataf,x){
 }
 
 
-#' Probit-transform the data and apply Abbott's correction (if necessary)
+#' Probit-transform the data and apply Abbott's correction
 #'
-#' This function applies probit transformation to the data, after applying Abbott's correction (see reference) when control groups (e.g. unexposed susceptible strain) show non-negligible mortality.
+#' This function applies probit transformation to the data, after applying
+#' Abbott's correction (see reference) when control groups (e.g. unexposed
+#' susceptible strain) show non-negligible mortality.
 #'
-#' @param dataf a data frame of mortality data containing four mandatory columns "strain", "dose", "total", "dead" (not necessarily in that order).
-#' @param conf numerical. Threshold for the mortality in the controls above which the correction should be applied (default=0.05)
+#' @param dataf a data frame of mortality data containing four mandatory
+#' columns "strain", "dose", "total", "dead" (not necessarily in that order).
+#' @param conf numerical. Threshold for the mortality in the controls above
+#' which the correction should be applied (default=0.05)
 #'
 #' @importFrom stats glm optim qnorm quasibinomial runif
 #'
-#' @return a list. convrg: with correction values and convergence (NULL if mortality in the controls is below conf.), tr.data: transformed data
+#' @return Returns a list. convrg: with correction values and convergence
+#' (NULL if mortality in the controls is below conf.), tr.data: transformed
+#' data
 #'
 #' @author Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
 #'
-#' @references Abbott, WS (1925). A method of computing the effectiveness of an insecticide. J. Econ. Entomol.;18:265‐267.
+#' @references Abbott, WS (1925). A method of computing the effectiveness of
+#' an insecticide. J. Econ. Entomol.;18:265‐267.
 #'
 #' @examples
 #' data(bioassay)

@@ -47,16 +47,30 @@ do.call("legend",llg[names(llg)%in%lnames])}
 
 #' Plot dose-mortality response for each strain
 #'
-#' This function plots the probit-transformed mortalities (probit.trans() function) as a function of the log10 of the dose, the regressions predicted by the resist.ratio() function,  with or without confidence levels, if the dose-mortality responses are linear (option).
+#' This function plots the probit-transformed mortalities (\code{probit.trans()}
+#'  function) as a function of the log10 of the dose, the regressions predicted
+#'   by the resist.ratio() function,  with or without confidence levels, if the
+#'    dose-mortality responses are linear (option).
 #'
-#' @param data a data frame of probit transformed mortality data using the function probit.trans()
-#' @param strains character. list of test strains to be plotted. If not provided, the function will plot all the strains in the data set.
-#' @param plot.conf logical. Whether to plot the confidence intervals for each strain, default TRUE
+#' @param data a data frame of probit transformed mortality data using the
+#' function \code{probit.trans()}
+#' @param strains character. list of test strains to be plotted. If not
+#' provided, the function will plot all the strains in the data set.
+#' @param plot.conf logical. Whether to plot the confidence intervals for
+#' each strain, default TRUE
 #' @param conf.level numerical. The confidence interval to be plotted
-#' @param LD.value numerical. Level of lethal dose to be tested. default=c(25,50,95)
-#' @param test.validity logical. When TRUE (default), if a strain mortality-dose response fails the chi-square test for linearity in the resist.ratio() function, no regression will be plotted, only the observed data.
-#' @param legend.par multi-type. Arguments to be passed to the legend as in \code{\link[graphics]{legend}}. default position \code{bottomleft}. If no legend desired use FALSE. Note: if pch, lty, and col are passed to the plot, they don't need to be passed to \code{legend()}
-#' @param ... parameters to be passed on to graphics for the plot (e.g. col, pch)
+#' @param LD.value numerical. Level of lethal dose to be tested.
+#' default=c(25,50,95)
+#' @param test.validity logical. When TRUE (default), if a strain
+#' mortality-dose response fails the chi-square test for linearity in the
+#' \code{resist.ratio()} function, no regression will be plotted, only the
+#' observed data.
+#' @param legend.par multi-type. Arguments to be passed to the legend as in
+#'  \code{\link[graphics]{legend}}. default position \code{bottomleft}.
+#'  If no legend desired use FALSE. Note: if pch, lty, and col are passed to
+#'  the plot, they don't need to be passed to \code{legend()}
+#' @param ... parameters to be passed on to graphics for the plot
+#' (e.g. col, pch)
 #'
 #' @importFrom graphics points layout par plot.default title
 #' @importFrom colorspace rainbow_hcl
@@ -75,8 +89,9 @@ do.call("legend",llg[names(llg)%in%lnames])}
 #' @export
 mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
                     LD.value=c(25,50,95),test.validity=TRUE,legend.par=c("bottomleft"),...){
-  #opars<-par(no.readonly = TRUE)
-  #on.exit(par(opars))
+  opars<-par(no.readonly = TRUE)
+  on.exit(par(opars))
+
   data$strain<-as.factor(data$strain)
   if(is.null(strains)){
     strains<-levels(data$strain)
