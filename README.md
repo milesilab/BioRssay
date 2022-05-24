@@ -1,10 +1,9 @@
 <!-- badges: start -->
 
-[![Github All
-Releases](https://img.shields.io/github/downloads/milesilab/BioRssay/total.svg)]()
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
-[![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+
+[![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+
 [![DOI](https://zenodo.org/badge/377436359.svg)](https://zenodo.org/badge/latestdoi/377436359)
 <!-- badges: end -->
 
