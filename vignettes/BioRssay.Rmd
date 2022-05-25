@@ -119,12 +119,14 @@ Further, the function outputs seven more columns with statistical outputs from t
 `str` - values for the strains  
 `int` - values for the interaction between the strain and the dose  
 
-*Note: the pvalues for strain and strain-dose interaction is from a F-test for a bionomial model.*  
+*Note: the pvalues for strain and strain-dose interaction is from a F-test for a binomial model.*  
 
 ***Data Visualization***
 The data and the regression can be plotted with confidence levels using the `mort.plot()` function. It is also possible to take the validity of the linearity test into account for the plots using the `test.validity=` option. The probit-transformed mortalities (`probit.trans()` function) are plotted as a function of the log10 of the doses.
 
 ```{r,fig.dim=c(8,4)}
+oldpar<-par(no.readonly = TRUE)
+
 strains<-levels(data$strain)
 par(mfrow=c(1,2)) # set plot rows
 # plot without confidence intervals and test of validity of the model
@@ -135,6 +137,8 @@ mort.plot(data,plot.conf=FALSE,test.validity=FALSE,pch=NA)
 par(mfrow=c(1,2))
 mort.plot(data,plot.conf=TRUE,test.validity=FALSE)
 mort.plot(data,plot.conf=TRUE,test.validity=FALSE,pch=NA)
+
+par(oldpar)
 ```
 It is also possible to plot different confidence intervals with the `conf.level=` option (the default is 0.95). It is possible to plot only a subset of strains using the `strains=` option to list the desired strains; if not provided, all the strains will be plotted.
 

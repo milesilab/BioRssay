@@ -89,8 +89,8 @@ do.call("legend",llg[names(llg)%in%lnames])}
 #' @export
 mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
                     LD.value=c(25,50,95),test.validity=TRUE,legend.par=c("bottomleft"),...){
-  opars<-par(no.readonly = TRUE)
-  on.exit(par(opars))
+  #opars<-par(no.readonly = TRUE)
+  #on.exit(par(opars))
 
   data$strain<-as.factor(data$strain)
   if(is.null(strains)){
