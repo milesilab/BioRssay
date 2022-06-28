@@ -231,24 +231,19 @@
 <p><em>Note: the pvalues for strain and strain-dose interaction is from a F-test for a binomial model.</em></p>
 <p><strong><em>Data Visualization</em></strong> The data and the regression can be plotted with confidence levels using the <code><a href="../reference/mort.plot.html">mort.plot()</a></code> function. It is also possible to take the validity of the linearity test into account for the plots using the <code>test.validity=</code> option. The probit-transformed mortalities (<code><a href="../reference/probit.trans.html">probit.trans()</a></code> function) are plotted as a function of the log10 of the doses.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">oldpar</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>no.readonly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="va">strains</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">strain</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">strains</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">strain</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="co"># set plot rows</span>
 <span class="co"># plot without confidence intervals and test of validity of the model</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">FALSE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span> 
 <span class="co"># plot only the regression lines</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">FALSE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span>,pch<span class="op">=</span><span class="cn">NA</span><span class="op">)</span> </code></pre></div>
-<p><img src="BioRssay_files/figure-html/unnamed-chunk-9-1.png" width="768"></p>
+<p><img src="BioRssay_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># same plots with confidence level</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">TRUE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mort.plot.html">mort.plot</a></span><span class="op">(</span><span class="va">data</span>,plot.conf<span class="op">=</span><span class="cn">TRUE</span>,test.validity<span class="op">=</span><span class="cn">FALSE</span>,pch<span class="op">=</span><span class="cn">NA</span><span class="op">)</span></code></pre></div>
-<p><img src="BioRssay_files/figure-html/unnamed-chunk-9-2.png" width="768"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">oldpar</span><span class="op">)</span></code></pre></div>
+<p><img src="BioRssay_files/figure-html/unnamed-chunk-10-2.png" width="768"></p>
 <p>It is also possible to plot different confidence intervals with the <code>conf.level=</code> option (the default is 0.95). It is possible to plot only a subset of strains using the <code>strains=</code> option to list the desired strains; if not provided, all the strains will be plotted.</p>
 <p>Note that the plots can be generated directly from the “resist.ratio” function using the <code>plot=TRUE</code> option.</p>
 </div>
@@ -257,7 +252,7 @@
 <strong>Example 2</strong><a class="anchor" aria-label="anchor" href="#example-2"></a>
 </h2>
 <p>We follow the same workflow (using the plot option in <code><a href="../reference/resist.ratio.html">resist.ratio()</a></code>). However, there are more than one insecticide tested in this experiment. Therefore, we need to subset the data for each insecticide, and carry out the analysis as before.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">test</span><span class="op">)</span>
 <span class="co">#&gt;   insecticide strain dose total dead</span>
 <span class="co">#&gt; 1  bendiocarb Kisumu 0.00    25    0</span>
@@ -278,13 +273,13 @@
 <span class="co">#&gt; 5  bendiocarb Kisumu 0.01    25    0</span>
 <span class="co">#&gt; 6  bendiocarb Kisumu 0.01    25    0</span></code></pre></div>
 <p>We will use a subset of the data for the insecticide “bendiocarb” only.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">dataT.b</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/probit.trans.html">probit.trans</a></span><span class="op">(</span><span class="va">bend</span><span class="op">)</span>
 <span class="va">data.b</span><span class="op">&lt;-</span><span class="va">dataT.b</span><span class="op">$</span><span class="va">tr.data</span>
 
 <span class="va">RR.b</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">data.b</span>,plot <span class="op">=</span> <span class="cn">T</span>,ref.strain <span class="op">=</span> <span class="st">"Kisumu"</span>,plot.conf <span class="op">=</span> <span class="cn">T</span>, test.validity <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
-<p><img src="BioRssay_files/figure-html/unnamed-chunk-11-1.png" width="576"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<p><img src="BioRssay_files/figure-html/unnamed-chunk-13-1.png" width="576"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">RR.b</span><span class="op">)</span>
 <span class="co">#&gt;         Slope SlopeSE Intercept InterceptSE    h      g  Chi2 df Chi(p)    LD25</span>
 <span class="co">#&gt; Acerkis  5.88  0.3656  -10.2992      0.6734 1.00 0.0149 11.00 31 0.9997 43.0000</span>
@@ -299,7 +294,7 @@
 <span class="co">#&gt; AgRR5   131.0000  666.00  290 144.0000   583.0  277 49.0000    1560</span>
 <span class="co">#&gt; Kisumu    0.3352    2.98    1   0.3849     2.6    1  0.0884      11</span></code></pre></div>
 <p>Note that we have enabled the arguments “plot=” with “plot.conf=” and <code>test.validity=</code>. When the log-dose-response is not linear for a strain (Chi-square p-value &lt; 0.05), it will be plotted without forcing linearity as for “Acerkis or AgRR5” strains in this example.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#To then test the difference in dose-mortality response between the strains</span>
 <span class="va">t.models</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">data.b</span><span class="op">)</span>
 <span class="co">#&gt; Analysis of Deviance Table</span>
@@ -339,12 +334,12 @@
 <h2 id="example-3">
 <strong>Example 3</strong><a class="anchor" aria-label="anchor" href="#example-3"></a>
 </h2>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/find.package.html" class="external-link">path.package</a></span><span class="op">(</span><span class="st">"BioRssay"</span><span class="op">)</span>, <span class="st">"/Example3.txt"</span><span class="op">)</span> <span class="co">#import the example file from the package</span>
 <span class="va">exm3</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table</a></span><span class="op">(</span><span class="va">file</span>,header<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">trnd</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/probit.trans.html">probit.trans</a></span><span class="op">(</span><span class="va">exm3</span><span class="op">)</span> <span class="co">#probit transformation and correction of data</span>
 <span class="fu"><a href="../reference/resist.ratio.html">resist.ratio</a></span><span class="op">(</span><span class="va">trnd</span><span class="op">$</span><span class="va">tr.data</span>,LD.value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>,<span class="fl">95</span><span class="op">)</span>,plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="co">#get LD and RR values with the mortality plot</span></code></pre></div>
-<p><img src="BioRssay_files/figure-html/unnamed-chunk-13-1.png" width="576"></p>
+<p><img src="BioRssay_files/figure-html/unnamed-chunk-15-1.png" width="576"></p>
 <pre><code><span class="co">#&gt;      Slope SlopeSE Intercept InterceptSE    h      g Chi2 df Chi(p)   LD50</span>
 <span class="co">#&gt; DZOU  1.64  0.1857      3.77      0.4515 7.94 0.0579   61 17  0.000 0.0050</span>
 <span class="co">#&gt; KIS   3.46  0.2648      9.64      0.7206 3.09 0.0279   14 13  0.358 0.0016</span>
