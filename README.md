@@ -1,9 +1,10 @@
 <!-- badges: start -->
 
+[![CRAN
+Downloads](https://cranlogs.r-pkg.org/badges/BioRssay)](https://cran.r-project.org/package=BioRssay)
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
-
-[![Lifecycle:stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![DOI](https://zenodo.org/badge/377436359.svg)](https://zenodo.org/badge/latestdoi/377436359)
 <!-- badges: end -->
 
@@ -17,6 +18,17 @@ any kind (e.g.,insecti/pesti/herbi-cides, antibiotics, etc.).
 where all the functions and usage are explained with ample examples.***
 
 **Installation**
+
+-   CRAN link <https://cran.r-project.org/package=BioRssay>
+
+<!-- -->
+
+    install.packages("BioRssay")
+
+-   You can install the development version of rCNV from
+    [GitHub](https://github.com/) with:
+
+<!-- -->
 
     if (!requireNamespace("devtools", quietly = TRUE)) 
         install.packages("devtools") 

@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">BioRssay</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,9 @@
 </li>
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
@@ -65,9 +68,17 @@
 <p><img src="unnamed-chunk-1-1.png"></p>
 <p><strong><em>For a comprehensive tutorial on the package, go to <a href="https://milesilab.github.io/BioRssay/" class="external-link uri">https://milesilab.github.io/BioRssay/</a> and navigate to “Get started” where all the functions and usage are explained with ample examples.</em></strong></p>
 <p><strong>Installation</strong></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"devtools"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"devtools"</span>) </span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"milesilab/BioRssay"</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<ul>
+<li>CRAN link <a href="https://cran.r-project.org/package=BioRssay" class="external-link uri">https://cran.r-project.org/package=BioRssay</a>
+</li>
+</ul>
+<!-- --><div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BioRssay"</span>)</span></code></pre></div>
+<ul>
+<li>You can install the development version of rCNV from <a href="https://github.com/" class="external-link">GitHub</a> with:</li>
+</ul>
+<!-- --><div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"devtools"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"devtools"</span>) </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"milesilab/BioRssay"</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Please don’t forget to cite us if you use the package.</p>
 <p><strong>How to cite</strong></p>
 <p>Karunarathne, P., Pocquet, N., Labbé, P. et al. BioRssay: an R package for analyses of bioassays and probit graphs. Parasites Vectors 15, 35 (2022). <a href="https://doi.org/10.1186/s13071-021-05146-x" class="external-link uri">https://doi.org/10.1186/s13071-021-05146-x</a></p>
@@ -75,8 +86,9 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=BioRssay" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/milesilab/BioRssay/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/milesilab/BioRssay/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/milesilab/BioRssay/issues/" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -108,7 +120,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href=""><img src="https://img.shields.io/github/downloads/milesilab/BioRssay/total.svg" alt="Github All Releases"></a></li>
+<li><a href="https://cran.r-project.org/package=BioRssay" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/BioRssay" alt="CRAN Downloads"></a></li>
 <li><a href="https://github.com/milesilab/BioRssay/actions" class="external-link"><img src="https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://www.tidyverse.org/lifecycle/#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://zenodo.org/badge/latestdoi/377436359" class="external-link"><img src="https://zenodo.org/badge/377436359.svg" alt="DOI"></a></li>

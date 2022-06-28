@@ -33,6 +33,15 @@ The package also allows determining the lethal doses for 25%, 50% and 95% of the
 
 The methods implemented here use likelihood ratio tests (LRT) to test for differences in resistance levels among different strains.  Finally, resistance ratios (RR) at LD25, LD50 and LD95, i.e. the LD ratios between a given strain and the strain with the lowest LD50 (or LD25,LD50, and LD95; usually it is the susceptible reference), with their 95% confidence intervals are calculated according to Robertson and *Preisler (1992)*.
 
+* Installing `BioRssay`
+```{r,eval=FALSE}
+#1. CRAN version
+install.packages("BioRssay")
+#2. Developmental version
+if (!requireNamespace("devtools", quietly = TRUE)) 
+        install.packages("devtools") 
+    devtools::install_github("milesilab/BioRssay", build_vignettes = TRUE)
+```
 
 # 1. **DATA PREPARATION**
 BioRssay can import data in any format that is compatible with base R data import functions (e.g. read.table, read.csv). However, for the functions in BioRssay to work, the data **must** have at least the following columns (other columns won’t be used, but are no hindrance).
