@@ -93,10 +93,10 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
   #opars<-par(no.readonly = TRUE)
   #on.exit(par(opars))
 
-  data$strain<-as.factor(data$strain)
+  data$strain<-factor(data$strain)
   if(is.null(strains)){
     strains<-levels(data$strain)
-  }
+  } else {data<-data[data$strain==strains,]}
   dmin<-floor(log10(min(data$dose)))
   dmax<-ceiling(log10(max(data$dose)))
   dose_min<- 10^(dmin)
@@ -125,14 +125,14 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
 
   dxt<-get.dxt(strains,data,ll$conf.level,LD.value=LD.value)
 
-  do.call("plot",c(list(x=data$dose,y=data$probmort),col=list(cl[data$strain]),pch=list(ph[data$strain]),ll[names(ll)%in%pnames]))
+  do.call("plot",c(list(x=data$dose,y=data$probmort),col=list(cl[data$strain]),pch=list(ph[data$strain]),ll[names(ll)%in%pnames],typ=list("n")))
   if(!is.null(ll$main)){title(ll$main)}
   ll$col<-cl
   ll$pch<-ph
 
   abline(v = dose_min, col = "grey95", lwd = 180000)
-  points(data$dose,data$probmort,col=ll$col[data$strain],
-         pch=ll$pch[data$strain])
+  points(data$dose,data$probmort,col=ll$col[factor(data$strain)],
+         pch=ll$pch[factor(data$strain)])
 
   labely<-c(1,5,seq(10,90,10),95,99)
   axis(2, at=qnorm(labely/100),labels=labely,las=2, adj=0)
@@ -159,8 +159,8 @@ mort.plot<-function(data,strains=NULL,plot.conf=TRUE,conf.level=0.95,
           lines(CIfit[,1],CIfit[,2],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)
           lines(CIfit[,1],CIfit[,3],type="l", lty=3, col=ll$col[i],lwd=ll$lwd)
         } else {
-          points(ndataf$dose[ndataf$strain==strains[i]],
-                 ndataf$p.mortality[ndataf$strain==strains[i]],type="l", col=ll$col[i])
+          points(sort(ndataf$dose[ndataf$strain==strains[i]]),
+                 sort(ndataf$p.mortality[ndataf$strain==strains[i]]),type="l", col=ll$col[i])
         }
       }
     } else {

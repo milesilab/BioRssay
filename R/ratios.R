@@ -182,7 +182,7 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
                         test.validity=TRUE,legend.par=c("bottomright"),...) {
   if(!any(LD.value==50)){LD.value<-sort(c(LD.value,50))}
 
-  data$strain<-as.factor(data$strain)
+  data$strain<-factor(data$strain)
   strains<-levels(data$strain)
   dxt<-get.dxt(strains,data,conf.level,LD.value=LD.value)
   dat<-do.call(rbind,lapply(dxt,function(x){x[[2]]}))
@@ -223,8 +223,10 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
     mort.plot(data,strains,plot.conf,test.validity=test.validity,
               conf.level=conf.level,legend.par=legend.par,...)
   }
-  dat<-dat[,-(grep("var",colnames(dat)))]
-  dat<-cbind(dat[,(ncol(dat)-8):ncol(dat)],dat[,1:(ncol(dat)-9)],RR)
+  nm<-colnames(dat)
+  dat<-rbind.data.frame(dat[,-(grep("var",colnames(dat)))])
+  dat<-as.matrix(cbind(dat[,(ncol(dat)-8):ncol(dat)],dat[,1:(ncol(dat)-9)],RR))
+  colnames(dat)<-c(nm,colnames(RR))[-c(grep("var",nm))]
   dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
   return(dat)
 }
