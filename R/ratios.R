@@ -220,13 +220,15 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
   RR<-do.call(cbind,RR)
 
   if(plot){
-    mort.plot(data,strains,plot.conf,test.validity=test.validity,
+    mort.plot(data,strains=NULL,plot.conf,test.validity=test.validity,
               conf.level=conf.level,legend.par=legend.par,...)
   }
   nm<-colnames(dat)
   dat<-rbind.data.frame(dat[,-(grep("var",colnames(dat)))])
+  nm<-nm[-c(grep("var",nm))]
+  nm<-nm[c((ncol(dat)-8):ncol(dat),1:(ncol(dat)-9))]
   dat<-as.matrix(cbind(dat[,(ncol(dat)-8):ncol(dat)],dat[,1:(ncol(dat)-9)],RR))
-  colnames(dat)<-c(nm,colnames(RR))[-c(grep("var",nm))]
+  colnames(dat)<-c(nm,colnames(RR))
   dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
   return(dat)
 }
