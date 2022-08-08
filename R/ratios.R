@@ -104,7 +104,7 @@ get.dxt<-function(strains,data,conf.level,LD.value){
 #' Calculate lethal dosage, resistance ratios, and regression coefficients
 #'  and tests for linearity
 #'
-#' Using a generalised linear model (GLM, logit link function), this function
+#' Using a generalized linear model (GLM, logit link function), this function
 #' computes the lethal doses for 25%, 50% and 95% (unless otherwise provided)
 #' of the population (LD25, LD50 and LD95, resp.), and their confidence
 #' intervals (LDmax and LDmin, 0.95 by default). See details for more info.
@@ -159,13 +159,13 @@ get.dxt<-function(strains,data,conf.level,LD.value){
 #' @author Pascal Milesi, Piyal Karunarathne, Pierrick Labbé
 #'
 #' @references Finney DJ (1971). Probitanalysis. Cambridge:Cambridge
-#' UniversityPress. 350p.
+#' University Press. 350p.
 #'
 #' Hommel G (1988). A stage wise rejective multiple test procedure based on
 #' a modified Bonferroni test. Biometrika 75, 383-6.
 #'
 #' Johnson RM, Dahlgren L, Siegfried BD, Ellis MD (2013). Acaricide,fungicide
-#' and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
+#' and drug interactions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
 #'
 #' Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with
 #' arthropods. CRC, Boca Raton, FL.
@@ -250,7 +250,7 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 #' @return a list with model outputs: a chi-square test if there are only two
 #' strains or if there are more than two strains, first an overall model
 #' assessment (i.e. one strain vs. all) and given overall model is significant,
-#'  then a bonferroni test of significance from a pariwise model comparison.
+#'  then a bonferroni test of significance from a pairwise model comparison.
 #'
 #' @details A global LRT test assesses a strain’s effect, by comparing two
 #' models, one with and one without this effect (i.e. comparing a model with

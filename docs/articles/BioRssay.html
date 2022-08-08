@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">BioRssay</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>BioRssay</h1>
             
-            <h4 data-toc-skip class="date">28 June, 2022</h4>
+            <h4 data-toc-skip class="date">08 August, 2022</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/milesilab/BioRssay/blob/HEAD/vignettes/BioRssay.Rmd" class="external-link"><code>vignettes/BioRssay.Rmd</code></a></small>
       <div class="d-none name"><code>BioRssay.Rmd</code></div>
@@ -194,7 +194,7 @@
 <p>Note that we did not specify the reference strain here as it is already labeled in the data</p>
 <p>For each strain, you have first the LD25, LD50 and LD95 and their upper and lower limits (defaults is 95% CI), then the slope and intercept of the regression (with their standard error), the heterogeneity (h) and the g factor (“With almost all good sets of data, g will be substantially smaller than 1.0 and seldom greater than 0.4.” Finney, 1971).</p>
 <p>The result of the chi test (<code>Chi(p)</code>) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD25, LD50 and LD95 (RR25, RR50 and RR95), as well as their upper and lower limits.</p>
-<p>The third step, when analysing more than one strain, is now to test for difference in dose-mortality responses between strains using the <code><a href="../reference/model.signif.html">model.signif()</a></code> function.</p>
+<p>The third step, when analyzing more than one strain, is now to test for difference in dose-mortality responses between strains using the <code><a href="../reference/model.signif.html">model.signif()</a></code> function.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/model.signif.html">model.signif</a></span><span class="op">(</span><span class="va">dataT</span><span class="op">$</span><span class="va">tr.data</span><span class="op">)</span>
 <span class="co">#&gt; Analysis of Deviance Table</span>

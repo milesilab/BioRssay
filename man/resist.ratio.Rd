@@ -50,7 +50,7 @@ Returns a data frame with the various estimates mentioned above.
  the log_10 doses.
 }
 \description{
-Using a generalised linear model (GLM, logit link function), this function
+Using a generalized linear model (GLM, logit link function), this function
 computes the lethal doses for 25%, 50% and 95% (unless otherwise provided)
 of the population (LD25, LD50 and LD95, resp.), and their confidence
 intervals (LDmax and LDmin, 0.95 by default). See details for more info.
@@ -87,13 +87,13 @@ resist.ratio(data,plot=TRUE)
 }
 \references{
 Finney DJ (1971). Probitanalysis. Cambridge:Cambridge
-UniversityPress. 350p.
+University Press. 350p.
 
 Hommel G (1988). A stage wise rejective multiple test procedure based on
 a modified Bonferroni test. Biometrika 75, 383-6.
 
 Johnson RM, Dahlgren L, Siegfried BD, Ellis MD (2013). Acaricide,fungicide
-and druginteractions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
+and drug interactions in honeybees (Apis mellifera). PLoSONE8(1): e54092.
 
 Robertson, J. L., and H.K. Preisler.1992. Pesticide bioassays with
 arthropods. CRC, Boca Raton, FL.

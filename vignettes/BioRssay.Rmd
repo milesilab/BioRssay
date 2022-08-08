@@ -111,7 +111,7 @@ For each strain, you have first the LD25, LD50 and LD95 and their upper and lowe
 
 The result of the chi test (`Chi(p)`) is then indicated to judge whether the data follow a linear regression: here all the p-values are over 0.05 so the fits are acceptable. Finally the resistance ratios are indicated for LD25, LD50 and LD95 (RR25, RR50 and RR95), as well as their upper and lower limits.
 
-The third step, when analysing more than one strain, is now to test for difference in dose-mortality responses between strains using the `model.signif()` function.
+The third step, when analyzing more than one strain, is now to test for difference in dose-mortality responses between strains using the `model.signif()` function.
 
 
 ```{r}

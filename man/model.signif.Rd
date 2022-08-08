@@ -14,7 +14,7 @@ function probit.trans}
 a list with model outputs: a chi-square test if there are only two
 strains or if there are more than two strains, first an overall model
 assessment (i.e. one strain vs. all) and given overall model is significant,
- then a bonferroni test of significance from a pariwise model comparison.
+ then a bonferroni test of significance from a pairwise model comparison.
 }
 \description{
 This function is used when comparing at least two strains. It tests whether
