@@ -1,7 +1,7 @@
 Package: BioRssay
 Type: Package
 Title: Analyze Bioassays and Probit Graphs
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: c(person(given="Piyal",family="Karunarathne", email="piyalkarumail@yahoo.com", role = c("aut", "cre"),comment = c(ORCID = "0000-0002-1934-145X")),person(given="Pascal", family="Milesi", role = "aut",comment = c(ORCID = "0000-0001-8580-4291")),person(given="Pierrick",family="Labbé",role="aut",comment=c(ORCID="0000-0003-0806-1919")))
 Maintainer: Piyal Karunarathne <piyalkarumail@yahoo.com>
 Description: A robust framework for analyzing mortality data from bioassays for one or several strains/lines/populations.
