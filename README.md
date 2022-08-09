@@ -4,7 +4,7 @@
 Downloads](https://cranlogs.r-pkg.org/badges/BioRssay)](https://cran.r-project.org/package=BioRssay)
 [![R-CMD-check](https://github.com/milesilab/BioRssay/workflows/R-CMD-check/badge.svg)](https://github.com/milesilab/BioRssay/actions)
 [![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![DOI](https://zenodo.org/badge/377436359.svg)](https://zenodo.org/badge/latestdoi/377436359)
 <!-- badges: end -->
 
