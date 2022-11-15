@@ -82,7 +82,7 @@ reg.pair<-function(data){
 
 #' Get LD and RR values for each strain
 #' @noRd
-get.dxt<-function(strains,data,conf.level,LD.value){
+get.dxt0<-function(strains,data,conf.level,LD.value){
   dxt<-lapply(strains,function(ss,data,conf.level,LD.value){
     tmp<-data[data$strain == ss,]
     y<-with(tmp,cbind(dead,total-dead))
@@ -98,7 +98,22 @@ get.dxt<-function(strains,data,conf.level,LD.value){
   return(dxt)
 }
 
-
+get.dxt<-function(strains,data,conf.level,LD.value){
+  dxt<-lapply(strains,function(ss,data,conf.level,LD.value){
+    tmp<-data[data$strain == ss,]
+    y<-with(tmp,cbind(dead,total-dead))
+    mods<-glm(y~log10(dose),data=tmp,family = quasibinomial(link=probit))
+    dat <- LD(mods, conf.level,LD.value=LD.value)
+    E<-mods$fitted.values*tmp$total # expected dead
+    chq<-sum(((E-tmp$dead)^2)/(ifelse(E<1,1,E))) #if E is lower than 1 chi-sq
+    #fails to detect the significance, ~change denominator to 1
+    df<-length(tmp$dead)-1
+    r2<-with(summary(mods), 1 - deviance/null.deviance)
+    dat<-c(dat,chq,df,pchisq(q=chq,df=df,lower.tail=FALSE),r2)
+    return(list(mods,dat))
+  },data=data,conf.level=conf.level,LD.value=LD.value)
+  return(dxt)
+}
 ###########
 
 #' Calculate lethal dosage, resistance ratios, and regression coefficients
@@ -185,6 +200,63 @@ resist.ratio<-function(data,conf.level=0.95,LD.value=c(25,50,95),
   data$strain<-factor(data$strain)
   strains<-levels(data$strain)
   dxt<-get.dxt(strains,data,conf.level,LD.value=LD.value)
+  dat<-do.call(rbind,lapply(dxt,function(x){x[[2]]}))
+  colnames(dat)<-c(paste0(paste0("LD",rep(LD.value,each=4)),
+                          rep(c("","min","max","var"),2)),"Slope", "SlopeSE",
+                   "Intercept", "InterceptSE", "h", "g","Chi2","df","Chi(p)","r2")
+  rownames(dat)<-strains
+  if(is.null(ref.strain)){
+    ref <- which(strains == strains[grep("-ref$",as.character(strains))],
+                 arr.ind=TRUE)
+  } else {
+    ref=ref.strain
+  }
+  if (length(ref)==0) {
+    refrow <- which(dat[,"LD50"]==min(dat[,"LD50"]),arr.ind=TRUE)
+  } else {
+    refrow <-ref
+  }
+
+  for(l in seq_along(LD.value)){
+    assign(paste0("rr",LD.value[l]),
+           dat[,paste0("LD",LD.value[l])]/dat[refrow,paste0("LD",LD.value[l])])
+    assign(paste0("CI",LD.value[l]),
+           1.96*sqrt(log10(dat[,paste0("LD",LD.value[l],"var")])+log10(dat[refrow,paste0("LD",LD.value[l],"var")])))
+    assign(paste0("rr",LD.value[l],"max"),
+           10^(log10(get(paste0("rr",LD.value[l])))+get(paste0("CI",LD.value[l]))))
+    assign(paste0("rr",LD.value[l],"min"),
+           10^(log10(get(paste0("rr",LD.value[l])))-get(paste0("CI",LD.value[l]))))
+    ggl<-get(paste0("rr",LD.value[l],"max"))
+    ggl[refrow]<-0
+    ggl2<-get(paste0("rr",LD.value[l],"min"))
+    ggl2[refrow]<-0
+  }
+  RR<-mget(c(paste0("rr",rep(LD.value,each=3),c("","min","max"))))
+  RR<-do.call(cbind,RR)
+
+  if(plot){
+    mort.plot(data,strains=NULL,plot.conf,test.validity=test.validity,
+              conf.level=conf.level,legend.par=legend.par,...)
+  }
+  nm<-colnames(dat)
+  dat<-rbind.data.frame(dat[,-(grep("var",colnames(dat)))])
+  nm<-nm[-c(grep("var",nm))]
+  nm<-nm[c((ncol(dat)-8):ncol(dat),1:(ncol(dat)-9))]
+  dat<-as.matrix(cbind(dat[,(ncol(dat)-8):ncol(dat)],dat[,1:(ncol(dat)-9)],RR))
+  colnames(dat)<-c(nm,colnames(RR))
+  dat<-ifelse(dat>10,round(dat,0),ifelse(dat>1,round(dat,2),round(dat,4)))
+  return(dat)
+}
+
+
+resist.ratio0<-function(data,conf.level=0.95,LD.value=c(25,50,95),
+                        ref.strain=NULL,plot=FALSE,plot.conf=TRUE,
+                        test.validity=TRUE,legend.par=c("bottomright"),...) {
+  if(!any(LD.value==50)){LD.value<-sort(c(LD.value,50))}
+
+  data$strain<-factor(data$strain)
+  strains<-levels(data$strain)
+  dxt<-get.dxt0(strains,data,conf.level,LD.value=LD.value)
   dat<-do.call(rbind,lapply(dxt,function(x){x[[2]]}))
   colnames(dat)<-c(paste0(paste0("LD",rep(LD.value,each=4)),
                           rep(c("","min","max","var"),2)),"Slope", "SlopeSE",
