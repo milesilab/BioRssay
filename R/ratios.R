@@ -316,6 +316,9 @@ resist.ratio0<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 #'
 #' @param data a data frame of probit transformed mortality data using the
 #' function probit.trans
+#' @param full.pval logical. If TRUE, output prints the complete length of the
+#' pvalue both for the model and the comparison of strains. If FALSE (default),
+#' output pvalue is rounded to five decimals.
 #' @importFrom stats anova na.omit
 #' @importFrom utils combn
 #'
@@ -346,7 +349,7 @@ resist.ratio0<-function(data,conf.level=0.95,LD.value=c(25,50,95),
 #' model.signif(data)
 #'
 #' @export
-model.signif<-function(data){
+model.signif<-function(data,full.pval=FALSE){
   data$strain<-as.factor(data$strain)
   strains<-levels(data$strain)
   if (length(strains)>=2) {
@@ -388,9 +391,15 @@ model.signif<-function(data){
       pval<-cbind(pval,rk)
       pval<-pval[order(pval[,1]),]
 
+      #allow printing full length of the pvalue
+      if(full.pval){
+        Test<-data.frame(cbind(toget,unlist(Test[toget]),
+                               ifelse(pval[,2]<pval[,3],"sig","non-sig")))
+      } else {
+        Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),
+                               ifelse(pval[,2]<pval[,3],"sig","non-sig")))
+      }
 
-      Test<-data.frame(cbind(toget,round(unlist(Test[toget]),5),
-                             ifelse(pval[,2]<pval[,3],"sig","non-sig")))
       rdl[which(Test[,3]>0.05),]<-NA
 
       ### bonferr for pvals
@@ -400,7 +409,13 @@ model.signif<-function(data){
       th<-unlist(lapply(1:bp0,function(x){0.05/(bp0-x+1)}))
       tmp<-suppressWarnings(cbind(bp,th))
       tmp[which(is.na(tmp[,2])),3]<-NA
-      tmp<-round(tmp[order(tmp[,1]),3],5)
+      #allow printing full length of the pvalue
+      if(full.pval){
+        tmp<-tmp[order(tmp[,1]),3]
+      } else {
+        tmp<-round(tmp[order(tmp[,1]),3],5)
+      }
+
       tmp<-split(tmp,cut(seq_along(tmp),2,labels = F))
 
       Test<-cbind(Test,rdl[,1:3],rdl[,4],tmp$`1`,rdl[,5],tmp$`2`)

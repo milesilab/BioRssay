@@ -4,11 +4,15 @@
 \alias{model.signif}
 \title{Test the significance of dose-mortality response differences}
 \usage{
-model.signif(data)
+model.signif(data, full.pval = FALSE)
 }
 \arguments{
 \item{data}{a data frame of probit transformed mortality data using the
 function probit.trans}
+
+\item{full.pval}{logical. If TRUE, output prints the complete length of the
+pvalue both for the model and the comparison of strains. If FALSE (default),
+output pvalue is rounded to five decimals.}
 }
 \value{
 a list with model outputs: a chi-square test if there are only two
