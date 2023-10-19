@@ -1,3 +1,8 @@
+# BioRssay 1.2.900 (developmental version)
+## changes
+* The function `model.signif()` was changed to allow printing full p-value
+
+
 # BioRssay 1.1.900 (Developmental version)
 ## Changes
 * R<sup>2</sup> added to `resist.ratio()` output

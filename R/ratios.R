@@ -400,7 +400,7 @@ model.signif<-function(data,full.pval=FALSE){
                                ifelse(pval[,2]<pval[,3],"sig","non-sig")))
       }
 
-      rdl[which(Test[,3]>0.05),]<-NA
+      rdl[which(as.numeric(Test[,3])>0.05),]<-NA
 
       ### bonferr for pvals
       bp<-cbind(1:(nrow(Test)*2),as.numeric(unlist(rdl[,4:5])))
