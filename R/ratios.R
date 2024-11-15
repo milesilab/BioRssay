@@ -1,6 +1,29 @@
 #' Calculate confidence range for regressions
 #' @noRd
-CIplot<-function(mods,pmort_min,pmort_max,conf.level){
+CIplot <- function(mods, pmort_min, pmort_max, conf.level) {
+  summ <- summary(mods)
+  zz <- qnorm((1 - conf.level) / 2, lower.tail = FALSE)
+  a <- summ$coefficient[2] # mods slope
+  b <- summ$coefficient[1] # mods intercept
+  minldose <- (pmort_min - b) / a # predicted dose for 0% mortality
+  maxldose <- (pmort_max - b) / a # predicted dose for 100% mortality
+
+  # Set the correct sign for "by" based on the direction of the sequence
+  by_sign <- ifelse((maxldose + 0.2) > (minldose - 0.2), 0.01, -0.01)
+  datalfit <- seq(minldose - 0.2, maxldose + 0.2, by = by_sign) # generates a set of doses
+
+  datafit <- data.frame(dose = 10^datalfit)
+  pred <- predict.glm(mods, newdata = datafit, type = "response", se.fit = TRUE)
+  # generates the predicted mortality for the set of doses and SE
+  ci <- cbind(pred$fit - zz * pred$se.fit, pred$fit + zz * pred$se.fit) # CI for each dose
+  probitci <- cbind(datafit$dose, suppressWarnings(qnorm(ci)))
+  # apply probit transformation to CI
+  return(probitci)
+}
+
+#' Calculate confidence range for regressions
+#' @noRd
+CIplot0<-function(mods,pmort_min,pmort_max,conf.level){
   summ<-summary(mods)
   zz<-qnorm((1-conf.level)/2,lower.tail=FALSE)
   a<-summ$coefficient[2] # mods slope

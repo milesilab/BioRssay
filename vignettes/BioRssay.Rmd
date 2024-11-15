@@ -5,8 +5,10 @@ output: rmarkdown::html_vignette
         
 vignette: >
   %\VignetteIndexEntry{BioRssay}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -83,7 +85,7 @@ unique(as.character(exm1$strain))
 ```
 This example contains the mortality data of three strains (KIS-ref, DZOU, and DZOU2 ); KIS is used as the reference, as indicated by the “ref” suffix.
 
-The first step is to check whether the controls have a non-negligible mortality, in which case a correction should be applied to the data, before probit transformation. This is easily achieved with the function `probit.trans()`.
+The first step is to check whether the controls have a non-negligible mortality, in which case a correction should be applied to the data before probit transformation. This is easily achieved with the function `probit.trans()`.
 
 ```{r}
 dataT<-probit.trans(exm1) #additionally an acceptable threshold for controls' mortality can be set as desired with "conf="; default is 0.05.
@@ -95,7 +97,9 @@ The output of probit.trans is a list of which the first element (`convrg`) conta
 
 However, since the mortality in the controls (dose=0) is below 5% (`conf=0.05`) in the present example, `data$convrg` is NULL and thus no correction is applied to the data . The second element of the list dataT is the probid transformed data with two additional columns: *mort*, the observed mortalities, and *probmort*, the observed probit-transformed mortalities. This data frame is what we’ll use in the next steps of the analysis.
 
-  *If you set the threshold to conf=0.01 with example 1, you can assess the effects of the Abbot’s correction: all mortalities are slightly reduced to take the base control mortality into account.*
+  *If you set the threshold to conf=0.01 with example 1, you can assess the effects of the Abbot’s correction: all mortality values are slightly reduced to take the base control mortality into account.*
+  
+  *Note: In example 1, you may see that mortality (`mort`) is not 100% in cases where total:dead is 1:1. We have subtracted 0.6% of the mortality values where the mortality is 100% to avoid infinite values during log transformation. This adjustment does not affect rest of the analysis*
 
 The second step is to compute the lethal dose values (25%, 50% and 95%, LD25, LD50 and LD95 respectively) and the corresponding resistance ratios. The function `resist.ratio` allows you to do just that (user also has the option to calculate these values for different LD values). If no reference strain has been specified in the data file (using the suffix “ref” as mentioned above), it can be specified in `ref.strain=`. Otherwise, the strain with the lowest LD50 will be considered as such. By default, the LDs’ 95% confidence intervals are computed (the min and max values are reported); you can adjust this using `conf.level=`.
 
